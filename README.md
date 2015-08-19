@@ -162,7 +162,9 @@ function __construct()
 <a id="user-content-controllers" href="#controllers"></a>
 ### 视图控件
 
-<a id="user-content-controllers" href="#controllers"></a>
+详细描述封装好的便于使用的数据控件
+
+<a id="user-content-datagrid" href="#datagrid"></a>
 #### 数据列表
 
 用法：`{!! Html::datagrid($results) !!}`
@@ -181,7 +183,9 @@ function __construct()
     }],
 ]
 ```
+
 数据项参数：
+
 1. 列名称
 2. 数据项的属性，其中`buttons`是固定的按钮列使用属性
 3. 有以下几种情况：
@@ -194,4 +198,5 @@ function __construct()
     3. 点击按钮后需要修改某个字段为某个值，比如审核通过或者驳回之类：
     `[['name'=>'测试','class'=>'btn-danger'],['tested'=>'true','other'=>'somevalue']]`
     第一个数组描述按钮的名称和样式，第二个数组描述需要更改的字段和值
-    4. 点击按钮后需要弹出某个弹出框，`['配置','#modal']`，就会弹出来id为`modal`的弹出框
+    4. 点击按钮后需要调用某个接口并传参数：`[['name'=>'测试','class'=>'btn-danger','uri'=>'/api/test','method'=>'POST'],['tested'=>'true','other'=>'somevalue']]`
+    5. 点击按钮后需要弹出某个弹出框，`['配置','#modal']`，就会弹出来id为`modal`的弹出框
