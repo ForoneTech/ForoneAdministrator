@@ -1,5 +1,5 @@
 {
-  "name": "forone/admin",
+  "name": "forone/administrator",
   "description": "Admin system based on Laravel 5.1",
   "homepage": "https://github.com/ForoneTech/LaravelAdmin",
   "keywords": ["laravel 5", "forone", "admin"],
