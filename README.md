@@ -162,7 +162,9 @@ function __construct()
 <a id="user-content-controllers" href="#controllers"></a>
 ### 视图控件
 
-<a id="user-content-controllers" href="#controllers"></a>
+详细描述封装好的便于使用的数据控件
+
+<a id="user-content-datagrid" href="#datagrid"></a>
 #### 数据列表
 
 用法：`{!! Html::datagrid($results) !!}`
@@ -181,7 +183,9 @@ function __construct()
     }],
 ]
 ```
+
 数据项参数：
+
 1. 列名称
 2. 数据项的属性，其中`buttons`是固定的按钮列使用属性
 3. 有以下几种情况：
