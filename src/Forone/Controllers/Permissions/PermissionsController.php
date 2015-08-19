@@ -12,13 +12,13 @@ use Forone\Admin\Controllers\BaseController;
 use Forone\Admin\Permission;
 use Forone\Admin\Requests\CreatePermissionRequest;
 use Forone\Admin\Requests\UpdatePermissionRequest;
+use Illuminate\Support\Facades\Request;
 
 class PermissionsController extends BaseController {
 
     function __construct()
     {
         parent::__construct('permissions', '权限');
-        $this->middleware('admin.permission', ['testsdf']);
     }
 
     public function index()
@@ -86,7 +86,7 @@ class PermissionsController extends BaseController {
      * @param  int  $id
      * @return Response
      */
-    public function update($id, UpdatePermissionRequest $request)
+    public function update($id, Request $request)
     {
         $data = $request->except('id', '_token');
         Permission::findOrFail($id)->update($data);

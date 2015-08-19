@@ -106,7 +106,7 @@ class RolesController extends BaseController {
      * @param  int  $id
      * @return Response
      */
-    public function update($id, UpdateRoleRequest $request)
+    public function update($id, Request $request)
     {
         $data = $request->except('id', '_token');
         Role::findOrFail($id)->update($data);
