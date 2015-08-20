@@ -5,7 +5,18 @@ ForoneAdministrator 是一款基于Laravel5.1封装的后台管理系统，集�
 - [权限控制](#permission)
 - [1分钟完成分类模块](#demo)
 - [视图控件](#controllers)
-    - [数据列表](#datagrid)
+    - [数据列表头 - Html::list_header](#list_header)
+    - [数据列表 - Html::datagrid](#datagrid)
+    - [下拉列表选择 - Form::form_select](#form_select)
+    - [单选Radio - Form::form_radio](#form_radio)
+    - [时间控件 - Form::form_time](#form_time)
+    - [日期控件 - Form::form_date](#form_date)
+    - [单行文本输入框 - From::form_text](#form_text)
+    - [多行文本输入框 - From::form_area](#form_area)
+    - [七牛单文件上传 - 待重构后测试]
+    - [七牛多文件上传 - 待重构后测试]
+    - [富文本编辑器 - 待测试]
+- [提高研发效率的几个自定义命令](#commands)
 
 ### 效果图
 
@@ -150,11 +161,11 @@ function __construct()
 
 1. 复制`PermissionsController`并粘贴更名为`CategoriesController`；复制`views/permissions`文件夹并粘贴更名为`views/categories`
 2. 编辑`CategoriesController`，修改以下几处：
-    1. 修改类名为文件名
-    2. 修改构造函数的uri和name为 `parent::__construct('categories', '分类管理');`
-    3. 批量修改`Permission`为`Category`
-    4. 修改`index`里的数据列表显示项
-    5. `Request`类视情况调整
+    - 修改类名为文件名
+    - 修改构造函数的uri和name为 `parent::__construct('categories', '分类管理');`
+    - 批量修改`Permission`为`Category`
+    - 修改`index`里的数据列表显示项
+    - `Request`类视情况调整
 3. 编辑`views/categories/form.blade.php`，修改输入项及描述名称
 4. 编辑`routes.php`添加路由 `Route::resource('categories', 'CategoriesController');`
 5. 编辑`forone.php`添加菜单 `"分类管理"=>["uri"=>"categories"]`
@@ -193,14 +204,173 @@ function __construct()
 1. 列名称
 2. 数据项的属性，其中`buttons`是固定的按钮列使用属性
 3. 有以下几种情况：
-    1. 可以为空，就按默认情况显示
-    2. 可以为数字，为显示的列宽
-    3. 可以为函数，用以处理数据项并返回显示结果，包括根据不同权限返回不同结果等
+    - 可以为空，就按默认情况显示
+    - 可以为数字，为显示的列宽
+    - 可以为函数，用以处理数据项并返回显示结果，包括根据不同权限返回不同结果等，作为函数的时候也可以直接返回`html`代码以显示任意内容
 4. 为函数，作为`buttons`项的时候，返回的按钮数组有以下几种情况：
-    1. `查看`,`编辑`默认会跳转到查看和编辑页面
-    2. `启用`,`禁用`默认会单独修改数据项的`enabled`字段
-    3. 点击按钮后需要修改某个字段为某个值，比如审核通过或者驳回之类：
+    - `查看`,`编辑`默认会跳转到查看和编辑页面
+    - `启用`,`禁用`默认会单独修改数据项的`enabled`字段
+    - 点击按钮后需要修改某个字段为某个值，比如审核通过或者驳回之类：
     `[['name'=>'测试','class'=>'btn-danger'],['tested'=>'true','other'=>'somevalue']]`
     第一个数组描述按钮的名称和样式，第二个数组描述需要更改的字段和值
-    4. 点击按钮后需要调用某个接口并传参数：`[['name'=>'测试','class'=>'btn-danger','uri'=>'/api/test','method'=>'POST'],['tested'=>'true','other'=>'somevalue']]`
-    5. 点击按钮后需要弹出某个弹出框，`['配置','#modal']`，就会弹出来id为`modal`的弹出框
+    - 点击按钮后需要调用某个接口并传参数：`[['name'=>'测试','class'=>'btn-danger','uri'=>'/api/test','method'=>'POST'],['tested'=>'true','other'=>'somevalue']]`
+    - 点击按钮后需要弹出某个弹出框，`['配置','#modal']`，就会弹出来id为`modal`的弹出框
+
+<a id="user-content-list_header" href="#list_header"></a>
+#### 数据列表头 - 新增、检索、过滤筛选等
+
+用法：
+```php
+{!! Html::list_header([
+    'new'=>true,
+    'search'=>true,
+    'title'=>'数据列表标题',
+    'filters'=>$results['filters']
+    ]) !!}
+```
+
+数据项参数：
+
+1. `new` 表示是否显示`新增`按钮，点击后跳转到创建页面
+2. `search` 表示是否显示`检索`输入框，输入检索内容后，默认以`keywords`为参数传递到后端接口，相当于`?keywords=xxx`
+3. `title` 标题
+4. `filters` 数据源为数组，如下：
+
+```php
+$results['filters'] = [
+    'status' => [
+        ['label' => '所有状态', 'value'=>''],
+        ['label' => '状态1', 'value' => 0]
+    ],
+    'other' => [
+        ['label' => '其它过滤', 'value'=>''],
+        ['label' => '过滤1', 'value' => 0]
+    }
+];
+```
+
+`status`和`other`是该数据项的字段名，它们对应的数组是显示出来供选择的选项，选择后会自动提交请求，相当于`?status=''&other=''`。
+相应的在Controller的`index`方法里，添加很简单的代码即可实现分页的同时自动加上相应的参数，并根据参数过滤相应的内容，如下：
+
+```php
+$all = $request->except(['page']);
+$paginate = Model::orderBy('id', 'desc');
+//如果没有筛选条件直接返回分页数据
+if (!sizeof($all)) {
+    $paginate = $paginate->paginate();
+}else{
+    //遍历筛选条件
+    foreach ($all as $key => $value) {
+        if ($key == 'keywords') { //检索的关键词，定义检索关键词的检索语句
+            $paginate->where('name', 'LIKE', '%'.$value.'%');
+        }else{
+            //可以根据不同的检索条件的不同值进行不同的语句组合，比如状态为7的数据加多筛选条件
+            if ($key == 'status' && $value == 7) {
+                $paginate->where($key, '=', 1)
+                        ->where('time', '<', Carbon::now())
+                        ->whereRaw(' `a` > `b` ')
+                        ->orWhere($key, '=', $value);
+            } else { //正常来说就只加where即可
+                $paginate->where($key, '=', $value);
+            }
+        }
+    }
+    $paginate = $paginate->paginate();
+}
+$results = [
+    'items' => $paginate->appends($all),
+];
+```
+
+> 针对简单内容的筛选，基本上检索代码都可以直接Copy使用，仅需修改`Model`即可
+
+<a id="user-content-form_select" href="#form_select"></a>
+#### 下拉列表选择
+
+用法：
+```php
+Form::form_select('type_id', '标的类型', [
+    ['label'=>'名称', 'value'=>'']
+],0.5,false)
+```
+
+参数：
+1. 字段名
+2. 数据项的Label名称
+3. 下拉列表数据，label表示显示出来的内容，value表示存储的时候使用的内容
+4. 长度，默认是bootstratp整行的一半，等同于`col-md-6`
+5. 是否用于`modal`，因为modal样式有些差异，所以加了这个参数
+
+<a id="user-content-form_radio" href="#form_radio"></a>
+#### 单选radio
+
+用法：
+```php
+{!! Form::form_radio('risk_level', '风险等级', [
+[0, 'A', true],
+[1, 'B'],
+[2, 'C'],
+[3, 'D'],
+[4, 'E'],
+[5, 'F']
+], 0.5) !!}
+```
+
+参数：
+1. 字段名
+2. 数据项的Label名称
+3. 数据内容，包括
+    - 存储时用的数据
+    - 显示出来的名称
+    - 是否默认选中
+4. 长度，默认是bootstratp整行的一半，等同于`col-md-6`，radio因为经常比较多，默认是`1`
+
+<a id="user-content-form_time" href="#form_time"></a>
+#### 时间控件
+
+用法：
+```php
+{!! Form::form_time('time','开始时间','如 2015-06-06 08:00:00') !!}
+```
+
+参数：
+1. 字段名
+2. label名称
+3. 提示文字
+
+<a id="user-content-form_date" href="#form_date"></a>
+#### 日期控件
+
+用法：
+```php
+{!! Form::form_date('date','开始日期','如 2015-06-06') !!}
+```
+
+参数：
+1. 字段名
+2. label名称
+3. 提示文字
+
+<a id="user-content-form_text" href="#form_text"></a>
+#### 单行文本输入
+
+用法：
+```php
+{!! Form::form_text('column','字段名称','提示文字') !!}
+```
+
+<a id="user-content-form_area" href="#form_area"></a>
+#### 多行文本输入
+
+用法：
+```php
+{!! Form::form_area('column','字段名称','提示文字') !!}
+```
+
+<a id="user-content-commands" href="#commands"></a>
+#### 提高研发效率的几个自定义命令
+
+- `php artisan forone:init` 系统初始化命令，只可运行一次。
+- `php artisan db:backup` 通过`iseed`库自动备份当前数据库的数据到Seeder文件里，解决研发时测试数据同步或临时数据结构变更测试数据面临清空等问题。并可根据migrations的文件顺序进行合理的排序，避免由于依赖关系引起的后续数据填充问题。
+- `php artisan db:clear` 清空数据库，心情不爽的时候用一下，感觉棒棒哒。
+- `php artisan db:upgrade` 升级数据库，可能加了新的字段等，会自动填充Seeder文件里的数据，升级之前最好先备份下数据。
