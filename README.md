@@ -33,7 +33,7 @@ ForoneAdministrator 是一款基于Laravel5.1封装的后台管理系统，集�
 由于不可抗力因素，最好在`compoer.json`里加入如下配置后再开始安装，设置国内的`composer`镜像同时也可设置直接从国内git服务器上下载。
 由于使用的entrust还处于dev状态，所以需要将composer.json里的`minimum-stability` 设置为 `dev`
 
-```
+```json
 "repositories": [
   {"type": "git", "url": "http://git.forone.co/mani/ForoneAdministrator.git"},
   {"type": "composer", "url": "http://packagist.phpcomposer.com"},
@@ -85,7 +85,7 @@ use Authenticatable, CanResetPassword, EntrustUserTrait;
 <a id="user-content-config" href="#config"></a>
 ### forone配置
 
-```
+```php
 return [
     'site_config'                 => [
         'site_name'   => '站点名称',
@@ -127,12 +127,14 @@ return [
 ### 权限控制
 
 权限控制主要分两部分，一部分是控制菜单是否显示，通过菜单的`permission`属性即可完成，另一部分是控制路由，通过`admin.permission`中间件传参来进行控制即可，主要有两种使用场景：
-1. 在routes里进行权限控制，这种用法是直接使用middleware进行自动判定的，更多的别的路由过滤的用法请看`entrust`文档
-```
+
+- 在routes里进行权限控制，这种用法是直接使用middleware进行自动判定的，更多的别的路由过滤的用法请看`entrust`文档
+```php
 Route::group(['prefix' => 'admin', 'middleware' => ['admin.auth', 'admin.permission:admin']], function () {
 ```
-2. 在Controller里对Controller的所有请求进行权限控制
-```
+
+- 在Controller里对Controller的所有请求进行权限控制
+```php
 function __construct()
 {
     parent::__construct('admins', '管理员');
@@ -168,8 +170,10 @@ function __construct()
 #### 数据列表
 
 用法：`{!! Html::datagrid($results) !!}`
+
 数据：数据源为数组
-```
+
+```php
 'columns' => [
     ['流水号', 'id', function ($id) {
         return '';
