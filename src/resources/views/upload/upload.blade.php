@@ -1,5 +1,5 @@
 <script type='text/javascript'>
-    $(document).ready(function(){
+    init.push(function(){
         var name = "{{$name}}";
         Qiniu.uploader({
             browse_button: "{{$name}}_img",
@@ -23,9 +23,12 @@
                                     'id="'+file.id+'" ' +
                                     'style="width: 68px; height: 68px;cursor:pointer" ' +
                                     'src="'+ e.target.result+'">' +
-                                    '<img id="'+file.id+'loading" src="/vendor/forone/components/qiniu/loading.gif">' +
-//                                    '<input type="text" onkeyup="fillMultiUploadInput(\''+name+'\')" style="width: 68px;float: left" placeholder="图片描述">' +
-                                    '</div>';
+                                    '<img id="'+file.id+'loading" src="/vendor/forone/components/qiniu/loading.gif">';
+                            @if(isset($with_description) && $with_description)
+                                item+='<input type="text" onkeyup="fillMultiUploadInput(\''+name+'\')" style="width: 68px;float: left" placeholder="图片描述">';
+                            @else
+                                item+='</div>';
+                            @endif
                             $("#{{$name}}_div").append(item);
                         }
                         reader.readAsDataURL(file.getNative());

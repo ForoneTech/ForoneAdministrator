@@ -13,8 +13,8 @@ ForoneAdministrator 是一款基于Laravel5.1封装的后台管理系统，集�
     - [日期控件 - Form::form_date](#form_date)
     - [单行文本输入框 - From::form_text](#form_text)
     - [多行文本输入框 - From::form_area](#form_area)
-    - [七牛单文件上传 - 待重构后测试]
-    - [七牛多文件上传 - 待重构后测试]
+    - [单文件上传 - Form::single_file_upload](#single_upload)
+    - [多文件上传 - Form::multi_file_upload](#multi_upload)
     - [富文本编辑器 - 待测试]
 - [提高研发效率的几个自定义命令](#commands)
 
@@ -80,6 +80,11 @@ composer require forone/administrator:~1.0.0
 php artisan vendor:publish
 ```
 
+修改`.env`通过环境变量设置初始管理员账号密码
+
+`ADMIN_EMAIL`默认为`admin@admin.com`
+`ADMIN_PASSWORD`默认为`admin`
+
 系统初始化
 
 ```
@@ -91,7 +96,7 @@ php artisan forone:init
 use Authenticatable, CanResetPassword, EntrustUserTrait;
 ```
 
-现在就可以使用forone.php配置文件里的管理员账号密码登陆了
+现在就可以使用`.env`里的管理员账号密码登陆了
 
 <a id="user-content-config" href="#config"></a>
 ### forone配置
@@ -366,6 +371,37 @@ Form::form_select('type_id', '标的类型', [
 ```php
 {!! Form::form_area('column','字段名称','提示文字') !!}
 ```
+
+<a id="user-content-single_upload" href="#single_upload"></a>
+#### 单文件上传
+
+用法：
+```php
+{!! Form::single_file_upload('field_name', 'label') !!}
+```
+
+参数：
+
+1. 字段名
+2. 项名称
+3. 项宽度，默认`0.5`
+4. 上传平台，目前默认且仅支持`qiniu`
+
+<a id="user-content-multi_upload" href="#multi_upload"></a>
+#### 多文件上传
+
+用法：
+```php
+{!! Form::multi_file_upload('field_name', 'label') !!}
+```
+
+参数：
+
+1. 字段名
+2. 项名称
+3. 是否显示图片描述输入框
+4. 项宽度，默认`0.5`
+5. 上传平台，目前默认且仅支持`qiniu`
 
 <a id="user-content-commands" href="#commands"></a>
 #### 提高研发效率的几个自定义命令

@@ -35,7 +35,7 @@ return [
     ],
 
     'qiniu'                       => [
-        'host'       => 'http://share.u.qiniudn.com', //your qiniu host url
+        'host'       => 'http://share.u.qiniudn.com/', //your qiniu host url
         'access_key' => '-S31BNj77Ilqwk5IN85PIBoGg8qlbkqwULiraG0x', //for test
         'secret_key' => 'QoVdaBFZITDp9hD7ytvUKOMAgohKaB8oa11FJdxN', //for test
         'bucket'     => 'share'

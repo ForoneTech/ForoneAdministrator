@@ -9,12 +9,14 @@
 namespace Forone\Admin\Providers;
 
 
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Form;
 
 class QiniuUploadProvider extends ServiceProvider
 {
 
+    static $single_inited;
 
     /**
      * Register the service provider.
@@ -27,22 +29,17 @@ class QiniuUploadProvider extends ServiceProvider
         $this->multiFilesUpload();
     }
 
-    public static function parseValue($model, $name)
-    {
-        $arr = explode('.', $name);
-        if (sizeof($arr) == 2) {
-            return $model && (!is_array($model) ||  array_key_exists($arr[0], $model)) ? $model[$arr[0]][$arr[1]] : '';
-        }else{
-            return $model && (!is_array($model) ||  array_key_exists($name, $model)) ? $model[$name] : '';
-        }
-    }
-
     private function singleFileUpload()
     {
-        $handler = function ($name, $label, $percent = 0.5) {
-            $value = self::parseValue($this->model, $name);
+        $handler = function ($name, $label, $percent = 0.5,$platform="qiniu") {
+            $value = ForoneFormServiceProvider::parseValue($this->model, $name);
             $url = $value ? config('forone.qiniu.host') . $value : '/vendor/forone/images/upload_add.png';
-            return '<div class="form-group col-sm-' . ($percent * 12) . '">
+            $js = View::make('forone::upload.upload')->with(['name'=>$name])->render();
+            if(!QiniuUploadProvider::$single_inited){
+                $js = View::make('forone::upload.upload_js')->render() . $js;
+                QiniuUploadProvider::$single_inited = true;
+            }
+            return $js.'<div class="form-group col-sm-' . ($percent * 12) . '">
                         ' . Form::form_label($label) . '
                         <div class="col-sm-9">
                             <input id="' . $name . '" type="hidden" name="' . $name . '" type="text" value="' . $value . '">
@@ -51,13 +48,12 @@ class QiniuUploadProvider extends ServiceProvider
                     </div>';
         };
         Form::macro('single_file_upload', $handler);
-        Form::macro('qiniu_single_file_upload', $handler);
     }
 
     private function multiFilesUpload()
     {
-        Form::macro('multi_file_upload', function ($name, $label, $percent=0.5) {
-            $value = self::parseValue($this->model, $name);
+        Form::macro('multi_file_upload', function ($name, $label, $with_description=true, $percent=0.5,$platform="qiniu") {
+            $value = ForoneFormServiceProvider::parseValue($this->model, $name);
             $url = '/vendor/forone/images/upload_add.png';
             $uploaded_items = '';
             if ($value) {
@@ -83,7 +79,13 @@ class QiniuUploadProvider extends ServiceProvider
                 }
             }
 
-            return '<div class="form-group col-sm-' . ($percent * 12) . '">
+            $js = View::make('forone::upload.upload')->with(['multi'=>true,'name'=>$name, 'with_description'=>$with_description])->render();
+            if(!QiniuUploadProvider::$single_inited){
+                $js = View::make('forone::upload.upload_js')->render() . $js;
+                QiniuUploadProvider::$single_inited = true;
+            }
+
+            return $js.'<div class="form-group col-sm-' . ($percent * 12) . '">
                         ' . Form::form_label($label) . '
                         <div class="col-sm-9">
                             <input id="'.$name.'" type="hidden" name="' . $name . '" type="text" value="'.$value.'">
