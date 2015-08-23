@@ -300,6 +300,7 @@ Form::form_select('type_id', '标的类型', [
 ```
 
 参数：
+
 1. 字段名
 2. 数据项的Label名称
 3. 下拉列表数据，label表示显示出来的内容，value表示存储的时候使用的内容
@@ -322,6 +323,7 @@ Form::form_select('type_id', '标的类型', [
 ```
 
 参数：
+
 1. 字段名
 2. 数据项的Label名称
 3. 数据内容，包括
@@ -339,6 +341,7 @@ Form::form_select('type_id', '标的类型', [
 ```
 
 参数：
+
 1. 字段名
 2. label名称
 3. 提示文字
@@ -352,6 +355,7 @@ Form::form_select('type_id', '标的类型', [
 ```
 
 参数：
+
 1. 字段名
 2. label名称
 3. 提示文字
