@@ -14,6 +14,7 @@ use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Config;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
 
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract {
@@ -40,6 +41,17 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      * @var array
      */
     protected $hidden = ['password', 'remember_token'];
+
+    /**
+     * Creates a new instance of the model.
+     *
+     * @param array $attributes
+     */
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        $this->table = config('forone.auth.administrator_table', 'users');
+    }
 
     /**
      * Get the unique identifier for the user.

@@ -26,7 +26,7 @@ class ForoneServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        if (!$this->app->routesAreCached()) {
+        if (!config('forone.disable_routes')) {
             require __DIR__ . '/../routes.php';
         }
         $this->loadViewsFrom(__DIR__ . '/../../resources/views', 'forone');

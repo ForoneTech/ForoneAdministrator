@@ -7,6 +7,11 @@
  */
 
 return [
+    'disable_routes' => false, //禁用自带routes，默认启用
+    'auth' => [
+        'administrator_table' => 'users',
+        'administrator_auth_controller' => 'Forone\Admin\Controllers\Auth\AuthController'
+    ],
     'site_config'                 => [
         'site_name'   => 'your site name',
         'title'       => 'your site title',
