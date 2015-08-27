@@ -12,7 +12,8 @@ use Forone\Admin\Controllers\BaseController;
 use Forone\Admin\Permission;
 use Forone\Admin\Requests\CreatePermissionRequest;
 use Forone\Admin\Requests\UpdatePermissionRequest;
-use Illuminate\Support\Facades\Request;
+//use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
 
 class PermissionsController extends BaseController {
 
@@ -88,10 +89,11 @@ class PermissionsController extends BaseController {
      */
     public function update($id, Request $request)
     {
-        $data = $request->except('id', '_token');
+
+        $data = $request->except('_token');
         Permission::findOrFail($id)->update($data);
 
-        return $this->toIndex();
+        return $this->toIndex('编辑成功');
     }
 
 }

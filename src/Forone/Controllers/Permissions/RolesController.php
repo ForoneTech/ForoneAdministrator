@@ -80,7 +80,7 @@ class RolesController extends BaseController {
      */
     public function store(CreateRoleRequest $request)
     {
-        Role::create($request->only(['name']));
+        Role::create($request->except('_token'));
         return redirect()->route('admin.roles.index');
     }
 
