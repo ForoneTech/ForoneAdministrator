@@ -10,7 +10,7 @@ Route::get('/', function () {
     return redirect('/admin/auth/login');
 });
 Route::controllers([
-    'admin/auth' => config('forone.auth.administrator_auth_controller'),
+    'admin/auth' => config('forone.auth.administrator_auth_controller', 'Forone\Admin\Controllers\Auth\AuthController'),
 ]);
 
 //admin
