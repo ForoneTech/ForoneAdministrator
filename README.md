@@ -53,6 +53,8 @@ ForoneAdministrator 是一款基于Laravel5.1封装的后台管理系统，集�
 "minimum-stability" : "dev"
 ```
 
+> 由于启用了 `"minimum-stability" : "dev"`，Laravel的`dev`版本会导致paginate出错，请在`composer.json`里将laravel版本设置为`5.1.4`
+
 使用composer进行安装
 ```
 composer require forone/administrator:~1.0.0
@@ -94,6 +96,10 @@ php artisan forone:init
 为`App\User`添加Entrust的Trait，以便使用一些封装的方法
 ```
 use Authenticatable, CanResetPassword, EntrustUserTrait;
+```
+使用`EntrustUserTrait`的时候注意需要引入该类：
+```
+use Zizaco\Entrust\Traits\EntrustUserTrait;
 ```
 
 现在就可以使用`.env`里的管理员账号密码登陆了
@@ -414,3 +420,4 @@ Form::form_select('type_id', '标的类型', [
 - `php artisan db:backup` 通过`iseed`库自动备份当前数据库的数据到Seeder文件里，解决研发时测试数据同步或临时数据结构变更测试数据面临清空等问题。并可根据migrations的文件顺序进行合理的排序，避免由于依赖关系引起的后续数据填充问题。
 - `php artisan db:clear` 清空数据库，心情不爽的时候用一下，感觉棒棒哒。
 - `php artisan db:upgrade` 升级数据库，可能加了新的字段等，会自动填充Seeder文件里的数据，升级之前最好先备份下数据。
+- `php artisan forone:copy` 可复制一些文件到实际项目里，比如复制routes文件以便自定义route
