@@ -59,6 +59,7 @@ class ForoneServiceProvider extends ServiceProvider
             \Forone\Admin\Console\InitCommand::class,
             \Forone\Admin\Console\Upgrade::class,
             \Forone\Admin\Console\Backup::class,
+            \Forone\Admin\Console\CopyForone::class
         ]);
     }
 
