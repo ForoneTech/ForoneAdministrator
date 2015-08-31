@@ -21,7 +21,7 @@ class CreateAdminRequest extends Request {
 	{
 		return [
             'name' => 'required|max:20',
-            'email' => 'required|email|unique:config("forone.auth.administrator_table")',
+            'email' => 'required|email|unique:'.config("forone.auth.administrator_table"),
             'password' => 'required|max:20',
         ];
 	}
