@@ -19,9 +19,6 @@ class ForoneHtmlServiceProvider extends ServiceProvider
     public function register()
     {
         $this->groupLabel();
-        $this->modalButton();
-        $this->panelStart();
-        $this->panelEnd();
         $this->modalStart();
         $this->modalEnd();
         $this->json();
@@ -38,40 +35,6 @@ class ForoneHtmlServiceProvider extends ServiceProvider
         } else {
             return $model && (!is_array($model) || array_key_exists($name, $model)) ? $model[$name] : '';
         }
-    }
-
-    public function panelStart()
-    {
-        Form::macro('panel_start', function ($title = '') {
-            return '<div class="panel panel-default">
-                        <div class="panel-heading bg-white">
-                            <span class="font-bold">' . $title . '</span>
-                        </div>
-                    <div class="panel-body">';
-        });
-    }
-
-    public function panelEnd()
-    {
-        Form::macro('panel_end', function ($submit_label = '') {
-            if (!$submit_label) {
-                return '';
-            }
-            $result = '</div><footer class="panel-footer">
-                            <button type="submit" class="btn btn-info">' . $submit_label . '</button>
-                        </footer></div>';
-            return $result;
-        });
-    }
-
-    public function modalButton()
-    {
-        Form::macro('modal_button', function ($label, $modal, $data, $class = 'waves-effect') {
-            $jsonData = json_encode($data);
-            $html = '<a href="' . $modal . '" style="margin-left:5px;"><button onclick="fillModal(\'' . $data->id . '\')" class="btn ' . $class . '" >' . $label . '</button></a>';
-            $js = "<script>init.push(function(){datas['" . $data->id . "']='" . $jsonData . "';})</script>";
-            return $html . $js;
-        });
     }
 
     private function dataGrid()
@@ -291,7 +254,7 @@ class ForoneHtmlServiceProvider extends ServiceProvider
 
                 $result = '';
                 foreach ($data['filters'] as $key => $value) {
-                    $result .= '<div class="col-sm-2" style="padding-left: 0px;width: 13%">
+                    $result .= '<div class="col-sm-2" style="padding-left: 0px;width: 8%">
                         <select class="form-control" name="' . $key . '">';
                     foreach ($value as $item) {
                         $value = is_array($item) ? $item['value'] : $item;
@@ -327,6 +290,88 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                         });
                     })</script>";
                 $html .= $result . $js;
+            }
+
+            if (array_key_exists('priceStart',$data)) {
+
+                $priceStart = is_bool($data['priceStart']) ? '价格' : $data['priceStart'];
+                $html .= '<div class="col-md-3" style="padding-left:0px;width: 8%">
+                                <input id="priceStartInput" type="text" class="form-control input" name="priceStart" value="'.Input::get('priceStart').'" placeholder="'.$priceStart.'"  />
+                            </div>';
+                $js = "<script>init.push(function(){
+                    $('#priceStartInput').keyup(function(event){
+                        if(event.keyCode == 13){
+                            console.log('do search');
+                            var params = window.location.search.substring(1);
+                            var paramObject = {};
+                            var paramArray = params.split('&');
+                            paramArray.forEach(function(param){
+                                if(param){
+                                    var arr = param.split('=');
+                                    paramObject[arr[0]] = arr[1];
+                                }
+                            });
+                            var baseUrl = window.location.origin+window.location.pathname;
+                            if($(this).val()){
+                                 if($('#priceEndInput').val())
+                                    {
+                                        if(parseFloat($('#priceEndInput').val()) >= parseFloat($(this).val())){
+                                             paramObject[$('#priceEndInput').attr('name')] = $('#priceEndInput').val();
+                                        }else{
+                                            alert('范围有错');
+                                            return;
+                                        }
+                                    }
+                                 paramObject[$(this).attr('name')] = $(this).val();
+                            }else{
+                                delete paramObject[$(this).attr('name')];
+                            }
+                            window.location.href = $.param(paramObject) ? baseUrl+'?'+$.param(paramObject) : baseUrl;
+                        }
+                    });
+                });</script>";
+                $html .= $js;
+            }
+
+            if (array_key_exists('priceEnd',$data)) {
+
+                $priceEnd = is_bool($data['priceEnd']) ? '价格' : $data['priceEnd'];
+                $html .= '<div class="col-md-3" style="padding-left:0px;width: 8%">
+                                <input id="priceEndInput" type="text" class="form-control input" name="priceEnd" value="'.Input::get('priceEnd').'" placeholder="'.$priceEnd.'"  />
+                            </div>';
+                $js = "<script>init.push(function(){
+                    $('#priceEndInput').keyup(function(event){
+                        if(event.keyCode == 13){
+                            console.log('do search');
+                            var params = window.location.search.substring(1);
+                            var paramObject = {};
+                            var paramArray = params.split('&');
+                            paramArray.forEach(function(param){
+                                if(param){
+                                    var arr = param.split('=');
+                                    paramObject[arr[0]] = arr[1];
+                                }
+                            });
+                            var baseUrl = window.location.origin+window.location.pathname;
+                            if($(this).val()){
+                                if($('#priceStartInput').val())
+                                {
+                                    if(parseFloat($('#priceStartInput').val()) <= parseFloat($(this).val())){
+                                         paramObject[$('#priceStartInput').attr('name')] = $('#priceStartInput').val();
+                                    }else{
+                                        alert('范围有错');
+                                        return;
+                                    }
+                                }
+                                paramObject[$(this).attr('name')] = $(this).val();
+                            }else{
+                                delete paramObject[$(this).attr('name')];
+                            }
+                            window.location.href = $.param(paramObject) ? baseUrl+'?'+$.param(paramObject) : baseUrl;
+                        }
+                    });
+                });</script>";
+                $html .= $js;
             }
 
             if (array_key_exists('search', $data)) {
