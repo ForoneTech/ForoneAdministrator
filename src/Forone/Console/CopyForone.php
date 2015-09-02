@@ -70,6 +70,7 @@ class CopyForone extends Command {
         if($this->confirm('Copy routes? This will override app/Http/routes.php file, please backup that first')){
             copy('vendor/forone/administrator/src/Forone/routes.php', 'app/Http/routes.php');
             copyr('vendor/forone/administrator/src/Forone/Controllers', 'app/Http/Controllers/Forone/Admin/Controllers');
+            copyr('vendor/forone/administrator/src/resources/views', 'resources/views/forone');
             $config = file_get_contents('config/forone.php');
             $config = str_replace("'disable_routes' => false", "'disable_routes' => true", $config);
             file_put_contents('config/forone.php', $config);
