@@ -40,9 +40,10 @@ return [
     ],
 
     'qiniu'                       => [
-        'host'       => 'http://share.u.qiniudn.com/', //your qiniu host url
-        'access_key' => '-S31BNj77Ilqwk5IN85PIBoGg8qlbkqwULiraG0x', //for test
-        'secret_key' => 'QoVdaBFZITDp9hD7ytvUKOMAgohKaB8oa11FJdxN', //for test
-        'bucket'     => 'share'
+
+        'host'       => env('QINIU_HOST', 'http://7xlntj.com2.z0.glb.qiniucdn.com/'), //your qiniu host url
+        'access_key' => env('QINIU_AK', '7uuXy55ekyLfIw9gwI2Jr4Oin_9qHIQQfXi4ijL1'), //for test
+        'secret_key' => env('QINIU_SK', 'FX8P2NE_iE2TR0pwMkK1f3ZErGqGlsmjffCOIZUq'), //for test
+        'bucket'     => env('QINIU_BT', 'poly')
     ]
 ];
