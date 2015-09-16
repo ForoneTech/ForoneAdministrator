@@ -65,6 +65,11 @@ class ForoneServiceProvider extends ServiceProvider
 
     private function registerProvider()
     {
+
+        //当.env配置 SESSION_DRIVER=redis 时注册RedisServiceProvider和CacheServiceProvider
+        $this->app->register(\Illuminate\Redis\RedisServiceProvider::class);
+        $this->app->register(\Illuminate\Cache\CacheServiceProvider::class);
+
         $this->app->register(\Illuminate\Translation\TranslationServiceProvider::class);
         $this->app->register(\Illuminate\Html\HtmlServiceProvider::class);
         $this->app->register(\Orangehill\Iseed\IseedServiceProvider::class);
