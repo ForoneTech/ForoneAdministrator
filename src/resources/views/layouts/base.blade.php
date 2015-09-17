@@ -25,6 +25,10 @@
     <link rel="stylesheet" href="{{ asset('vendor/forone/components/remodal/dist/remodal.css') }}">
     <link rel="stylesheet" href="{{ asset('vendor/forone/components/remodal/dist/remodal-default-theme.css') }}">
 
+    <script src="{{ asset('vendor/forone/libs/jquery/jquery/dist/jquery.js') }}"></script>
+    <script src="{{ asset("vendor/forone/ueditor/ueditor.config.js") }}"></script>
+    <script src="{{ asset("vendor/forone/ueditor/ueditor.all.js") }}"></script>
+
     <style>
         input {
             font-size: 16px;
@@ -74,7 +78,6 @@
 
 </div>
 
-<script src="{{ asset('vendor/forone/libs/jquery/jquery/dist/jquery.js') }}"></script>
 <script src="{{ asset('vendor/forone/scripts/jquery.fancybox.pack.js') }}"></script>
 <script src="{{ asset('vendor/forone/libs/jquery/bootstrap/dist/js/bootstrap.js') }}"></script>
 <script src="{{ asset('vendor/forone/libs/jquery/waves/dist/waves.js') }}"></script>

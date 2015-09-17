@@ -35,6 +35,7 @@ class ForoneFormServiceProvider extends ServiceProvider
         $this->panelStart();
         $this->panelEnd();
         $this->modalButton();
+        $this->ueditor();
     }
 
     public static function parseValue($model, $name)
@@ -46,7 +47,36 @@ class ForoneFormServiceProvider extends ServiceProvider
             return $model && (!is_array($model) || array_key_exists($name, $model)) ? $model[$name] : '';
         }
     }
-
+    /**
+     *ueditor
+     */
+    private function ueditor()
+    {
+        $handler = function ($name, $label, $placeholder = '', $percent = 0.5, $modal = false) {
+            $value = ForoneFormServiceProvider::parseValue($this->model, $name);
+            $data = '';
+            $input_col = 9;
+            if (is_array($placeholder)) {
+                $data = Form::parse($placeholder);
+                $placeholder = $data['placeholder'];
+                $percent = $data['percent'] ? $data['percent'] : 0.5;
+                $modal = $data['modal'] ? true : false;
+                $input_col = $data['label_col'] ? 12 - $data['label_col'] : 9;
+            }
+            $style = $modal ? 'style="padding:0px"' : '';
+            return '<div class="form-group col-sm-' . ($percent * 12) . '" ' . $style . '>
+                        ' . Form::form_label($label, $data) . '
+                        <div class="col-sm-' . $input_col . '">
+                             <script id="container" name=' . $name . ' type="text/plain">
+                            </script>
+                            <script type="text/javascript">
+                                var ue = UE.getEditor("container");
+                            </script>
+                          </div>
+                    </div>';
+        };
+        Form::macro('ueditor', $handler);
+    }
     /**
      * fill special fields data
      */
