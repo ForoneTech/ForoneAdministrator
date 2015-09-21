@@ -15,7 +15,7 @@ ForoneAdministrator 是一款基于Laravel5.1封装的后台管理系统，集�
     - [多行文本输入框 - From::form_area](#form_area)
     - [单文件上传 - Form::single_file_upload](#single_upload)
     - [多文件上传 - Form::multi_file_upload](#multi_upload)
-    - [富文本编辑器 - 待测试]
+    - [富文本编辑器 - Form::ueditor](#ueditor)
 - [提高研发效率的几个自定义命令](#commands)
 
 ### 效果图
@@ -412,6 +412,23 @@ Form::form_select('type_id', '标的类型', [
 3. 是否显示图片描述输入框
 4. 项宽度，默认`0.5`
 5. 上传平台，目前默认且仅支持`qiniu`
+
+
+<a id="user-content-ueditor" href="#ueditor"></a>
+#### 富文本编辑器
+
+用法：
+```php
+{!! Form::ueditor('name', 'label') !!}
+```
+
+参数：
+
+1. 字段名
+2. 项名称
+3. 项宽度，默认`0.5`
+
+
 
 <a id="user-content-commands" href="#commands"></a>
 #### 提高研发效率的几个自定义命令

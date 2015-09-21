@@ -40,6 +40,41 @@ class ForoneHtmlServiceProvider extends ServiceProvider
         }
     }
 
+    public function panelStart()
+    {
+        Form::macro('panel_start', function ($title = '') {
+            return '<div class="panel panel-default">
+                        <div class="panel-heading bg-white">
+                            <span class="font-bold">' . $title . '</span>
+                        </div>
+                    <div class="panel-body">';
+        });
+    }
+
+    public function panelEnd()
+    {
+        Form::macro('panel_end', function ($submit_label = '') {
+            if (!$submit_label) {
+                return '';
+            }
+            $result = '</div><footer class="panel-footer">
+                            <button type="submit" class="btn btn-info">' . $submit_label . '</button>
+                        </footer></div>';
+            return $result;
+        });
+    }
+
+
+    public function modalButton()
+    {
+        Form::macro('modal_button', function ($label, $modal, $data, $class = 'waves-effect') {
+            $jsonData = json_encode($data);
+            $html = '<a href="' . $modal . '" style="margin-left:5px;"><button onclick="fillModal(\'' . $data->id . '\')" class="btn ' . $class . '" >' . $label . '</button></a>';
+            $js = "<script>init.push(function(){datas['" . $data->id . "']='" . $jsonData . "';})</script>";
+            return $html . $js;
+        });
+    }
+
     private function dataGrid()
     {
         Html::macro('datagrid', function ($data) {
@@ -215,41 +250,6 @@ class ForoneHtmlServiceProvider extends ServiceProvider
         });
     }
 
-
-    public function panelStart()
-    {
-        Form::macro('panel_start', function ($title = '') {
-            return '<div class="panel panel-default">
-                        <div class="panel-heading bg-white">
-                            <span class="font-bold">' . $title . '</span>
-                        </div>
-                    <div class="panel-body">';
-        });
-    }
-
-    public function panelEnd()
-    {
-        Form::macro('panel_end', function ($submit_label = '') {
-            if (!$submit_label) {
-                return '';
-            }
-            $result = '</div><footer class="panel-footer">
-                            <button type="submit" class="btn btn-info">' . $submit_label . '</button>
-                        </footer></div>';
-            return $result;
-        });
-    }
-
-
-    public function modalButton()
-    {
-        Form::macro('modal_button', function ($label, $modal, $data, $class = 'waves-effect') {
-            $jsonData = json_encode($data);
-            $html = '<a href="' . $modal . '" style="margin-left:5px;"><button onclick="fillModal(\'' . $data->id . '\')" class="btn ' . $class . '" >' . $label . '</button></a>';
-            $js = "<script>init.push(function(){datas['" . $data->id . "']='" . $jsonData . "';})</script>";
-            return $html . $js;
-        });
-    }
 
     private function modalStart()
     {
