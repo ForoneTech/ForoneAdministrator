@@ -11,6 +11,7 @@ namespace Forone\Admin\Providers;
 
 use Form;
 use Html;
+use View;
 use Illuminate\Support\ServiceProvider;
 
 class ForoneFormServiceProvider extends ServiceProvider
