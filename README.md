@@ -1,3 +1,5 @@
+实在招不到人，在此打个广告，40k左右/月，招Laravel负责人，比这要求低一点的也可以，请联系 mani@nxdai.com 或 1283233833
+
 ForoneAdministrator 是一款基于Laravel5.1封装的后台管理系统，集成了[Entrust](https://github.com/Zizaco/entrust)权限管理，并针对业务的增删改查进行了视图和业务层的封装，有助于进行后台管理系统的快速研发。
 
 - [安装初始化](#init)
