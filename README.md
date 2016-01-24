@@ -58,8 +58,13 @@ ForoneAdministrator 是一款基于Laravel5.1封装的后台管理系统，集�
 > 由于启用了 `"minimum-stability" : "dev"`，Laravel的`dev`版本会导致paginate出错，请在`composer.json`里将laravel版本设置为`5.1.4`
 
 使用composer进行安装
+5.1.x版本
 ```
-composer require forone/administrator:~1.0.0
+composer require forone/administrator:5.1.x
+```
+5.2.x版本
+```
+composer require forone/administrator:5.2.x
 ```
 
 编辑 `config/app.php` 注册 `providers` 和 `aliases`
