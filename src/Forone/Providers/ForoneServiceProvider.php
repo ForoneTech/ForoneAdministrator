@@ -36,6 +36,7 @@ class ForoneServiceProvider extends ServiceProvider
         $this->publishMigrations();
         $this->setLocale();
         $this->app['events']->fire('admin.ready');
+        $this->registerProvider();
     }
 
     /**
@@ -45,8 +46,7 @@ class ForoneServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->registerCommands();
-        $this->registerProvider();
+        $this->registerCommands();        
         $this->registerAlias();
         $this->registerMiddleware();
         $this->app->bind(\Illuminate\Contracts\Auth\Registrar::class, \Forone\Admin\Services\Registrar::class);
