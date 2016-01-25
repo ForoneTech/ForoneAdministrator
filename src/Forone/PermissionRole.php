@@ -6,7 +6,7 @@
  * Email: smartydroid@gmail.com
  */
 
-namespace Forone\Admin;
+namespace Forone;
 
 use Zizaco\Entrust\Contracts\EntrustRoleInterface;
 use Zizaco\Entrust\Traits\EntrustRoleTrait;

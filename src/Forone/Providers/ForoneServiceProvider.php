@@ -6,7 +6,7 @@
  * Email: mani@forone.co
  */
 
-namespace Forone\Admin\Providers;
+namespace Forone\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -46,30 +46,25 @@ class ForoneServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->registerCommands();        
+        $this->registerCommands();
         $this->registerAlias();
         $this->registerMiddleware();
-        $this->app->bind(\Illuminate\Contracts\Auth\Registrar::class, \Forone\Admin\Services\Registrar::class);
+        $this->app->bind(\Illuminate\Contracts\Auth\Registrar::class, \Forone\Services\Registrar::class);
     }
 
     private function registerCommands()
     {
         $this->commands([
-            \Forone\Admin\Console\ClearDatabase::class,
-            \Forone\Admin\Console\InitCommand::class,
-            \Forone\Admin\Console\Upgrade::class,
-            \Forone\Admin\Console\Backup::class,
-            \Forone\Admin\Console\CopyForone::class
+            \Forone\Console\ClearDatabase::class,
+            \Forone\Console\InitCommand::class,
+            \Forone\Console\Upgrade::class,
+            \Forone\Console\Backup::class,
+            \Forone\Console\CopyForone::class
         ]);
     }
 
     private function registerProvider()
     {
-
-        //当.env配置 SESSION_DRIVER=redis 时注册RedisServiceProvider和CacheServiceProvider
-        $this->app->register(\Illuminate\Redis\RedisServiceProvider::class);
-        $this->app->register(\Illuminate\Cache\CacheServiceProvider::class);
-
         $this->app->register(\Illuminate\Translation\TranslationServiceProvider::class);
         $this->app->register(\Illuminate\Html\HtmlServiceProvider::class);
         $this->app->register(\Orangehill\Iseed\IseedServiceProvider::class);
@@ -123,8 +118,8 @@ class ForoneServiceProvider extends ServiceProvider
 
     private function registerMiddleware()
     {
-        $this->app['router']->middleware('admin.permission', \Forone\Admin\Middleware\EntrustPermission::class);
-        $this->app['router']->middleware('admin.auth', \Forone\Admin\Middleware\Authenticate::class);
-        $this->app['router']->middleware('admin.guest', \Forone\Admin\Middleware\RedirectIfAuthenticated::class);
+        $this->app['router']->middleware('admin.permission', \Forone\Middleware\EntrustPermission::class);
+        $this->app['router']->middleware('admin.auth', \Forone\Middleware\Authenticate::class);
+        $this->app['router']->middleware('admin.guest', \Forone\Middleware\RedirectIfAuthenticated::class);
     }
 }

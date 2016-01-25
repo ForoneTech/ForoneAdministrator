@@ -1,4 +1,4 @@
-<?php namespace Forone\Admin\Console;
+<?php namespace Forone\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
@@ -46,7 +46,7 @@ class CopyForone extends Command {
             if (is_file($source)) {
                 $copied = copy($source, $dest);
                 $content = file_get_contents($dest);
-                $content = str_replace("Forone\Admin\Controllers", "App\Http\Controllers\Forone\Admin\Controllers", $content);
+                $content = str_replace("Forone\Controllers", "App\Http\Controllers\Forone\Controllers", $content);
                 file_put_contents($dest, $content);
                 return $copied;
             }
@@ -69,7 +69,7 @@ class CopyForone extends Command {
 
         if($this->confirm('Copy routes? This will override app/Http/routes.php file, please backup that first')){
             copy('vendor/forone/administrator/src/Forone/routes.php', 'app/Http/routes.php');
-            copyr('vendor/forone/administrator/src/Forone/Controllers', 'app/Http/Controllers/Forone/Admin/Controllers');
+            copyr('vendor/forone/administrator/src/Forone/Controllers', 'app/Http/Controllers/Forone/Controllers');
             copyr('vendor/forone/administrator/src/resources/views', 'resources/views/forone');
             $config = file_get_contents('config/forone.php');
             $config = str_replace("'disable_routes' => false", "'disable_routes' => true", $config);

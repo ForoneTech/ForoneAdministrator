@@ -1,6 +1,6 @@
-<?php namespace Forone\Admin\Services;
+<?php namespace Forone\Services;
 
-use Forone\Admin\User;
+use Forone\Admin;
 use Validator;
 use Illuminate\Contracts\Auth\Registrar as RegistrarContract;
 
@@ -29,7 +29,7 @@ class Registrar implements RegistrarContract {
 	 */
 	public function create(array $data)
 	{
-		return User::create([
+		return Admin::create([
 			'name' => $data['name'],
 			'email' => $data['email'],
 			'password' => bcrypt($data['password']),

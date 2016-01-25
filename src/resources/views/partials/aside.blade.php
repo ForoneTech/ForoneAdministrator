@@ -17,7 +17,7 @@
                         <div id="nav">
                             <nav ui-nav>
                                 <ul class="nav">
-                                    @inject('ns', 'Forone\Admin\Services\NavService')
+                                    @inject('ns', 'Forone\Services\NavService')
                                     @foreach(config('forone.menus') as $title => $value)
                                         @if($ns->checkPermission($value))
                                         <li class="{{ $ns->isActive($value) }}">

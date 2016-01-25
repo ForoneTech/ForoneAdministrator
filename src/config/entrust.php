@@ -7,9 +7,7 @@
  * @license MIT
  * @package Zizaco\Entrust
  */
-
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Entrust Role Model
@@ -19,8 +17,7 @@ return [
     | the role if it is in a different namespace.
     |
     */
-    'role' => 'Forone\Admin\Role',
-
+    'role' => 'Forone\Role',
     /*
     |--------------------------------------------------------------------------
     | Entrust Roles Table
@@ -30,7 +27,6 @@ return [
     |
     */
     'roles_table' => 'roles',
-
     /*
     |--------------------------------------------------------------------------
     | Entrust Permission Model
@@ -40,8 +36,7 @@ return [
     | Update the permission if it is in a different namespace.
     |
     */
-    'permission' => 'Forone\Admin\Permission',
-
+    'permission' => 'Forone\Permission',
     /*
     |--------------------------------------------------------------------------
     | Entrust Permissions Table
@@ -52,7 +47,6 @@ return [
     |
     */
     'permissions_table' => 'permissions',
-
     /*
     |--------------------------------------------------------------------------
     | Entrust permission_role Table
@@ -63,7 +57,6 @@ return [
     |
     */
     'permission_role_table' => 'permission_role',
-
     /*
     |--------------------------------------------------------------------------
     | Entrust role_user Table
@@ -73,6 +66,6 @@ return [
     | database.
     |
     */
-    'role_user_table' => 'role_user',
+    'role_user_table' => 'role_admin'
 
 ];

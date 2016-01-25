@@ -7,7 +7,7 @@
  * Email: mani@forone.co
  */
 
-namespace Forone\Admin\Providers;
+namespace Forone\Providers;
 
 use Form;
 use Html;
@@ -38,7 +38,7 @@ class ForoneFormServiceProvider extends ServiceProvider
 
     public static function parseValue($model, $name)
     {
-        $arr = explode('.', $name);
+        $arr = explode('-', $name);
         if (sizeof($arr) == 2) {
             return $model && (!is_array($model) || array_key_exists($arr[0], $model)) ? $model[$arr[0]][$arr[1]] : '';
         } else {
@@ -89,7 +89,6 @@ class ForoneFormServiceProvider extends ServiceProvider
             return $data;
         });
     }
-
 
     private function hiddenInput()
     {
@@ -150,7 +149,7 @@ class ForoneFormServiceProvider extends ServiceProvider
     private function formArea()
     {
         $handler = function ($name, $label, $placeholder = '', $percent = 0.5) {
-            $value = $this->model && (!is_array($this->model) || array_key_exists($name, $this->model)) ? $this->model[$name] : '';
+            $value = ForoneFormServiceProvider::parseValue($this->model, $name);
             $data = '';
             $input_col = 9;
             $modal = false;
@@ -235,6 +234,11 @@ class ForoneFormServiceProvider extends ServiceProvider
             if (!array_key_exists('uri', $config)) {
                 $config['uri'] = 'update';
             }
+            if (strpos($config['uri'] ,'.')) {
+                $uri = route($config['uri'],['id'=>$config['id']]);
+            }else{
+                $uri = $this->url->current() . '/' . $config['uri'];
+            }
             if (!array_key_exists('class', $config)) {
                 $config['class'] = 'btn-default';
             }
@@ -247,7 +251,7 @@ class ForoneFormServiceProvider extends ServiceProvider
                 foreach ($data as $key => $value) {
                     $dataInputs .= '<input type="hidden" name="' . $key . '" value="' . $value . '">';
                 }
-                $result = '<form style="float: left;margin-right: 5px;" action="' . $this->url->current() . '/' . $config['uri'] . '" method="POST">
+                $result = '<form style="float: left;margin-right: 5px;" action="' . $uri . '" method="POST">
                  <input type="hidden" name="id" value="' . $config['id'] . '">
                  <input type="hidden" name="_method" value="PATCH">
                  ' . $dataInputs . '
@@ -255,7 +259,7 @@ class ForoneFormServiceProvider extends ServiceProvider
                  <button type="submit" class="btn ' . $config['class'] . '" onclick="return confirm(\'' . $config['alert'] . '\')" >' . $config['name'] . '</button>
                  </form>';
             } else {
-                $result = '<a href="' . $this->url->current() . '/' . $config['uri'] . '"><button type="submit" class="btn ' . $config['class'] . '">' . $config['name'] . '</button></a>';
+                $result = '<a href="' . $uri . '"><button type="submit" class="btn ' . $config['class'] . '">' . $config['name'] . '</button></a>';
             }
 
             return $result;

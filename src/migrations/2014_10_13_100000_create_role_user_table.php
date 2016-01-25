@@ -12,7 +12,7 @@ class CreateRoleUserTable extends Migration
      */
     public function up()
     {
-        Schema::create(config('entrust.role_user_table','role_user'), function (Blueprint $table) {
+        Schema::create(config('entrust.role_user_table','role_admin'), function (Blueprint $table) {
             $table->integer('user_id')->unsigned();
             $table->integer('role_id')->unsigned();
 
@@ -32,6 +32,6 @@ class CreateRoleUserTable extends Migration
      */
     public function down()
     {
-        Schema::drop('role_user');
+        Schema::drop('role_admin');
     }
 }

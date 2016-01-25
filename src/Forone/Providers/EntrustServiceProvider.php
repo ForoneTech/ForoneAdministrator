@@ -1,4 +1,4 @@
-<?php namespace Forone\Admin\Providers;
+<?php namespace Forone\Providers;
 
 /**
  * This file is part of Entrust,

@@ -26,9 +26,6 @@
     <link rel="stylesheet" href="{{ asset('vendor/forone/components/remodal/dist/remodal-default-theme.css') }}">
 
     <script src="{{ asset('vendor/forone/libs/jquery/jquery/dist/jquery.js') }}"></script>
-    <script src="{{ asset("vendor/forone/ueditor/ueditor.config.js") }}"></script>
-    <script src="{{ asset("vendor/forone/ueditor/ueditor.all.js") }}"></script>
-
     <style>
         input {
             font-size: 16px;

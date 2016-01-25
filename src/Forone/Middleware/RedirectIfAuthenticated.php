@@ -1,6 +1,6 @@
 <?php
 
-namespace Forone\Admin\Middleware;
+namespace Forone\Middleware;
 
 use Closure;
 use Illuminate\Contracts\Auth\Guard;

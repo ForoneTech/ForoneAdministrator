@@ -9,8 +9,8 @@
 return [
     'disable_routes' => false, //禁用自带routes，默认启用
     'auth' => [
-        'administrator_table' => 'users',
-        'administrator_auth_controller' => 'Forone\Admin\Controllers\Auth\AuthController'
+        'administrator_table'      => 'admins',
+        'administrator_auth_controller' => 'Forone\Controllers\Auth\AuthController'
     ],
     'site_config'                 => [
         'site_name'   => 'your site name',
@@ -22,7 +22,7 @@ return [
     'RedirectIfAuthenticatedPath' => 'admin/roles', // 如果授权后直接跳转到指定页面
 
     'menus'                       => [
-        '系统设置' => [
+        '权限设置' => [
             'icon'       => 'mdi-toggle-radio-button-on',
             'permission' => 'admin',
             'children'   => [

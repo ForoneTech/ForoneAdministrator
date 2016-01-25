@@ -6,7 +6,7 @@
  * Email: smartydroid@gmail.com
  */
 
-namespace Forone\Admin\Services;
+namespace Forone\Services;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;

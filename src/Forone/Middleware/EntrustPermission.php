@@ -6,7 +6,7 @@
  * Email: mani@forone.co
  */
 
-namespace Forone\Admin\Middleware;
+namespace Forone\Middleware;
 
 use Closure;
 

@@ -6,7 +6,7 @@
  * Email: mani@forone.co
  */
 
-namespace Forone\Admin\Providers;
+namespace Forone\Providers;
 
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;

@@ -1,4 +1,4 @@
-<?php namespace Forone\Admin\Requests;
+<?php namespace Forone\Requests;
 
 class CreateRoleRequest extends Request {
 

@@ -48,30 +48,26 @@ ForoneAdministrator 是一款基于Laravel5.1封装的后台管理系统，集�
 
 ```json
 "repositories": [
-  {"type": "git", "url": "http://git.forone.co/mani/ForoneAdministrator.git"},
+  {"type": "git", "url": "http://git.nxdai.com/mani/ForoneAdministrator.git"},
   {"type": "composer", "url": "http://packagist.phpcomposer.com"},
   {"packagist": false}
 ],
 "minimum-stability" : "dev"
 ```
 
-> 由于启用了 `"minimum-stability" : "dev"`，Laravel的`dev`版本会导致paginate出错，请在`composer.json`里将laravel版本设置为`5.1.4`
+> 由于启用了 `"minimum-stability" : "dev"`，Laravel的`dev`版本会导致paginate出错，请在`composer.json`里将laravel版本设置为确定的版本号，例如`5.1.4`
 
 使用composer进行安装
 5.1.x版本
 ```
 composer require forone/administrator:5.1.x
 ```
-5.2.x版本
-```
-composer require forone/administrator:5.2.x
-```
 
 编辑 `config/app.php` 注册 `providers` 和 `aliases`
 
 ```php
 'providers' => [
-    Forone\Admin\Providers\ForoneServiceProvider::class
+    Forone\Providers\ForoneServiceProvider::class
 ]
 ```
 
@@ -99,6 +95,13 @@ php artisan vendor:publish
 ```
 php artisan forone:init
 ```
+用户表默认使用admins表，用户模型使用Forone类的Admin模型，在laravel自带的auth.app内配置model项,
+
+```
+'model' => 'Forone\Admin'
+
+```
+5.1.11之后laravel版本，在用户模型内请务必删除继承的AuthorizableContract类，否则会报错
 
 为`App\User`添加Entrust的Trait，以便使用一些封装的方法
 ```
@@ -229,9 +232,9 @@ function __construct()
     - `查看`,`编辑`默认会跳转到查看和编辑页面
     - `启用`,`禁用`默认会单独修改数据项的`enabled`字段
     - 点击按钮后需要修改某个字段为某个值，比如审核通过或者驳回之类：
-    `[['name'=>'测试','class'=>'btn-danger'],['tested'=>'true','other'=>'somevalue']]`
+    `[['name'=>'审核','class'=>'btn-danger'],['tested'=>'true','other'=>'somevalue']]`
     第一个数组描述按钮的名称和样式，第二个数组描述需要更改的字段和值
-    - 点击按钮后需要调用某个接口并传参数：`[['name'=>'测试','class'=>'btn-danger','uri'=>'/api/test','method'=>'POST'],['tested'=>'true','other'=>'somevalue']]`
+    - 点击按钮后需要调用某个接口并传参数：`[['name' => '审核', 'uri' => 'lastInstance.get', 'method' => 'GET','id'=>$project->id],[]]`,uri使用路由名称
     - 点击按钮后需要弹出某个弹出框，`['配置','#modal']`，就会弹出来id为`modal`的弹出框
 
 <a id="user-content-list_header" href="#list_header"></a>

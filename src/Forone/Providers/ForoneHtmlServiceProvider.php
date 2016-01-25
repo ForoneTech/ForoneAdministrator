@@ -6,7 +6,7 @@
  * Email: mani@forone.co
  */
 
-namespace Forone\Admin\Providers;
+namespace Forone\Providers;
 
 use Form;
 use Html;
@@ -21,9 +21,9 @@ class ForoneHtmlServiceProvider extends ServiceProvider
         $this->groupLabel();
         $this->panelStart();
         $this->panelEnd();
+        $this->modalButton();
         $this->modalStart();
         $this->modalEnd();
-        $this->modalButton();
         $this->json();
         $this->datagridHeader();
         $this->dataGrid();
@@ -38,41 +38,6 @@ class ForoneHtmlServiceProvider extends ServiceProvider
         } else {
             return $model && (!is_array($model) || array_key_exists($name, $model)) ? $model[$name] : '';
         }
-    }
-
-    public function panelStart()
-    {
-        Form::macro('panel_start', function ($title = '') {
-            return '<div class="panel panel-default">
-                        <div class="panel-heading bg-white">
-                            <span class="font-bold">' . $title . '</span>
-                        </div>
-                    <div class="panel-body">';
-        });
-    }
-
-    public function panelEnd()
-    {
-        Form::macro('panel_end', function ($submit_label = '') {
-            if (!$submit_label) {
-                return '';
-            }
-            $result = '</div><footer class="panel-footer">
-                            <button type="submit" class="btn btn-info">' . $submit_label . '</button>
-                        </footer></div>';
-            return $result;
-        });
-    }
-
-
-    public function modalButton()
-    {
-        Form::macro('modal_button', function ($label, $modal, $data, $class = 'waves-effect') {
-            $jsonData = json_encode($data);
-            $html = '<a href="' . $modal . '" style="margin-left:5px;"><button onclick="fillModal(\'' . $data->id . '\')" class="btn ' . $class . '" >' . $label . '</button></a>';
-            $js = "<script>init.push(function(){datas['" . $data->id . "']='" . $jsonData . "';})</script>";
-            return $html . $js;
-        });
     }
 
     private function dataGrid()
@@ -167,10 +132,10 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                                             'class' => 'btn-success'
                                         ], ['enabled' => true]);
                                     } else if ($value == '查看') {
-                                        $html .= '<a href="' . $this->url->current() . '/' . $item->id . '">
+                                        $html .= '<a href="' . $this->url->current() . '/' . $item['id'] . '">
                                                     <button class="btn">查看</button></a>';
                                     } else if ($value == '编辑') {
-                                        $html .= '<a href="' . $this->url->current() . '/' . $item->id . '/edit">
+                                        $html .= '<a href="' . $this->url->current() . '/' . $item['id'] . '/edit">
                                                     <button class="btn">编辑</button></a>';
                                     }
                                 } else {
@@ -182,16 +147,7 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                                     } else {
                                         if (array_key_exists('method', $config) && $config['method'] == 'GET') {
                                             $uri = array_key_exists('uri', $config) ? $config['uri'] : '';
-                                            $params = array_key_exists('params', $config) ? $config['params'] : '';
-                                            if ($params) {
-                                                $params = explode(',', $params);
-                                                $query = [];
-                                                foreach ($params as $key) {
-                                                    $query[$key] = $item[$key];
-                                                }
-                                                $uri .= '?' . http_build_query($query);
-                                                $config['uri'] = $uri;
-                                            }
+                                            $config['uri'] = $uri;
                                         } else {
                                             $config['id'] = $item->id;
                                         }
@@ -250,6 +206,40 @@ class ForoneHtmlServiceProvider extends ServiceProvider
         });
     }
 
+
+    public function panelStart()
+    {
+        Form::macro('panel_start', function ($title = '') {
+            return '<div class="panel panel-default">
+                        <div class="panel-heading bg-white">
+                            <span class="font-bold">' . $title . '</span>
+                        </div>
+                    <div class="panel-body">';
+        });
+    }
+
+    public function panelEnd()
+    {
+        Form::macro('panel_end', function ($submit_label = '') {
+            if (!$submit_label) {
+                return '';
+            }
+            $result = '</div><footer class="panel-footer">
+                            <button type="submit" class="btn btn-info">' . $submit_label . '</button>
+                        </footer></div>';
+            return $result;
+        });
+    }
+
+    public function modalButton()
+    {
+        Form::macro('modal_button', function ($label, $modal, $data, $class = 'waves-effect') {
+            $jsonData = json_encode($data);
+            $html = '<a href="' . $modal . '" style="margin-left:5px;"><button onclick="fillModal(\'' . $data->id . '\')" class="btn ' . $class . '" >' . $label . '</button></a>';
+            $js = "<script>init.push(function(){datas['" . $data->id . "']='" . $jsonData . "';})</script>";
+            return $html . $js;
+        });
+    }
 
     private function modalStart()
     {

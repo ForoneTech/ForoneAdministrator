@@ -6,14 +6,14 @@
  * Email: smartydroid@gmail.com
  */
 
-namespace Forone\Admin\Controllers\Permissions;
+namespace Forone\Controllers\Permissions;
 
 
-use Forone\Admin\Controllers\BaseController;
-use Forone\Admin\Permission;
-use Forone\Admin\Requests\CreateRoleRequest;
-use Forone\Admin\Requests\UpdateRoleRequest;
-use Forone\Admin\Role;
+use Forone\Controllers\BaseController;
+use Forone\Permission;
+use Forone\Requests\CreateRoleRequest;
+use Forone\Requests\UpdateRoleRequest;
+use Forone\Role;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 

@@ -6,13 +6,13 @@
  * Email: smartydroid@gmail.com
  */
 
-namespace Forone\Admin\Controllers\Permissions;
+namespace Forone\Controllers\Permissions;
 
-use Forone\Admin\Controllers\BaseController;
-use Forone\Admin\Requests\CreateAdminRequest;
-use Forone\Admin\Requests\UpdateAdminRequest;
-use Forone\Admin\Role;
-use Forone\Admin\User;
+use Forone\Controllers\BaseController;
+use Forone\Requests\CreateAdminRequest;
+use Forone\Requests\UpdateAdminRequest;
+use Forone\Role;
+use Forone\Admin;
 use Illuminate\Contracts\Auth\Registrar;
 use Illuminate\Http\Request;
 
@@ -42,7 +42,7 @@ class AdminsController extends BaseController {
             ]
         ];
         $roles = Role::all();
-        $paginate = User::orderBy('created_at', 'desc')->paginate();
+        $paginate = Admin::orderBy('created_at', 'desc')->paginate();
         $results['items'] = $paginate;
 
         foreach ($paginate as $user) {
@@ -76,7 +76,7 @@ class AdminsController extends BaseController {
      */
     public function show($id)
     {
-        $data = User::findOrFail($id);
+        $data = Admin::findOrFail($id);
         if ($data) {
             return $this->view('forone::' . $this->uri. "/show", compact('data'));
         }else{
@@ -92,7 +92,7 @@ class AdminsController extends BaseController {
      */
     public function edit($id)
     {
-        $data = User::findOrFail($id);
+        $data = Admin::findOrFail($id);
         if ($data) {
             return $this->view('forone::' . $this->uri. "/edit", compact('data'));
         }else{
@@ -110,15 +110,15 @@ class AdminsController extends BaseController {
     {
         $name = $request->get('name');
         $email = $request->get('email');
-        $count = User::whereName($name)->where('id', '!=', $id)->count();
+        $count = Admin::whereName($name)->where('id', '!=', $id)->count();
         if ($count > 0) {
             return $this->redirectWithError('名称不能重复');
         }
-        $count = User::whereEmail($email)->where('id', '!=', $id)->count();
+        $count = Admin::whereEmail($email)->where('id', '!=', $id)->count();
         if ($count > 0) {
             return $this->redirectWithError('邮箱不能重复');
         }
-        User::findOrFail($id)->update($request->only(['name', 'email']));
+        Admin::findOrFail($id)->update($request->only(['name', 'email']));
         return redirect()->route('admin.admins.index');
     }
 
@@ -127,7 +127,7 @@ class AdminsController extends BaseController {
      */
     public function assignRole(Request $request)
     {
-        $user = User::find($request->get('id'));
+        $user = Admin::find($request->get('id'));
         $roles = $request->except(['_token', 'id']);
         $user->detachRoles($user->roles()->get());
         foreach($roles as $name => $status){

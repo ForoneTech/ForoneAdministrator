@@ -6,10 +6,10 @@
  * Email: smartydroid@gmail.com
  */
 
-namespace Forone\Admin\Controllers\Auth;
+namespace Forone\Controllers\Auth;
 
 
-use Forone\Admin\Controllers\BaseController;
+use Forone\Controllers\BaseController;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\View\View;

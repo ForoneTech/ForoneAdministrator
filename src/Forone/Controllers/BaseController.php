@@ -6,7 +6,7 @@
  * Email: smartydroid@gmail.com
  */
 
-namespace Forone\Admin\Controllers;
+namespace Forone\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;

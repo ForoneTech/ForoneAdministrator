@@ -6,7 +6,7 @@
  * Email: smartydroid@gmail.com
  */
 
-namespace Forone\Admin\Controllers;
+namespace Forone\Controllers;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;

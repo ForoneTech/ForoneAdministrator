@@ -1,6 +1,6 @@
 <?php
 
-namespace Forone\Admin\Console;
+namespace Forone\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
