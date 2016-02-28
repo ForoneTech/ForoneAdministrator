@@ -220,13 +220,23 @@ class ForoneHtmlServiceProvider extends ServiceProvider
 
     public function panelEnd()
     {
-        Form::macro('panel_end', function ($submit_label = '') {
-            if (!$submit_label) {
+        Form::macro('panel_end', function ($label='') {
+            if (!$label) {
                 return '';
             }
-            $result = '</div><footer class="panel-footer">
-                            <button type="submit" class="btn btn-info">' . $submit_label . '</button>
+            if (is_array($label)) {
+                $buttons = '';
+                foreach($label as $button){
+                    $buttons .= Form::form_button($button[0], $button[1]);
+                }
+                $result = '</div><footer class="panel-footer" style="height: 70px">
+                            '.$buttons.'
                         </footer></div>';
+            }else{
+                $result = '</div><footer class="panel-footer">
+                            <button type="submit" class="btn btn-info">' . $label . '</button>
+                        </footer></div>';
+            }
             return $result;
         });
     }
