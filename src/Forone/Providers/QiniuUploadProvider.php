@@ -27,6 +27,7 @@ class QiniuUploadProvider extends ServiceProvider
     {
         $this->singleFileUpload();
         $this->multiFilesUpload();
+        $this->singleVideoUpload();
     }
 
     private function singleFileUpload()
@@ -95,5 +96,34 @@ class QiniuUploadProvider extends ServiceProvider
                         </div>
                     </div>';
         });
+    }
+
+    private function singleVideoUpload()
+    {
+        $handler = function ($name, $label, $percent = 0.5,$platform="qiniu") {
+            $value = ForoneFormServiceProvider::parseValue($this->model, $name);
+            $url = $value ? config('forone.qiniu.host') . $value : '/vendor/forone/images/upload_add.png';
+            $js = View::make('forone::upload.video')->with(['name'=>$name])->render();
+            if(!QiniuUploadProvider::$single_inited){
+                $js = View::make('forone::upload.upload_js')->render() . $js;
+                QiniuUploadProvider::$single_inited = true;
+            }
+            return $js.'<div class="form-group col-sm-' . ($percent * 12) . '">
+                        ' . Form::form_label($label) . '
+                        <div class="col-sm-9">'.
+            '<input id="' . $name . '" type="hidden" name="' . $name . '" type="text" value="' . $value . '">'.
+            '<img style="width:58px;height:58px;cursor:pointer;float:left;margin-right:20px;" id="'.$name.'_img" src="'.$url.'">'.
+            '</div>'.
+            '<div style="margin-top:80px;" class="col-sm-9">'.
+            '<video id="'.$name.'_video" class="video-js" style="display:none;" controls preload="auto" width="640" height="400" poster="MY_VIDEO_POSTER.jpg" data-setup="{}">'.
+            '<source src=" '. $url .' " type="video/mp4">'.
+            '<p class="vjs-no-js">要查观看此视频，请启用JavaScript，并考虑升级到Web浏览器
+                                 <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+                                </p>
+                            </video>'.
+            '</div>'.
+            '</div>';
+        };
+        Form::macro('single_video_upload', $handler);
     }
 }
