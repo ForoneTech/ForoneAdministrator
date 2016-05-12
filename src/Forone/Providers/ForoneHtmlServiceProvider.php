@@ -331,6 +331,46 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                 $html .= $result . $js;
             }
 
+            if (array_key_exists('time', $data)) {
+
+                $datetime = function ($name, $holder) {
+                    $result = '<div class="form-group" style="width: 150px; float: left; padding-right: 15px;">
+                        <div>' .
+                        '<input id="'.$name.'" name="'.$name.'" type="text" value="'.Input::get($name).'" class="form-control" placeholder="'.$holder.'">';
+                    $js = "<script>init.push(function(){jQuery('#$name').datetimepicker({format:'Y-m-d H:i'});})</script>";
+                    $time = $result . '</div></div>' . $js;
+
+                    $js = "<script>init.push(function(){
+                        jQuery('#$name').datetimepicker({
+                          timepicker:false,
+                          onChangeDateTime:function(dp,input){
+                                var params = window.location.search.substring(1);
+                                var paramObject = {};
+                                var paramArray = params.split('&');
+                                paramArray.forEach(function(param){
+                                    if(param){
+                                        var arr = param.split('=');
+                                        paramObject[arr[0]] = arr[1];
+                                    }
+                                });
+                                var baseUrl = window.location.origin+window.location.pathname;
+                                var date = $('#$name');
+                                if(date.val()){
+                                    paramObject[date.attr('name')] = date.val();
+                                }else{
+                                    delete paramObject[date.attr('name')];
+                                }
+                                var href = $.param(paramObject) ? baseUrl+'?'+decodeURIComponent($.param(paramObject)) : baseUrl;
+                                window.location.href = href;
+                              }
+                        });
+                    })</script>";
+                    return $time . $js;
+                };
+
+                $html .= $datetime('begin', '起始时间') . $datetime('end', '截止时间');
+            }
+
             if (array_key_exists('priceStart',$data)) {
 
                 $priceStart = is_bool($data['priceStart']) ? '价格' : $data['priceStart'];
