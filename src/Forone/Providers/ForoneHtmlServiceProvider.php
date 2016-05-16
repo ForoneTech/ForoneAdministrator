@@ -43,7 +43,6 @@ class ForoneHtmlServiceProvider extends ServiceProvider
     private function dataGrid()
     {
         Html::macro('datagrid', function ($data) {
-
             $html = '<table class="table m-b-none" data-sort="false" ui-jp="footable">';
             $columns = $data['columns'];
             $items = $data['items'];
@@ -54,7 +53,7 @@ class ForoneHtmlServiceProvider extends ServiceProvider
 
             // build table head
             $html .= '<thead><tr>';
-            foreach ($columns as $column) {
+            foreach ($columns as $index=>$column) {
                 array_push($heads, $column[0]); // title
                 array_push($fields, $column[1]); // fields
                 $size = sizeof($column);
@@ -67,18 +66,16 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                             array_push($widths, $column[2]);
                         } else {
                             array_push($widths, 0);
-                            $functions[$column[1]] = $column[2];
+                            $functions[$column[1] . $index ] = $column[2];
                         }
                         break;
                     case 4:
                         array_push($widths, $column[2]);
-                        $functions[$column[1]] = $column[3];
+                        $functions[$column[1] . $index] = $column[3];
                         break;
                 }
             }
-
-            foreach ($heads as $head) {
-                $index = array_search($head, $heads);
+            foreach ($heads as $index=>$head) {
                 $class = '';
                 $dataToggle = '';
                 if ($index == 0) {
@@ -110,11 +107,10 @@ class ForoneHtmlServiceProvider extends ServiceProvider
             if ($items) {
                 foreach ($items as $item) {
                     $html .= '<tr>';
-                    foreach ($fields as $field) {
-                        $index = array_search($field, $fields);
+                    foreach ($fields as $index=>$field) {
                         $html .= $widths[$index] ? '<td style="width: ' . $widths[$index] . 'px">' : '<td>';
                         if ($field == 'buttons') {
-                            $buttons = $functions[$field]($item);
+                            $buttons = $functions[$field . $index]($item);
                             foreach ($buttons as $button) {
                                 $size = sizeof($button);
                                 if ($size == 1) {
@@ -156,8 +152,8 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                                 }
                             }
                         } else {
-                            if (array_key_exists($field, $functions)) {
-                                $value = $functions[$field]($item[$field]);
+                            if (array_key_exists($field.$index, $functions)) {
+                                $value = $functions[$field.$index]($item[$field]);
                             } else {
                                 $arr = explode('.', $field);
                                 if (sizeof($arr) == 2) {
@@ -173,7 +169,6 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                 }
             }
             $html .= '<tbody>';
-
             $html .= '<tfoot>';
             $html .= ' <tr>';
             $html .= '    <td colspan="10" class="text-center">';
@@ -329,6 +324,46 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                         });
                     })</script>";
                 $html .= $result . $js;
+            }
+
+            if (array_key_exists('time', $data)) {
+
+                $datetime = function ($name, $holder) {
+                    $result = '<div class="form-group" style="width: 150px; float: left; padding-right: 15px;">
+                        <div>' .
+                        '<input id="'.$name.'" name="'.$name.'" type="text" value="'.Input::get($name).'" class="form-control" placeholder="'.$holder.'">';
+                    $js = "<script>init.push(function(){jQuery('#$name').datetimepicker({format:'Y-m-d H:i'});})</script>";
+                    $time = $result . '</div></div>' . $js;
+
+                    $js = "<script>init.push(function(){
+                        jQuery('#$name').datetimepicker({
+                          timepicker:false,
+                          onChangeDateTime:function(dp,input){
+                                var params = window.location.search.substring(1);
+                                var paramObject = {};
+                                var paramArray = params.split('&');
+                                paramArray.forEach(function(param){
+                                    if(param){
+                                        var arr = param.split('=');
+                                        paramObject[arr[0]] = arr[1];
+                                    }
+                                });
+                                var baseUrl = window.location.origin+window.location.pathname;
+                                var date = $('#$name');
+                                if(date.val()){
+                                    paramObject[date.attr('name')] = date.val();
+                                }else{
+                                    delete paramObject[date.attr('name')];
+                                }
+                                var href = $.param(paramObject) ? baseUrl+'?'+decodeURIComponent($.param(paramObject)) : baseUrl;
+                                window.location.href = href;
+                              }
+                        });
+                    })</script>";
+                    return $time . $js;
+                };
+
+                $html .= $datetime('begin', '起始时间') . $datetime('end', '截止时间');
             }
 
             if (array_key_exists('priceStart',$data)) {
