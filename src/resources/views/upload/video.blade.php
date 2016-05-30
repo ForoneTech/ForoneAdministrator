@@ -6,7 +6,7 @@
             uptoken_url: '{{ route("admin.qiniu.video-token") }}',
             unique_names: true,
             domain: '{{config('forone.qiniu.host')}}',
-            max_file_size: '{{config('forone.qiniu.max_file_size')}}' ? '{{config('forone.qiniu.max_file_size')}}' : '100mb',
+            max_file_size: '{{config('forone.qiniu.max_file_size')}}' ? '{{config('forone.qiniu.max_file_size')}}' : '150mb',
             flash_swf_url: '/vendor/forone/components/qiniu/plupload/Moxie.swf',
             max_retries: 3,
             chunk_size: '4mb',
