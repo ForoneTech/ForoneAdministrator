@@ -41,6 +41,8 @@ class ForoneFormServiceProvider extends ServiceProvider
         $arr = explode('-', $name);
         if (sizeof($arr) == 2) {
             return $model && (!is_array($model) || array_key_exists($arr[0], $model)) ? $model[$arr[0]][$arr[1]] : '';
+        } else if(sizeof($arr)>2) {
+            return self::parseValue(self::parseValue($model,array_shift($arr)),join("-",$arr));
         } else {
             return $model && (!is_array($model) || array_key_exists($name, $model)) ? $model[$name] : '';
         }
@@ -291,7 +293,7 @@ class ForoneFormServiceProvider extends ServiceProvider
                 $selected = '';
 
                 if ($this->model) {
-                    $selected = $this->model[$name] == $value ? 'selected="selected"' : '';;
+                    $selected = ForoneFormServiceProvider::parseValue($this->model, $name) == $value ? 'selected="selected"' : '';;
                 } else if (is_array($item)) {
                     $selected = sizeof($item) == 3 ? 'selected=' . $item[2] : '';
                 }
