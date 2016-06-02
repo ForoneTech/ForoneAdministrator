@@ -36,21 +36,21 @@
                     });
                 },
                 'UploadProgress': function(up, file) {
-                    console.log(up);
+                    $('#progress').val(file.percent);
+
                 },
                 'FileUploaded': function(up, file, info) {
                     var domain = up.getOption('domain');
                     console.log(info);
-                    console.log('haha');
                     var res = $.parseJSON(info);
                     var sourceLink = domain + res.key;
+                    var source =  '<source src=" '+sourceLink+' " type="video/mp4">'
                     @if(!isset($multi))
                     $("source").attr("src",sourceLink);
-                    $("video").attr("src",sourceLink);
+                    $("video").attr("src",sourceLink).html(source);
                     $("#{{$name}}").attr("value",res.persistentId);
                     $(".video-js").css("display",'block');
                     $("video").css("display",'block');
-
                     @else
                         $("#"+file.id).attr("src",sourceLink);
                     $("#"+file.id+"loading").remove();
@@ -60,6 +60,7 @@
                 'Error': function(up, err, errTip) {
                 },
                 'UploadComplete': function() {
+
                 }
             }
         });
