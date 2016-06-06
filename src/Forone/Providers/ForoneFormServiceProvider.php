@@ -291,7 +291,6 @@ class ForoneFormServiceProvider extends ServiceProvider
                 $value = is_array($item) ? $item['value'] : $item;
                 $label = is_array($item) ? $item['label'] : $item;
                 $selected = '';
-
                 if ($this->model) {
                     $selected = ForoneFormServiceProvider::parseValue($this->model, $name) == $value ? 'selected="selected"' : '';;
                 } else if (is_array($item)) {

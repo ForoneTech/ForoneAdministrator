@@ -43,6 +43,7 @@ class ForoneHtmlServiceProvider extends ServiceProvider
     private function dataGrid()
     {
         Html::macro('datagrid', function ($data) {
+
             $html = '<table class="table m-b-none" data-sort="false" ui-jp="footable">';
             $columns = $data['columns'];
             $items = $data['items'];
@@ -53,7 +54,7 @@ class ForoneHtmlServiceProvider extends ServiceProvider
 
             // build table head
             $html .= '<thead><tr>';
-            foreach ($columns as $index=>$column) {
+            foreach ($columns as $index => $column) {
                 array_push($heads, $column[0]); // title
                 array_push($fields, $column[1]); // fields
                 $size = sizeof($column);
@@ -66,16 +67,18 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                             array_push($widths, $column[2]);
                         } else {
                             array_push($widths, 0);
-                            $functions[$column[1] . $index ] = $column[2];
+                            $functions[$column[1].$index] = $column[2];
                         }
                         break;
                     case 4:
                         array_push($widths, $column[2]);
-                        $functions[$column[1] . $index] = $column[3];
+                        $functions[$column[1].$index] = $column[3];
                         break;
                 }
             }
-            foreach ($heads as $index=>$head) {
+
+            foreach ($heads as $head) {
+                $index = array_search($head, $heads);
                 $class = '';
                 $dataToggle = '';
                 if ($index == 0) {
@@ -107,10 +110,10 @@ class ForoneHtmlServiceProvider extends ServiceProvider
             if ($items) {
                 foreach ($items as $item) {
                     $html .= '<tr>';
-                    foreach ($fields as $index=>$field) {
+                    foreach ($fields as $index => $field) {
                         $html .= $widths[$index] ? '<td style="width: ' . $widths[$index] . 'px">' : '<td>';
                         if ($field == 'buttons') {
-                            $buttons = $functions[$field . $index]($item);
+                            $buttons = $functions[$field.$index]($item);
                             foreach ($buttons as $button) {
                                 $size = sizeof($button);
                                 if ($size == 1) {
@@ -169,6 +172,7 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                 }
             }
             $html .= '<tbody>';
+
             $html .= '<tfoot>';
             $html .= ' <tr>';
             $html .= '    <td colspan="10" class="text-center">';
