@@ -41,8 +41,6 @@ class ForoneFormServiceProvider extends ServiceProvider
         $arr = explode('-', $name);
         if (sizeof($arr) == 2) {
             return $model && (!is_array($model) || array_key_exists($arr[0], $model)) ? $model[$arr[0]][$arr[1]] : '';
-        } else if(sizeof($arr)>2) {
-            return self::parseValue(self::parseValue($model,array_shift($arr)),join("-",$arr));
         } else {
             return $model && (!is_array($model) || array_key_exists($name, $model)) ? $model[$name] : '';
         }
@@ -229,33 +227,37 @@ class ForoneFormServiceProvider extends ServiceProvider
 
     private function formButton()
     {
-        Form::macro('form_button', function ($config, $data) {
+        Form::macro('form_button', function ($config, $data = []) {
             if (!array_key_exists('alert', $config)) {
                 $config['alert'] = '确认吗？';
             }
             if (!array_key_exists('uri', $config)) {
                 $config['uri'] = 'update';
             }
+            if (!array_key_exists('id', $config)) {
+                $config['id'] = $data['id'];
+            }
+            if (!array_key_exists('method', $config)) {
+                $config['method'] = 'POST';
+            }
             if (strpos($config['uri'] ,'.')) {
-                $uri = route($config['uri'],['id'=>$config['id']]);
+                $uri = $config['method'] == 'POST' ? route($config['uri']) : route($config['uri'],['id'=>$config['id']]);
             }else{
                 $uri = $this->url->current() . '/' . $config['uri'];
             }
             if (!array_key_exists('class', $config)) {
                 $config['class'] = 'btn-default';
             }
-            if (!array_key_exists('method', $config)) {
-                $config['method'] = 'POST';
-            }
 
             if ($config['method'] == 'POST') {
                 $dataInputs = '';
+                $patch = $config['method'] == 'PATCH' ? '<input type="hidden" name="_method" value="PATCH">' : '';
                 foreach ($data as $key => $value) {
                     $dataInputs .= '<input type="hidden" name="' . $key . '" value="' . $value . '">';
                 }
                 $result = '<form style="float: left;margin-right: 5px;" action="' . $uri . '" method="POST">
                  <input type="hidden" name="id" value="' . $config['id'] . '">
-                 <input type="hidden" name="_method" value="PATCH">
+                 '. $patch.'
                  ' . $dataInputs . '
                  ' . Form::token() . '
                  <button type="submit" class="btn ' . $config['class'] . '" onclick="return confirm(\'' . $config['alert'] . '\')" >' . $config['name'] . '</button>
@@ -292,7 +294,7 @@ class ForoneFormServiceProvider extends ServiceProvider
                 $label = is_array($item) ? $item['label'] : $item;
                 $selected = '';
                 if ($this->model) {
-                    $selected = ForoneFormServiceProvider::parseValue($this->model, $name) == $value ? 'selected="selected"' : '';;
+                    $selected = $this->model[$name] == $value ? 'selected="selected"' : '';;
                 } else if (is_array($item)) {
                     $selected = sizeof($item) == 3 ? 'selected=' . $item[2] : '';
                 }

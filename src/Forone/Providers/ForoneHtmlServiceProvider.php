@@ -116,31 +116,39 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                             $buttons = $functions[$field.$index]($item);
                             foreach ($buttons as $button) {
                                 $size = sizeof($button);
+                                $normalButton = false;
                                 if ($size == 1) {
                                     $value = $button[0];
-                                    if ($value == '禁用') {
-                                        $html .= Form::form_button([
-                                            'name'  => $value,
-                                            'id'    => $item->id,
-                                            'class' => 'bg-warning'
-                                        ], ['enabled' => false]);
-                                    } else if ($value == '启用') {
-                                        $html .= Form::form_button([
-                                            'name'  => $value,
-                                            'id'    => $item->id,
-                                            'class' => 'btn-success'
-                                        ], ['enabled' => true]);
-                                    } else if ($value == '查看') {
-                                        $html .= '<a href="' . $this->url->current() . '/' . $item['id'] . '">
+                                    $normalButton = array_search($value, ['禁用', '启用', '查看', '编辑']);
+                                    switch ($value) {
+                                        case '禁用':
+                                            $html .= Form::form_button([
+                                                'name'  => $value,
+                                                'id'    => $item->id,
+                                                'class' => 'bg-warning'
+                                            ], ['enabled' => false]);
+                                            break;
+                                        case '启用':
+                                            $html .= Form::form_button([
+                                                'name'  => $value,
+                                                'id'    => $item->id,
+                                                'class' => 'btn-success'
+                                            ], ['enabled' => true]);
+                                            break;
+                                        case '查看':
+                                            $html .= '<a href="' . $this->url->current() . '/' . $item['id'] . '">
                                                     <button class="btn">查看</button></a>';
-                                    } else if ($value == '编辑') {
-                                        $html .= '<a href="' . $this->url->current() . '/' . $item['id'] . '/edit">
+                                            break;
+                                        case '编辑':
+                                            $html .= '<a href="' . $this->url->current() . '/' . $item['id'] . '/edit">
                                                     <button class="btn">编辑</button></a>';
+                                            break;
                                     }
-                                } else {
+                                }
+                                if(!$normalButton){
                                     $getButton = sizeof($button) > 2 ? true : false;
                                     $config = $getButton ? $button : $button[0];
-                                    $data = $getButton ? [] : $button[1];
+                                    $data = $getButton || $size == 1 ? [] : $button[1];
                                     if (is_string($data) && strripos($data, '#') == 0) {
                                         $html .= Form::modal_button($config, $data, $item);
                                     } else {
@@ -226,7 +234,7 @@ class ForoneHtmlServiceProvider extends ServiceProvider
             if (is_array($label)) {
                 $buttons = '';
                 foreach($label as $button){
-                    $buttons .= Form::form_button($button[0], $button[1]);
+                    $buttons .= Form::form_button($button[0], sizeof($button) == 2 ? $button[1] : []);
                 }
                 $result = '</div><footer class="panel-footer" style="height: 70px">
                             '.$buttons.'

@@ -100,8 +100,8 @@ class QiniuUploadProvider extends ServiceProvider
 
     private function fileViewer()
     {
-        Form::macro('file_viewer', function ($name, $label, $percent = 0.5) {
-            $value = ForoneFormServiceProvider::parseValue($this->model, $name);
+        Form::macro('file_viewer', function ($name, $label='文件浏览', $percent = 0.5) {
+            $value = $this->model ? ForoneFormServiceProvider::parseValue($this->model, $name) : $name;
             $result = '';
             if ($value) {
                 $items = explode('|', $value);
