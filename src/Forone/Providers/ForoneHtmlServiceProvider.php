@@ -145,7 +145,7 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                                             break;
                                     }
                                 }
-                                if(!$normalButton){
+                                if($normalButton === false){
                                     $getButton = sizeof($button) > 2 ? true : false;
                                     $config = $getButton ? $button : $button[0];
                                     $data = $getButton || $size == 1 ? [] : $button[1];
