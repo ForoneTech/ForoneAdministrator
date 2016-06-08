@@ -32,7 +32,10 @@ class NavService
 
     public function checkPermission($value)
     {
-        return array_key_exists('permission', $value) ? Auth::user()->can($value['permission']) : true;
+        if (array_key_exists('permission', $value)) {
+            return Auth::user()->can(explode('|',$value['permission']));
+        }
+        return true;
     }
 
 }

@@ -36,9 +36,11 @@
                                             @if(array_key_exists('children', $value) && count($value['children']))
                                                 <ul class="nav nav-sub">
                                                     @foreach($value['children'] as $childTitle => $chidrenValue)
+                                                        @if($ns->checkPermission($chidrenValue))
                                                         <li class="{{ $ns->isActive($chidrenValue) }}">
                                                             <a md-ink-ripple href='{{ '/admin/'.$chidrenValue['uri'] }}'>{{ $childTitle }}</a>
                                                         </li>
+                                                        @endif
                                                     @endforeach
                                                 </ul>
                                             @endif
