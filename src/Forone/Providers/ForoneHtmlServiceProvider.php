@@ -184,11 +184,11 @@ class ForoneHtmlServiceProvider extends ServiceProvider
             $html .= '<tfoot>';
             $html .= ' <tr>';
             $html .= '    <td colspan="10" class="text-center">';
-            $html .= $items ? $items->render() : '';
+            $html .= $items && !is_array($items) ? $items->render() : '';
             $html .= '  </td>';
             $html .= ' </tr>';
             $html .= '</tfoot>';
-            $html .= '</table></div></div>';
+            $html .= '</table>';
             $js = "<script>init.push(function(){
                    $('.fancybox').fancybox({
                     openEffect  : 'none',
@@ -234,7 +234,11 @@ class ForoneHtmlServiceProvider extends ServiceProvider
             if (is_array($label)) {
                 $buttons = '';
                 foreach($label as $button){
-                    $buttons .= Form::form_button($button[0], sizeof($button) == 2 ? $button[1] : []);
+                    if (!is_array($button[0])) {
+                        $buttons .= Form::form_dropdown($button[0], $button[1]);
+                    }else{
+                        $buttons .= Form::form_button($button[0], sizeof($button) == 2 ? $button[1] : []);
+                    }
                 }
                 $result = '</div><footer class="panel-footer" style="height: 70px">
                             '.$buttons.'

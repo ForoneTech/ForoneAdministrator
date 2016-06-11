@@ -34,6 +34,7 @@ class ForoneFormServiceProvider extends ServiceProvider
         $this->formDate();
         $this->formTime();
         $this->ueditor();
+        $this->formDropDown();
     }
 
     public static function parseValue($model, $name)
@@ -51,14 +52,14 @@ class ForoneFormServiceProvider extends ServiceProvider
      */
     private function ueditor()
     {
-        $handler = function ($name, $label,$percent = 0.5, $modal = false) {
+        $handler = function ($name, $label, $percent = 0.5, $modal = false) {
             $value = ForoneFormServiceProvider::parseValue($this->model, $name);
             $js = View::make('forone::ueditor.ueditor');
-            return $js.'<div class="form-group col-sm-' . ($percent * 12) . '">
+            return $js . '<div class="form-group col-sm-' . ($percent * 12) . '">
                         ' . Form::form_label($label) . '
                         <div class="col-sm-9">
                              <script id="container" name=' . $name . ' type="text/plain">
-                                    '.$value.'
+                                    ' . $value . '
                             </script>
                             <script type="text/javascript">
                                 var ue = UE.getEditor("container");
@@ -240,9 +241,9 @@ class ForoneFormServiceProvider extends ServiceProvider
             if (!array_key_exists('method', $config)) {
                 $config['method'] = 'POST';
             }
-            if (strpos($config['uri'] ,'.')) {
-                $uri = $config['method'] == 'POST' ? route($config['uri']) : route($config['uri'],['id'=>$config['id']]);
-            }else{
+            if (strpos($config['uri'], '.')) {
+                $uri = $config['method'] == 'POST' ? route($config['uri']) : route($config['uri'], ['id' => $config['id']]);
+            } else {
                 $uri = $this->url->current() . '/' . $config['uri'];
             }
             if (!array_key_exists('class', $config)) {
@@ -251,13 +252,13 @@ class ForoneFormServiceProvider extends ServiceProvider
 
             if ($config['method'] == 'POST') {
                 $dataInputs = '';
-                $patch = $config['method'] == 'PATCH' ? '<input type="hidden" name="_method" value="PATCH">' : '';
+                $patch = $config['method'] == 'PATCH' || $config['uri'] == 'update' ? '<input type="hidden" name="_method" value="PATCH">' : '';
                 foreach ($data as $key => $value) {
                     $dataInputs .= '<input type="hidden" name="' . $key . '" value="' . $value . '">';
                 }
                 $result = '<form style="float: left;margin-right: 5px;" action="' . $uri . '" method="POST">
                  <input type="hidden" name="id" value="' . $config['id'] . '">
-                 '. $patch.'
+                 ' . $patch . '
                  ' . $dataInputs . '
                  ' . Form::token() . '
                  <button type="submit" class="btn ' . $config['class'] . '" onclick="return confirm(\'' . $config['alert'] . '\')" >' . $config['name'] . '</button>
@@ -285,7 +286,7 @@ class ForoneFormServiceProvider extends ServiceProvider
 
     private function formSelect()
     {
-        Form::macro('form_select', function ($name, $label, $data, $percent = 0.5, $modal=false) {
+        Form::macro('form_select', function ($name, $label, $data, $percent = 0.5, $modal = false) {
             $result = '<div class="form-group col-sm-' . ($percent * 12) . '">
                         ' . Form::form_label($label, $modal) . '
                         <div class="col-sm-9"><select class="form-control" name="' . $name . '">';
@@ -359,6 +360,29 @@ class ForoneFormServiceProvider extends ServiceProvider
                 '<input id="' . $name . 'date" name="' . $name . '" type="text" value="' . $value . '" class="form-control" placeholder="' . $placeholder . '">';
             $js = "<script>init.push(function(){jQuery('#" . $name . "date').datetimepicker({format:'Y-m-d H:i'});})</script>";
             return $result . '</div></div>' . $js;
+        });
+    }
+
+    private function formDropDown()
+    {
+        Form::macro('form_dropdown', function ($label, $menus = []) {
+            $dropdownMenus = '';
+            foreach ($menus as $menu) {
+                if (array_key_exists('href', $menu) && $menu['href']) {
+                    $dropdownMenus .= '<li><a href="' . $menu['href'] . '">' . $menu['label'] . '</a></li>';
+                } else {
+                    $dropdownMenus .= '<li class="divider"></li>';
+                }
+            }
+            $result = '<div class="btn-group dropdown">
+          <button type="button" class="btn btn-default waves-effect" data-toggle="dropdown" aria-expanded="true">
+                ' . $label . ' <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu animated fadeIn">'
+                . $dropdownMenus . '
+          </ul>
+        </div>';
+            return $result;
         });
     }
 }
