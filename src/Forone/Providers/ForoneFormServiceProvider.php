@@ -31,6 +31,7 @@ class ForoneFormServiceProvider extends ServiceProvider
         $this->formLabel();
         $this->formSelect();
         $this->formMultiSelect();
+        $this->formTagsInput();
         $this->formDate();
         $this->formTime();
         $this->ueditor();
@@ -306,28 +307,85 @@ class ForoneFormServiceProvider extends ServiceProvider
         });
     }
 
-    private function formMultiSelect()
+    private function formTagsInput()
     {
-        Form::macro('form_multi_select', function ($name, $label, $data, $percent = 0.5) {
+        Form::macro('form_tags_input', function ($name, $label, $default='', $placeholder='', $percent = 0.5) {
+            $value = ForoneFormServiceProvider::parseValue($this->model, $name);
+            if (!$value) {
+                $value = $default;
+            }
             $result = '<div class="form-group col-lg-' . ($percent * 12) . '">
-                        ' . Form::form_label($label) . '
-                        <div class="col-lg-9"><select multiple class="form-control chzn-select" name="' . $name . '[]">';
-            foreach ($data as $item) {
-                $value = is_array($item) ? $item['value'] : $item;
-                $label = is_array($item) ? $item['label'] : $item;
-                $selected = '';
-                if ($this->model) {
-                    if (isset($this->model[$name])) {
-                        $type_ids = explode(',', $this->model[$name]);
-                    } else {
-                        $type_ids = [];
-                    }
-                    $result .= '<option ' . (in_array($value, $type_ids) ? 'selected' : '') . ' value="' . $value . '">' . $label . '</option>';
-                } else if (is_array($item)) {
-                    $result .= '<option ' . $selected . ' value="' . $value . '">' . $label . '</option>';
+                        ' . Form::form_label($label).'<div class="col-sm-9">
+                        <input type="text" id="'.$name.'" name="'.$name.'" class="input-tags" placeholder="'.$placeholder.'" value="'.$value.'"></div></div>';
+            $js = "<script>init.push(function(){jQuery('#" . $name . "').selectize({
+            plugins: ['remove_button'],
+            create:true,
+            onDelete: function(values) {
+                return confirm(values.length > 1 ? '确认删除' + values.length + '个选项?' : '确认删除 \"' + values[0] + '\"?');
+            },
+            onItemAdd: function(value){
+                if(typeof itemAddHandler != 'undefined'){
+                    itemAddHandler('".$name."',value);
+                }
+            },
+            onItemRemove: function(value){
+                if(typeof itemRemoveHandler != 'undefined'){
+                    itemRemoveHandler('".$name."',value);
+                }
+            },
+            onChange: function(value){
+                if(typeof itemChangeHandler != 'undefined'){
+                    itemChangeHandler('".$name."',value);
                 }
             }
-            return $result . '</select></div></div>';
+            });})</script>";
+            return $result . $js;
+        });
+    }
+
+    private function formMultiSelect()
+    {
+        Form::macro('form_multi_select', function ($name, $label, $data, $placeholder='', $percent = 0.5) {
+            $value = ForoneFormServiceProvider::parseValue($this->model, $name);
+            $options = '';
+            foreach ($data as $item) {
+                if (array_key_exists('children', $item)) {
+                    $options .= '<optgroup label="'.$item['label'].'">';
+                    foreach ($item['children'] as $option) {
+                        $selected = $option['value'] && strpos($value,$option['value'].'') !== false ? 'selected="selected"' : '';
+                        $options .= '<option value="'.$option['value'].'" '.$selected.'>'.$option['label'].'</option>';
+                    }
+                    $options .= '</optgroup>';
+                }else{
+                    $selected = $item['value'] && strpos($value,$item['value'].'') !== false ? 'selected="selected"' : '';
+                    $options .= '<option value="'.$item['value'].'" '.$selected.'>'.$item['label'].'</option>';
+                }
+            }
+            $result = '<div class="form-group col-lg-' . ($percent * 12) . '">
+                        ' . Form::form_label($label).'<div class="col-sm-9"><select id="'.$name.'" name="'.$name.'[]" multiple placeholder="'.$placeholder.'">
+                        '.$options.'</select></div></div>';
+            $js = "<script>init.push(function(){jQuery('#" . $name . "').selectize({
+            plugins: ['remove_button'],
+            onDelete: function(values) {
+                return confirm(values.length > 1 ? '确认删除' + values.length + '个选项?' : '确认删除 \"' + values[0] + '\"?');
+            },
+            onItemAdd: function(value){
+                if(typeof itemAddHandler != 'undefined'){
+                    itemAddHandler('".$name."',value);
+                }
+            },
+            onItemRemove: function(value){
+                if(typeof itemRemoveHandler != 'undefined'){
+                    itemRemoveHandler('".$name."',value);
+                }
+            },
+            onChange: function(value){
+                if(typeof itemChangeHandler != 'undefined'){
+                    itemChangeHandler('".$name."',value);
+                }
+            }
+            });})</script>";
+            return $result . $js;
         });
     }
 
