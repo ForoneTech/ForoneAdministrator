@@ -8,9 +8,7 @@
         var urls = [];
         var items = [];
         imgs.each(function () {
-            var s =$(this)[0].src;
-            s = s.replace('?imageView2/1/w/68/h/68', '');
-            s = s.replace('{{config('forone.qiniu.host')}}', '');
+            var s =$(this).attr('value');
             urls.push(s);
         });
         $.each(urls,function(index,item){
@@ -21,7 +19,6 @@
             items.push(item);
         })
         var value = items.join('|')
-        console.log(value);
         $('#'+filed_name).attr('value', value);
     }
 

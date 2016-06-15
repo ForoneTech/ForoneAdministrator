@@ -67,12 +67,12 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                             array_push($widths, $column[2]);
                         } else {
                             array_push($widths, 0);
-                            $functions[$column[1].$index] = $column[2];
+                            $functions[$column[1] . $index] = $column[2];
                         }
                         break;
                     case 4:
                         array_push($widths, $column[2]);
-                        $functions[$column[1].$index] = $column[3];
+                        $functions[$column[1] . $index] = $column[3];
                         break;
                 }
             }
@@ -91,10 +91,12 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                 }
                 if ($index <= 1) {
                     $class .= 'footable-visible ';
-                } else if ($index < 4) {
-                    $dataToggle .= ' data-hide="phone"';
                 } else {
-                    $dataToggle .= ' data-hide="tablet,phone"';
+                    if ($index < 4) {
+                        $dataToggle .= ' data-hide="phone"';
+                    } else {
+                        $dataToggle .= ' data-hide="tablet,phone"';
+                    }
                 }
 
                 if ($widths[$index]) {
@@ -113,7 +115,7 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                     foreach ($fields as $index => $field) {
                         $html .= $widths[$index] ? '<td style="width: ' . $widths[$index] . 'px">' : '<td>';
                         if ($field == 'buttons') {
-                            $buttons = $functions[$field.$index]($item);
+                            $buttons = $functions[$field . $index]($item);
                             foreach ($buttons as $button) {
                                 $size = sizeof($button);
                                 $normalButton = false;
@@ -145,7 +147,7 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                                             break;
                                     }
                                 }
-                                if($normalButton === false){
+                                if ($normalButton === false) {
                                     $getButton = sizeof($button) > 2 ? true : false;
                                     $config = $getButton ? $button : $button[0];
                                     $data = $getButton || $size == 1 ? [] : $button[1];
@@ -163,14 +165,23 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                                 }
                             }
                         } else {
-                            if (array_key_exists($field.$index, $functions)) {
-                                $value = $functions[$field.$index]($item[$field]);
+                            if (array_key_exists($field . $index, $functions)) {
+                                if (is_array($item)) {
+                                    $value = array_key_exists($field, $item) ? $item[$field] : '';
+                                }else{
+                                    $value = $item->getAttribute($field) ? $item[$field] : '';
+                                }
+                                $value = $functions[$field . $index]($value);
                             } else {
                                 $arr = explode('.', $field);
                                 if (sizeof($arr) == 2) {
                                     $value = $item[$arr[0]][$arr[1]];
                                 } else {
-                                    $value = $item[$field];
+                                    if (is_array($item)) {
+                                        $value = array_key_exists($field, $arr) ? $item[$field] : '';
+                                    }else{
+                                        $value = $item->getAttribute($field) ? $item[$field] : '';
+                                    }
                                 }
                             }
                             $html .= $value . '</td>';
@@ -196,6 +207,7 @@ class ForoneHtmlServiceProvider extends ServiceProvider
   });
                 });</script>";
             $html .= $js;
+
             return $html;
         });
     }
@@ -204,6 +216,7 @@ class ForoneHtmlServiceProvider extends ServiceProvider
     {
         Form::macro('group_label', function ($name, $label) {
             $value = ForoneHtmlServiceProvider::parseValue($this->model, $name);
+
             return '<div class="control-group">
                         <label for="title" class="control-label">' . $label . '</label>
                         <div class="controls">
@@ -227,27 +240,32 @@ class ForoneHtmlServiceProvider extends ServiceProvider
 
     public function panelEnd()
     {
-        Form::macro('panel_end', function ($label='') {
+        Form::macro('panel_end', function ($label = '') {
             if (!$label) {
                 return '';
             }
             if (is_array($label)) {
                 $buttons = '';
-                foreach($label as $button){
-                    if (!is_array($button[0])) {
+                foreach ($label as $button) {
+                    if (is_string($button)) {
+                        $buttons .= '
+                            <button type="submit" class="btn btn-info">' . $button . '</button>
+                        ';
+                    }else if (!is_array($button[0])) {
                         $buttons .= Form::form_dropdown($button[0], $button[1]);
-                    }else{
+                    } else {
                         $buttons .= Form::form_button($button[0], sizeof($button) == 2 ? $button[1] : []);
                     }
                 }
                 $result = '</div><footer class="panel-footer" style="height: 70px">
-                            '.$buttons.'
+                            ' . $buttons . '
                         </footer></div>';
-            }else{
+            } else {
                 $result = '</div><footer class="panel-footer">
                             <button type="submit" class="btn btn-info">' . $label . '</button>
                         </footer></div>';
             }
+
             return $result;
         });
     }
@@ -258,6 +276,7 @@ class ForoneHtmlServiceProvider extends ServiceProvider
             $jsonData = json_encode($data);
             $html = '<a href="' . $modal . '" style="margin-left:5px;"><button onclick="fillModal(\'' . $data->id . '\')" class="btn ' . $class . '" >' . $label . '</button></a>';
             $js = "<script>init.push(function(){datas['" . $data->id . "']='" . $jsonData . "';})</script>";
+
             return $html . $js;
         });
     }
@@ -271,6 +290,7 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                         <span style="font-size: 20px">' . $title . '</span>
                     </div>
                     <div class="panel-body" style="margin: 35px 0px;padding: 0;">';
+
             return $html;
         });
     }
@@ -347,7 +367,7 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                 $datetime = function ($name, $holder) {
                     $result = '<div class="form-group" style="width: 150px; float: left; padding-right: 15px;">
                         <div>' .
-                        '<input id="'.$name.'" name="'.$name.'" type="text" value="'.Input::get($name).'" class="form-control" placeholder="'.$holder.'">';
+                        '<input id="' . $name . '" name="' . $name . '" type="text" value="' . Input::get($name) . '" class="form-control" placeholder="' . $holder . '">';
                     $js = "<script>init.push(function(){jQuery('#$name').datetimepicker({format:'Y-m-d H:i'});})</script>";
                     $time = $result . '</div></div>' . $js;
 
@@ -376,17 +396,18 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                               }
                         });
                     })</script>";
+
                     return $time . $js;
                 };
 
                 $html .= $datetime('begin', '起始时间') . $datetime('end', '截止时间');
             }
 
-            if (array_key_exists('priceStart',$data)) {
+            if (array_key_exists('priceStart', $data)) {
 
                 $priceStart = is_bool($data['priceStart']) ? '价格' : $data['priceStart'];
                 $html .= '<div class="col-md-3" style="padding-left:0px;width: 8%">
-                                <input id="priceStartInput" type="text" class="form-control input" name="priceStart" value="'.Input::get('priceStart').'" placeholder="'.$priceStart.'"  />
+                                <input id="priceStartInput" type="text" class="form-control input" name="priceStart" value="' . Input::get('priceStart') . '" placeholder="' . $priceStart . '"  />
                             </div>';
                 $js = "<script>init.push(function(){
                     $('#priceStartInput').keyup(function(event){
@@ -423,11 +444,11 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                 $html .= $js;
             }
 
-            if (array_key_exists('priceEnd',$data)) {
+            if (array_key_exists('priceEnd', $data)) {
 
                 $priceEnd = is_bool($data['priceEnd']) ? '价格' : $data['priceEnd'];
                 $html .= '<div class="col-md-3" style="padding-left:0px;width: 8%">
-                                <input id="priceEndInput" type="text" class="form-control input" name="priceEnd" value="'.Input::get('priceEnd').'" placeholder="'.$priceEnd.'"  />
+                                <input id="priceEndInput" type="text" class="form-control input" name="priceEnd" value="' . Input::get('priceEnd') . '" placeholder="' . $priceEnd . '"  />
                             </div>';
                 $js = "<script>init.push(function(){
                     $('#priceEndInput').keyup(function(event){
@@ -496,6 +517,7 @@ class ForoneHtmlServiceProvider extends ServiceProvider
             }
 
             $html .= '</div>';
+
             return $html;
         };
         Html::macro('list_header', $handler);

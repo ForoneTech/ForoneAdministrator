@@ -250,6 +250,10 @@ class ForoneFormServiceProvider extends ServiceProvider
             if (!array_key_exists('class', $config)) {
                 $config['class'] = 'btn-default';
             }
+            $target = '';
+            if (array_key_exists('target', $config)) {
+                $target = 'target="'.$config['target'].'"';
+            }
 
             if ($config['method'] == 'POST') {
                 $dataInputs = '';
@@ -265,7 +269,7 @@ class ForoneFormServiceProvider extends ServiceProvider
                  <button type="submit" class="btn ' . $config['class'] . '" onclick="return confirm(\'' . $config['alert'] . '\')" >' . $config['name'] . '</button>
                  </form>';
             } else {
-                $result = '<a href="' . $uri . '"><button type="submit" class="btn ' . $config['class'] . '">' . $config['name'] . '</button></a>';
+                $result = '<a style="margin-right:5px" '.$target.' href="' . $uri . '"><button type="submit" class="btn ' . $config['class'] . '">' . $config['name'] . '</button></a>';
             }
 
             return $result;
@@ -432,7 +436,7 @@ class ForoneFormServiceProvider extends ServiceProvider
                     $dropdownMenus .= '<li class="divider"></li>';
                 }
             }
-            $result = '<div class="btn-group dropdown">
+            $result = '<div style="margin-right: 5px" class="btn-group dropdown">
           <button type="button" class="btn btn-default waves-effect" data-toggle="dropdown" aria-expanded="true">
                 ' . $label . ' <span class="caret"></span>
           </button>

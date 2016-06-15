@@ -35,7 +35,12 @@ class QiniuUploadProvider extends ServiceProvider
     {
         $handler = function ($name, $label, $percent = 0.5,$platform="qiniu") {
             $value = ForoneFormServiceProvider::parseValue($this->model, $name);
-            $url = $value ? config('forone.qiniu.host') . $value : '/vendor/forone/images/upload_add.png';
+            if(!preg_match("/(jpe?g|png)/", $value)){
+                $imgUrl = '/vendor/forone/images/upload.png';
+            }else{
+                $imgUrl = config('forone.qiniu.host') . $value;
+            }
+            $url = $value ? $imgUrl : '/vendor/forone/images/upload_add.png';
             $js = View::make('forone::upload.upload')->with(['name'=>$name])->render();
             if(!QiniuUploadProvider::$single_inited){
                 $js = View::make('forone::upload.upload_js')->render() . $js;
@@ -64,11 +69,11 @@ class QiniuUploadProvider extends ServiceProvider
                     $details = explode('~', $item);
                     $idvalue = rand().'';
                     $div = '<div id="'.$idvalue.'div" style="float:left;width:68px;margin-right: 20px">';
-                    if(preg_match("/.pdf/", $details[0])){
-                        $img = '<img onclick="removeMultiUploadItem(\'' . $idvalue . 'div\',\''.$name.'\')" style="width: 68px; height: 68px;cursor:pointer"
+                    if(!preg_match("/(jpe?g|png)/", $details[0])){
+                        $img = '<img value="'.$details[0].'" onclick="removeMultiUploadItem(\'' . $idvalue . 'div\',\''.$name.'\')" style="width: 68px; height: 68px;cursor:pointer"
                         src="/vendor/forone/images/upload.png">';
                     }else{
-                        $img = '<img onclick="removeMultiUploadItem(\'' . $idvalue . 'div\',\''.$name.'\')" style="width: 68px; height: 68px;cursor:pointer"
+                        $img = '<img value="'.$details[0].'" onclick="removeMultiUploadItem(\'' . $idvalue . 'div\',\''.$name.'\')" style="width: 68px; height: 68px;cursor:pointer"
                         src="'.config('forone.qiniu.host').$details[0].'?imageView2/1/w/68/h/68">';
                     }
 
@@ -77,7 +82,7 @@ class QiniuUploadProvider extends ServiceProvider
                     if (sizeof($details) == 2) {
                         $v = "value='$details[1]'";
                     }
-                    $uploaded_items .= '<input '.$v.' onkeyup="fillMultiUploadInput(\''.$name.'\')" style="width: 68px;float: left" placeholder="图片描述"></div>';
+                    $uploaded_items .= '<input '.$v.' onkeyup="fillMultiUploadInput(\''.$name.'\')" style="width: 68px;float: left" placeholder="文件描述"></div>';
                 }
             }
 
