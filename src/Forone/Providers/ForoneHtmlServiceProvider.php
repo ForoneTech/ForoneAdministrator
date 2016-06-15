@@ -8,6 +8,7 @@
 
 namespace Forone\Providers;
 
+use App\AdminMessage;
 use Form;
 use Html;
 use Illuminate\Support\Facades\Input;
@@ -178,7 +179,7 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                                     $value = $item[$arr[0]][$arr[1]];
                                 } else {
                                     if (is_array($item)) {
-                                        $value = array_key_exists($field, $arr) ? $item[$field] : '';
+                                        $value = array_key_exists($field, $item) ? $item[$field] : '';
                                     }else{
                                         $value = $item->getAttribute($field) ? $item[$field] : '';
                                     }
