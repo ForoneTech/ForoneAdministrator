@@ -18,6 +18,7 @@
                         var reader = new FileReader();
                         reader.onload = function(e){
                             var item = '<div id="'+file.id+'div" style="float:left;width:68px;margin-right: 20px">' +
+                                            '<progress  id="progress'  + file.id + '"' + 'style="width: 68px;" value="0" max="100"></progress>' +
                                     '<label id="'+file.id+'label" style="position:absolute; width: 68px; text-overflow: ellipsis; overflow: hidden; color: #ffffff"></label><img ' +
                                     'onclick="removeMultiUploadItem(\''+file.id+'div\',\''+name+'\')" ' +
                                     'id="'+file.id+'" ' +
@@ -36,6 +37,8 @@
                     });
                 },
                 'UploadProgress': function(up, file) {
+                    var progress = '#progress' +  file.id;
+                    $(progress).val(file.percent);
                 },
                 'FileUploaded': function(up, file, info) {
                     var domain = up.getOption('domain');
