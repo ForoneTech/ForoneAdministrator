@@ -240,7 +240,7 @@ class ForoneFormServiceProvider extends ServiceProvider
                 $config['id'] = $data['id'];
             }
             if (!array_key_exists('method', $config)) {
-                $config['method'] = 'POST';
+                $config['method'] = $config['uri'] == 'update'?"PATCH":'POST';
             }
             if (strpos($config['uri'], '.')) {
                 $uri = $config['method'] == 'POST' ? route($config['uri']) : route($config['uri'], ['id' => $config['id']]);
@@ -255,9 +255,9 @@ class ForoneFormServiceProvider extends ServiceProvider
                 $target = 'target="'.$config['target'].'"';
             }
 
-            if ($config['method'] == 'POST') {
+            if ($config['method'] != 'GET') {
                 $dataInputs = '';
-                $patch = $config['method'] == 'PATCH' || $config['uri'] == 'update' ? '<input type="hidden" name="_method" value="PATCH">' : '';
+                $patch = $config['method'] != 'POST' ? '<input type="hidden" name="_method" value="'.$config['method'].'">' : '';
                 foreach ($data as $key => $value) {
                     $dataInputs .= '<input type="hidden" name="' . $key . '" value="' . $value . '">';
                 }
