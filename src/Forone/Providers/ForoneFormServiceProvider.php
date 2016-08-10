@@ -351,17 +351,18 @@ class ForoneFormServiceProvider extends ServiceProvider
     {
         Form::macro('form_multi_select', function ($name, $label, $data, $placeholder='', $percent = 0.5) {
             $value = ForoneFormServiceProvider::parseValue($this->model, $name);
+            $value = $value ? explode(',', $value) : '' ;
             $options = '';
             foreach ($data as $item) {
                 if (array_key_exists('children', $item)) {
                     $options .= '<optgroup label="'.$item['label'].'">';
                     foreach ($item['children'] as $option) {
-                        $selected = $option['value'] && strpos($value,$option['value'].'') !== false ? 'selected="selected"' : '';
+                        $selected = $option['value'] && $value && in_array($option['value'].'',$value) ? 'selected="selected"' : '';
                         $options .= '<option value="'.$option['value'].'" '.$selected.'>'.$option['label'].'</option>';
                     }
                     $options .= '</optgroup>';
                 }else{
-                    $selected = $item['value'] && strpos($value,$item['value'].'') !== false ? 'selected="selected"' : '';
+                    $selected = $item['value'] && $value && in_array($item['value'].'',$value) ? 'selected="selected"' : '';
                     $options .= '<option value="'.$item['value'].'" '.$selected.'>'.$item['label'].'</option>';
                 }
             }
