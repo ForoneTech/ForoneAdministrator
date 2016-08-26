@@ -13,8 +13,8 @@ Route::controllers([
     'admin/auth' => config('forone.auth.administrator_auth_controller', 'Forone\Controllers\Auth\AuthController'),
 ]);
 
-//admin
-Route::group(['prefix' => 'admin', 'middleware' => ['admin.auth', 'admin.permission:admin']], function () {
+//admin //, 'admin.permission:admin'
+Route::group(['prefix' => 'admin', 'middleware' => ['admin.auth', 'permission:admin']], function () {
 
     Route::group(['namespace' => '\Forone\Controllers\Permissions'], function () {
         Route::resource('roles', 'RolesController');

@@ -41,7 +41,7 @@ ForoneAdministrator 是一款基于Laravel5.1封装的后台管理系统，集�
 
 系统要求:
 
-- Laravel 5.1+
+- Laravel 5.2+
 - PHP 5.5.9+
 
 由于不可抗力因素，最好在`compoer.json`里加入如下配置后再开始安装，设置国内的`composer`镜像同时也可设置直接从国内git服务器上下载。
@@ -49,7 +49,7 @@ ForoneAdministrator 是一款基于Laravel5.1封装的后台管理系统，集�
 
 ```json
 "repositories": [
-  {"type": "git", "url": "http://git.nxdai.com/mani/ForoneAdministrator.git"},
+  {"type": "git", "url": "https://github.com/yangcuiwang/ForoneAdministrator.git"},
   {"type": "composer", "url": "http://packagist.phpcomposer.com"},
   {"packagist": false}
 ],
@@ -59,24 +59,25 @@ ForoneAdministrator 是一款基于Laravel5.1封装的后台管理系统，集�
 > 由于启用了 `"minimum-stability" : "dev"`，Laravel的`dev`版本会导致paginate出错，请在`composer.json`里将laravel版本设置为确定的版本号，例如`5.1.4`
 
 使用composer进行安装
-5.1.x版本
+5.2.x版本
 ```
-composer require forone/administrator:5.1.x
+composer require yangcuiwnag/administrator:5.1.x
 ```
 
 编辑 `config/app.php` 注册 `providers` 和 `aliases`
 
 ```php
 'providers' => [
-    Forone\Providers\ForoneServiceProvider::class
+    Collective\Html\HtmlServiceProvider::class,
+    Forone\Providers\ForoneServiceProvider::class,
 ]
 ```
 
 ```php
 'aliases' => [
-    'Form'      => Illuminate\Html\FormFacade::class,
-    'Html'      => Illuminate\Html\HtmlFacade::class,
-    'Entrust'   => Zizaco\Entrust\EntrustFacade::class
+    'Form' => Collective\Html\FormFacade::class,
+    'Html' => Collective\Html\HtmlFacade::class,
+    'Entrust'   => Zizaco\Entrust\EntrustFacade::class,
 ]
 ```
 

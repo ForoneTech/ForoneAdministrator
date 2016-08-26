@@ -12,6 +12,8 @@ namespace Forone\Controllers\Auth;
 use Forone\Controllers\BaseController;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 
 class AuthController extends BaseController {
