@@ -59,7 +59,7 @@ ForoneAdministrator 是一款基于Laravel5.2封装的后台管理系统，集�
 > 由于启用了 `"minimum-stability" : "dev"`，Laravel的`dev`版本会导致paginate出错，请在`composer.json`里将laravel版本设置为确定的版本号，例如`5.1.4`
 
 使用composer进行安装
-5.1.x版本
+5.2.x版本
 ```
 composer require forone/ForoneAdministrator
 ```
@@ -103,7 +103,7 @@ php artisan forone:init
 'model' => 'Forone\Admin'
 
 ```
-5.1.11之后laravel版本，在用户模型内请务必删除继承的AuthorizableContract类，否则会报错
+5.2.0之后laravel版本，在用户模型内请务必删除继承的AuthorizableContract类，否则会报错
 
 为`App\User`添加Entrust的Trait，以便使用一些封装的方法
 ```
