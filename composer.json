@@ -6,13 +6,14 @@
   "license": "MIT",
   "type": "project",
   "require": {
-    "php": ">=5.5.9",
-    "laravel/framework": "5.2.*",
-    "qiniu/php-sdk": "v7.0.4",
-    "orangehill/iseed": "^2.0",
-    "doctrine/dbal": "~2.3",
-    "laravelcollective/html": "5.2.*",
-    "zizaco/entrust": "dev-laravel-5"
+      "php": ">=5.5.9",
+      "laravel/framework": "5.2.x-dev",
+      "qiniu/php-sdk": "v7.0.4",
+      "orangehill/iseed": "^2.0",
+      "doctrine/dbal": "~2.3",
+      "laravelcollective/html": "5.2.*",
+      "zizaco/entrust": "dev-laravel-5",
+      "forone/administrator": "5.2.x-dev"
   },
   "require-dev": {
     "fzaninotto/faker": "~1.4",
@@ -54,5 +55,6 @@
   },
   "config": {
     "preferred-install": "dist"
-  }
+  },
+  "minimum-stability" : "dev"
 }
