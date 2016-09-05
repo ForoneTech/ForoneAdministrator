@@ -23,9 +23,6 @@
     "symfony/dom-crawler": "2.8.*|3.0.*"
   },
   "autoload": {
-    "classmap": [
-      "database"
-    ],
     "psr-4": {
       "App\\": "app/",
       "Forone\\": "src/Forone/"
