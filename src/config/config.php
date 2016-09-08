@@ -7,7 +7,7 @@
  */
 
 return [
-    'disable_routes' => false, //禁用自带routes，默认启用
+    'disable_routes' => true, //禁用自带routes，默认启用
     'auth' => [
         'administrator_table'      => 'admins',
         'administrator_auth_controller' => 'Forone\Controllers\Auth\AuthController'
@@ -18,12 +18,12 @@ return [
         'description' => 'you site description',
         'logo'        => 'vendor/forone/images/logo.png'
     ],
-    'RedirectAfterLoginPath'      => 'admin/roles', // 登录后跳转页面
-    'RedirectIfAuthenticatedPath' => 'admin/roles', // 如果授权后直接跳转到指定页面
+    'RedirectAfterLoginPath'      => 'admin/home/index', // 登录后跳转页面
+    'RedirectIfAuthenticatedPath' => 'admin/home/index', // 如果授权后直接跳转到指定页面
 
     'menus'                       => [
         '权限设置' => [
-            'icon'       => 'mdi-toggle-radio-button-on',
+            'icon'       => 'fa-expeditedssl',
             'permission' => 'admin',
             'children'   => [
                 '角色管理'  => [
@@ -40,7 +40,6 @@ return [
     ],
 
     'qiniu'                       => [
-
         'host'       => env('QINIU_HOST', 'http://7xlntj.com2.z0.glb.qiniucdn.com/'), //your qiniu host url
         'access_key' => env('QINIU_AK', '7uuXy55ekyLfIw9gwI2Jr4Oin_9qHIQQfXi4ijL1'), //for test
         'secret_key' => env('QINIU_SK', 'FX8P2NE_iE2TR0pwMkK1f3ZErGqGlsmjffCOIZUq'), //for test

@@ -13,12 +13,15 @@ Route::controllers([
     'admin/auth' => config('forone.auth.administrator_auth_controller', 'Forone\Controllers\Auth\AuthController'),
 ]);
 
-//admin //, 'admin.permission:admin'
+//admin
 Route::group(['prefix' => 'admin', 'middleware' => ['admin.auth', 'permission:admin']], function () {
 
     Route::group(['namespace' => '\Forone\Controllers\Permissions'], function () {
         Route::resource('roles', 'RolesController');
         Route::resource('permissions', 'PermissionsController');
+        Route::get('home/index', 'HomeController@index');
+        Route::get('home/main', 'HomeController@main');
+        Route::resource('home', 'HomeController');
         Route::resource('admins', 'AdminsController');
         Route::resource('navs', 'NavsController');
         Route::post('roles/assign-permission', ['as' => 'admin.roles.assign-permission', 'uses' => 'RolesController@assignPermission']);

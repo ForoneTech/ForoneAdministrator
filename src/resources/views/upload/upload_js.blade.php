@@ -1,5 +1,5 @@
-<script src="/vendor/forone/components/qiniu/plupload/plupload.full.min.js"></script>
-<script src="/vendor/forone/components/qiniu/qiniu.min.js"></script>
+<script src="{{ asset('vendor/forone/common/qiniu/plupload/plupload.full.min.js') }}"></script>
+<script src="{{ asset('vendor/forone/common/qiniu/qiniu.min.js') }}"></script>
 
 <script>
     function fillMultiUploadInput(filed_name){

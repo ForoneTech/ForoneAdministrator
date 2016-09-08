@@ -6,27 +6,10 @@
     <meta name="description" content="{{ $siteConfig['description'] }}" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
-    <link rel="stylesheet" href="{{ asset('vendor/forone/libs/assets/animate.css/animate.css') }}" type="text/css" />
-    <link rel="stylesheet" href="{{ asset('vendor/forone/libs/assets/font-awesome/css/font-awesome.css') }}" type="text/css" />
-    <link rel="stylesheet" href="{{ asset('vendor/forone/libs/jquery/bootstrap/dist/css/bootstrap.css') }}" type="text/css" />
-    <link rel="stylesheet" href="{{ asset('vendor/forone/libs/jquery/waves/dist/waves.css') }}" type="text/css" />
-
-    <link rel="stylesheet" href="{{ asset('vendor/forone/styles/material-design-icons.css') }}" type="text/css" />
-    <link rel="stylesheet" href="{{ asset('vendor/forone/styles/font.css') }}" type="text/css" />
-    <link rel="stylesheet" href="{{ asset('vendor/forone/styles/app.css') }}" type="text/css" />
-    <link rel="stylesheet" href="{{ asset('vendor/forone/styles/jquery.fancybox.css') }}" type="text/css" />
-
-    {{--<!-- Chosen -->--}}
-    <link href="{{ asset('vendor/forone/select/css/chosen/chosen.min.css') }}" rel="stylesheet"/>
-    <!-- Endless -->
-    <link href="{{ asset('vendor/forone/select/css/endless.min.css') }}" rel="stylesheet">
-
-    <link rel="stylesheet" href="{{ asset('vendor/forone/components/humane/themes/original.css') }}" type="text/css" />
-    <link rel="stylesheet" href="{{ asset('vendor/forone/components/remodal/dist/remodal.css') }}">
-    <link rel="stylesheet" href="{{ asset('vendor/forone/components/remodal/dist/remodal-default-theme.css') }}">
-    <link href="{{asset('vendor/forone/components/selectize/selectize.default.css')}}" rel="stylesheet">
-    <script src="{{ asset('vendor/forone/libs/jquery/jquery/dist/jquery.js') }}"></script>
-    <script src="{{ asset('vendor/forone/components/selectize/selectize.min.js') }}"></script>
+    <link rel="stylesheet" href="{{ asset('vendor/forone/semantic/semantic.min.css') }}" type="text/css" />
+    <script src="{{ asset('vendor/forone/common/jquery/jquery.min.js') }}"></script>
+    <link src="{{ asset('vendor/forone/common/humane/themes/boldlight.css') }}" type="text/css" />
+    <script src="{{ asset('vendor/forone/semantic/semantic.min.js') }}" type="text/javascript"></script>
     @yield('head')
     <style>
         input {
@@ -70,34 +53,27 @@
     @yield('css')
 
 </head>
-<body ng-app="app">
-<div class="app" ui-view ng-controller="AppCtrl">
-
-    @yield('app')
-
+<body ng-app="pushable">
+<div class="html ui top attached segment html">
+    <div class="main ui">
+        <div class="html ui top attached segment">
+            @yield('app')
+        </div>
+    </div>
 </div>
-
-<script src="{{ asset('vendor/forone/scripts/jquery.fancybox.pack.js') }}"></script>
-<script src="{{ asset('vendor/forone/libs/jquery/bootstrap/dist/js/bootstrap.js') }}"></script>
-<script src="{{ asset('vendor/forone/libs/jquery/waves/dist/waves.js') }}"></script>
-
-<script src="{{ asset('vendor/forone/scripts/ui-load.js') }}"></script>
-<script src="{{ asset('vendor/forone/scripts/ui-jp.config.js') }}"></script>
-<script src="{{ asset('vendor/forone/scripts/ui-jp.js') }}"></script>
-<script src="{{ asset('vendor/forone/scripts/ui-nav.js') }}"></script>
-<script src="{{ asset('vendor/forone/scripts/ui-toggle.js') }}"></script>
-<script src="{{ asset('vendor/forone/scripts/ui-waves.js') }}"></script>
-
-{{--<!-- Chosen -->--}}
-<script src='{{ asset('vendor/forone/select/js/chosen.jquery.min.js') }}'></script>
-{{--<!-- Endless -->--}}
-<script src="{{ asset('vendor/forone/select/js/endless_form.js') }}"></script>
-
-<script src="{{ asset('vendor/forone/components/humane/humane.min.js') }}"></script>
-<script src="{{ asset('vendor/forone/components/remodal/dist/remodal.min.js') }}"></script>
 
 @yield('js')
 
+<script src="{{ asset('vendor/forone/common/humane/humane.min.js') }}"></script>
+
+{{--<!-- Chosen -->--}}
+<script src='{{ asset('vendor/forone/common/select/js/chosen.jquery.min.js') }}'></script>
+{{--<!-- Endless -->--}}
+<script src="{{ asset('vendor/forone/common/select/js/endless_form.js') }}"></script>
+<script src="{{ asset('vendor/forone/common/remodal/dist/remodal.min.js') }}"></script>
+<script src="{{ asset('vendor/forone/common/datetimepicker-master/jquery.datetimepicker.js') }}"></script>
+<script src="{{ asset('vendor/forone/common/selectize/selectize.min.js') }}"></script>
+<script src="{{ asset('vendor/forone/common/jquery/jquery.fancybox.pack.js') }}"></script>
 <script>
     $(function(){
 
@@ -108,7 +84,11 @@
     });
 </script>
 
-@if (count($errors) > 0)
+<script>
+    $('.ui.dropdown').dropdown();
+</script>
+
+@if (isset($errors) && count($errors) > 0)
     <script>
     @foreach ($errors->all() as $error)
     humane.log('{{ $error }}');

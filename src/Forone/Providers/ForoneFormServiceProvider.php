@@ -56,16 +56,14 @@ class ForoneFormServiceProvider extends ServiceProvider
         $handler = function ($name, $label, $percent = 0.5, $modal = false) {
             $value = ForoneFormServiceProvider::parseValue($this->model, $name);
             $js = View::make('forone::ueditor.ueditor');
-            return $js . '<div class="form-group col-sm-' . ($percent * 12) . '">
+            return $js . '<div class="field">
                         ' . Form::form_label($label) . '
-                        <div class="col-sm-9">
                              <script id="container" name=' . $name . ' type="text/plain">
                                     ' . $value . '
                             </script>
                             <script type="text/javascript">
                                 var ue = UE.getEditor("container");
                             </script>
-                          </div>
                     </div>';
         };
         Form::macro('ueditor', $handler);
@@ -113,11 +111,9 @@ class ForoneFormServiceProvider extends ServiceProvider
                 $input_col = $data['label_col'] ? 12 - $data['label_col'] : 9;
             }
             $style = $modal ? 'style="padding:0px"' : '';
-            return '<div class="form-group col-sm-' . ($percent * 12) . '" ' . $style . '>
+            return '<div class="field"' . $style . '>
                         ' . Form::form_label($label, $data) . '
-                        <div class="col-sm-' . $input_col . '">
-                            <input name="' . $name . '" type="text" value="' . $value . '" class="form-control" placeholder="' . $placeholder . '">
-                          </div>
+                          <input name="' . $name . '" type="text" value="' . $value . '"  placeholder="' . $placeholder . '">
                     </div>';
         };
         Form::macro('group_text', $handler);
@@ -137,11 +133,9 @@ class ForoneFormServiceProvider extends ServiceProvider
                 $input_col = $data['label_col'] ? 12 - $data['label_col'] : 9;
             }
             $style = $modal ? 'style="padding:0px"' : '';
-            return '<div class="form-group col-sm-' . ($percent * 12) . '" ' . $style . '>
+            return '<div class="field">
                         ' . Form::form_label($label, $data) . '
-                        <div class="col-sm-' . $input_col . '">
-                            <input name="' . $name . '" type="password" class="form-control" placeholder="' . $placeholder . '">
-                          </div>
+                            <input name="' . $name . '" type="password" placeholder="' . $placeholder . '">
                     </div>';
         };
         Form::macro('group_password', $handler);
@@ -163,11 +157,9 @@ class ForoneFormServiceProvider extends ServiceProvider
                 $input_col = $data['label_col'] ? 12 - $data['label_col'] : 9;
             }
             $style = $modal ? 'style="padding:0px"' : '';
-            return '<div class="form-group col-sm-' . ($percent * 12) . '" ' . $style . '>
+            return '<div class="field" ' . $style . '>
                         ' . Form::form_label($label, $data) . '
-                        <div class="col-sm-' . $input_col . '">
-                            <textarea id="' . $name . '" name="' . $name . '" rows="6" class="form-control" placeholder="' . $placeholder . '">' . $value . '</textarea>
-                        </div>
+                            <textarea id="' . $name . '" name="' . $name . '" rows="6" placeholder="' . $placeholder . '">' . $value . '</textarea>
                     </div>';
         };
         Form::macro('group_area', $handler);
@@ -177,19 +169,17 @@ class ForoneFormServiceProvider extends ServiceProvider
     private function formRadio()
     {
         $handler = function ($name, $label, $data, $percent = 1) {
-            $result = '<div class="form-group col-sm-' . ($percent * 12) . '">
-                        ' . Form::form_label($label) . '
-                        <div class="col-sm-9">';
+            $result = '<div class="inline fields">' . Form::form_label($label);
             foreach ($data as $item) {
                 if ($this->model) {
                     $checked = $this->model[$name] == $item[0] ? 'checked=true' : '';;
                 } else {
                     $checked = sizeof($item) == 3 ? 'checked=' . $item[2] : '';
                 }
-                $result .= '<input ' . $checked . '" name="' . $name . '" type="radio" value="' . $item[0] . '">
-                            <span style="vertical-align: middle;padding-right:10px">' . $item[1] . '</span>';
+                $result .= '<div class="field"><div class="ui radio checkbox"><input ' . $checked . '" name="' . $name . '" type="radio" value="' . $item[0] . '">
+                            <label>' . $item[1] . '</label></div></div>';
             }
-            return $result . '</div></div>';
+            return $result . '</div>';
         };
         Form::macro('group_radio', $handler);
         Form::macro('form_radio', $handler);
@@ -198,18 +188,19 @@ class ForoneFormServiceProvider extends ServiceProvider
     private function formCheckbox()
     {
         $handler = function ($name, $label, $data, $percent = 1) {
-            $result = '<div class="form-group col-sm-' . ($percent * 12) . '">
-                        ' . Form::form_label($label) . '
-                        <div class="col-sm-9">';
+            $result = '<div class="inline fields">' . Form::form_label($label) . '
+                        <div class="field">';
             foreach ($data as $item) {
                 if ($this->model) {
                     $checked = $this->model[$name] == $item[0] ? 'checked=true' : '';;
                 } else {
                     $checked = sizeof($item) == 3 ? 'checked=' . $item[2] : '';
                 }
-                $result .= '<label class="checkbox-inline">';
-                $result .= '<input ' . $checked . '" name="' . $name . '" type="checkbox" value="' . $item[0] . '">
-                            <span style="vertical-align: middle;padding-right:10px">' . $item[1] . '</span>';
+                $result .= '<label>';
+                $result .= '<div class="ui checkbox">
+                            <input ' . $checked . '" name="' . $name . '" type="checkbox" value="' . $item[0] . '">
+                            <label>' . $item[1] . '</label>
+                            </div>';
                 $result .= '</label>';
             }
             return $result . '</div></div>';
@@ -221,9 +212,7 @@ class ForoneFormServiceProvider extends ServiceProvider
     private function formAction()
     {
         Form::macro('form_action', function ($label) {
-            return '<div class="form-group col-sm-12">
-                        <button class="btn btn-fw btn-primary" type="submit">' . $label . '</button>
-                    </div>';
+            return '<button class="ui button primary" type="submit">' . $label . '</button>';
         });
     }
 
@@ -266,10 +255,10 @@ class ForoneFormServiceProvider extends ServiceProvider
                  ' . $patch . '
                  ' . $dataInputs . '
                  ' . Form::token() . '
-                 <button type="submit" class="btn ' . $config['class'] . '" onclick="return confirm(\'' . $config['alert'] . '\')" >' . $config['name'] . '</button>
+                 <button type="submit" class="ui button ' . $config['class'] . '" onclick="return confirm(\'' . $config['alert'] . '\')" >' . $config['name'] . '</button>
                  </form>';
             } else {
-                $result = '<a style="margin-right:5px" '.$target.' href="' . $uri . '"><button type="submit" class="btn ' . $config['class'] . '">' . $config['name'] . '</button></a>';
+                $result = '<a style="margin-right:5px" '.$target.' href="' . $uri . '"><button type="submit" class="ui button ' . $config['class'] . '">' . $config['name'] . '</button></a>';
             }
 
             return $result;
@@ -285,16 +274,16 @@ class ForoneFormServiceProvider extends ServiceProvider
                 $modal = $modal['modal'];
             }
             $style = $modal ? 'style="padding: 7px 0px;"' : '';
-            return '<label class="col-sm-' . $col . ' control-label" ' . $style . '>' . $label . '</label>';
+            return '<label ' . $style . '>' . $label . '</label>';
         });
     }
 
     private function formSelect()
     {
         Form::macro('form_select', function ($name, $label, $data, $percent = 0.5, $modal = false) {
-            $result = '<div class="form-group col-sm-' . ($percent * 12) . '">
+            $result = '<div class="field">
                         ' . Form::form_label($label, $modal) . '
-                        <div class="col-sm-9"><select class="form-control" name="' . $name . '">';
+                        <select class="ui fluid dropdown" name="' . $name . '">';
             foreach ($data as $item) {
                 $value = is_array($item) ? $item['value'] : $item;
                 $label = is_array($item) ? $item['label'] : $item;
@@ -307,7 +296,7 @@ class ForoneFormServiceProvider extends ServiceProvider
                 $result .= '<option ' . $selected . ' value="' . $value . '">' . $label . '</option>';
             }
 
-            return $result . '</select></div></div>';
+            return $result . '</select></div>';
         });
     }
 
@@ -318,9 +307,9 @@ class ForoneFormServiceProvider extends ServiceProvider
             if (!$value) {
                 $value = $default;
             }
-            $result = '<div class="form-group col-lg-' . ($percent * 12) . '">
-                        ' . Form::form_label($label).'<div class="col-sm-9">
-                        <input type="text" id="'.$name.'" name="'.$name.'" class="input-tags" placeholder="'.$placeholder.'" value="'.$value.'"></div></div>';
+            $result = '<div class="field">
+                        ' . Form::form_label($label).'<div class="ui fluid">
+                        <input type="text" id="'.$name.'" name="'.$name.'" class="input-tags" style="width:80px;" placeholder="'.$placeholder.'" value="'.$value.'"></div></div>';
             $js = "<script>init.push(function(){jQuery('#" . $name . "').selectize({
             plugins: ['remove_button'],
             create:true,
@@ -366,31 +355,11 @@ class ForoneFormServiceProvider extends ServiceProvider
                     $options .= '<option value="'.$item['value'].'" '.$selected.'>'.$item['label'].'</option>';
                 }
             }
-            $result = '<div class="form-group col-lg-' . ($percent * 12) . '">
-                        ' . Form::form_label($label).'<div class="col-sm-9"><select id="'.$name.'" name="'.$name.'[]" multiple placeholder="'.$placeholder.'">
-                        '.$options.'</select></div></div>';
-            $js = "<script>init.push(function(){jQuery('#" . $name . "').selectize({
-            plugins: ['remove_button'],
-            onDelete: function(values) {
-                return confirm(values.length > 1 ? '确认删除' + values.length + '个选项?' : '确认删除 \"' + values[0] + '\"?');
-            },
-            onItemAdd: function(value){
-                if(typeof itemAddHandler != 'undefined'){
-                    itemAddHandler('".$name."',value);
-                }
-            },
-            onItemRemove: function(value){
-                if(typeof itemRemoveHandler != 'undefined'){
-                    itemRemoveHandler('".$name."',value);
-                }
-            },
-            onChange: function(value){
-                if(typeof itemChangeHandler != 'undefined'){
-                    itemChangeHandler('".$name."',value);
-                }
-            }
-            });})</script>";
-            return $result . $js;
+            $result = '<div class="field">
+                        ' . Form::form_label($label).'<select id="'.$name.'" name="'.$name.'[]" class="ui fluid multiple search selection dropdown"  multiple placeholder="'.$placeholder.'">
+                        '.$options.'</select></div>';
+
+            return $result;
         });
     }
 
@@ -401,12 +370,11 @@ class ForoneFormServiceProvider extends ServiceProvider
             if (!is_string($placeholder)) {
                 $percent = $placeholder;
             }
-            $result = '<div class="form-group col-sm-' . ($percent * 12) . '">
-                        ' . Form::form_label($label) . '
-                        <div class="col-sm-9">' .
+            $result = '<div class="field">
+                        ' . Form::form_label($label) .
                 '<input id="' . $name . 'date" name="' . $name . '" type="text" value="' . $value . '" class="form-control" placeholder="' . $placeholder . '">';
             $js = "<script>init.push(function(){jQuery('#" . $name . "date').datetimepicker({format:'Y-m-d'});})</script>";
-            return $result . '</div></div>' . $js;
+            return $result . '</div>' . $js;
         });
     }
 
@@ -417,12 +385,11 @@ class ForoneFormServiceProvider extends ServiceProvider
             if (!is_string($placeholder)) {
                 $percent = $placeholder;
             }
-            $result = '<div class="form-group col-sm-' . ($percent * 12) . '">
-                        ' . Form::form_label($label) . '
-                        <div class="col-sm-9">' .
+            $result = '<div class="field">
+                        ' . Form::form_label($label) .
                 '<input id="' . $name . 'date" name="' . $name . '" type="text" value="' . $value . '" class="form-control" placeholder="' . $placeholder . '">';
             $js = "<script>init.push(function(){jQuery('#" . $name . "date').datetimepicker({format:'Y-m-d H:i'});})</script>";
-            return $result . '</div></div>' . $js;
+            return $result . '</div>' . $js;
         });
     }
 

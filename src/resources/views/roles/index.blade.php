@@ -20,6 +20,7 @@
          {!! Form::close() !!}
      </div>
      {!! Html::modal_end() !!}
+
 @stop
 
 @section('js')

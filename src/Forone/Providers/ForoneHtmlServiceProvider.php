@@ -45,7 +45,7 @@ class ForoneHtmlServiceProvider extends ServiceProvider
     {
         Html::macro('datagrid', function ($data) {
 
-            $html = '<table class="table m-b-none" data-sort="false" ui-jp="footable">';
+            $html = '<table class="ui celled striped table" data-sort="false" ui-jp="footable">';
             $columns = $data['columns'];
             $items = $data['items'];
             $heads = [];
@@ -126,25 +126,25 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                                     switch ($value) {
                                         case '禁用':
                                             $html .= Form::form_button([
-                                                'name'  => $value,
-                                                'id'    => $item->id,
+                                                'name' => $value,
+                                                'id' => $item->id,
                                                 'class' => 'bg-warning'
                                             ], ['enabled' => false]);
                                             break;
                                         case '启用':
                                             $html .= Form::form_button([
-                                                'name'  => $value,
-                                                'id'    => $item->id,
+                                                'name' => $value,
+                                                'id' => $item->id,
                                                 'class' => 'btn-success'
                                             ], ['enabled' => true]);
                                             break;
                                         case '查看':
                                             $html .= '<a href="' . $this->url->current() . '/' . $item['id'] . '">
-                                                    <button class="btn">查看</button></a>';
+                                                    <button class="ui primary button">查看</button></a>';
                                             break;
                                         case '编辑':
                                             $html .= '<a href="' . $this->url->current() . '/' . $item['id'] . '/edit">
-                                                    <button class="btn">编辑</button></a>';
+                                                    <button class="ui primary button">编辑</button></a>';
                                             break;
                                     }
                                 }
@@ -169,7 +169,7 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                             if (array_key_exists($field . $index, $functions)) {
                                 if (is_array($item)) {
                                     $value = array_key_exists($field, $item) ? $item[$field] : '';
-                                }else{
+                                } else {
                                     $value = $item->getAttribute($field) ? $item[$field] : '';
                                 }
                                 $value = $functions[$field . $index]($value);
@@ -180,7 +180,7 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                                 } else {
                                     if (is_array($item)) {
                                         $value = array_key_exists($field, $item) ? $item[$field] : '';
-                                    }else{
+                                    } else {
                                         $value = $item->getAttribute($field) ? $item[$field] : '';
                                     }
                                 }
@@ -191,21 +191,26 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                     $html .= '</tr>';
                 }
             }
-            $html .= '<tbody>';
 
-            $html .= '<tfoot>';
-            $html .= ' <tr>';
-            $html .= '    <td colspan="10" class="text-center">';
-            $html .= $items && !is_array($items) ? $items->render() : '';
-            $html .= '  </td>';
-            $html .= ' </tr>';
-            $html .= '</tfoot>';
+
+            if ($items && is_array($items)) {
+                $html .= '<tbody>';
+                $html .= '<tfoot>';
+                $html .= ' <tr>';
+                $html .= '    <td colspan="10" class="text-center">';
+                $html .= $items && is_array($items) ? $items->render() : '';
+                $html .= '  </td>';
+                $html .= ' </tr>';
+                $html .= '</tfoot>';
+                $html .= '</tbody>';
+            }
+
             $html .= '</table>';
             $js = "<script>init.push(function(){
                    $('.fancybox').fancybox({
                     openEffect  : 'none',
                     closeEffect : 'none'
-  });
+                    });
                 });</script>";
             $html .= $js;
 
@@ -227,15 +232,10 @@ class ForoneHtmlServiceProvider extends ServiceProvider
         });
     }
 
-
     public function panelStart()
     {
         Form::macro('panel_start', function ($title = '') {
-            return '<div class="panel panel-default">
-                        <div class="panel-heading bg-white">
-                            <span class="font-bold">' . $title . '</span>
-                        </div>
-                    <div class="panel-body">';
+            return '<h2 class="ui dividing header">' . $title . '</h2>';
         });
     }
 
@@ -250,9 +250,9 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                 foreach ($label as $button) {
                     if (is_string($button)) {
                         $buttons .= '
-                            <button type="submit" class="btn btn-info">' . $button . '</button>
+                            <button type="submit" class="ui button">' . $button . '</button>
                         ';
-                    }else if (!is_array($button[0])) {
+                    } else if (!is_array($button[0])) {
                         $buttons .= Form::form_dropdown($button[0], $button[1]);
                     } else {
                         $buttons .= Form::form_button($button[0], sizeof($button) == 2 ? $button[1] : []);
@@ -262,8 +262,9 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                             ' . $buttons . '
                         </footer></div>';
             } else {
-                $result = '</div><footer class="panel-footer">
-                            <button type="submit" class="btn btn-info">' . $label . '</button>
+                $result = '</div>
+                        <footer class="panel-footer">
+                            <button type="submit" class="ui button">' . $label . '</button>
                         </footer></div>';
             }
 
@@ -275,7 +276,7 @@ class ForoneHtmlServiceProvider extends ServiceProvider
     {
         Form::macro('modal_button', function ($label, $modal, $data, $class = 'waves-effect') {
             $jsonData = json_encode($data);
-            $html = '<a href="' . $modal . '" style="margin-left:5px;"><button onclick="fillModal(\'' . $data->id . '\')" class="btn ' . $class . '" >' . $label . '</button></a>';
+            $html = '<a href="' . $modal . '" style="margin-left:5px;"><button onclick="fillModal(\'' . $data->id . '\')" class="ui primary button ' . $class . '" >' . $label . '</button></a>';
             $js = "<script>init.push(function(){datas['" . $data->id . "']='" . $jsonData . "';})</script>";
 
             return $html . $js;
@@ -319,7 +320,7 @@ class ForoneHtmlServiceProvider extends ServiceProvider
             $html .= '<div class="panel-heading">' . $title . '</div>';
             $html .= '<div class="panel-body b-b b-light">';
             if (array_key_exists('new', $data)) {
-                $html .= '<a href="' . $this->url->current() . '/create" class="btn btn-primary">&#43; 新增</a>';
+                $html .= '<a href="' . $this->url->current() . '/create" class="ui primary button">&#43; 新增</a>';
             }
             if (array_key_exists('filters', $data)) {
 
@@ -366,7 +367,7 @@ class ForoneHtmlServiceProvider extends ServiceProvider
             if (array_key_exists('time', $data)) {
 
                 $datetime = function ($name, $holder) {
-                    $result = '<div class="form-group" style="width: 150px; float: left; padding-right: 15px;">
+                    $result = '<div class="fields" style="width: 150px; float: left; padding-right: 15px;">
                         <div>' .
                         '<input id="' . $name . '" name="' . $name . '" type="text" value="' . Input::get($name) . '" class="form-control" placeholder="' . $holder . '">';
                     $js = "<script>init.push(function(){jQuery('#$name').datetimepicker({format:'Y-m-d H:i'});})</script>";
