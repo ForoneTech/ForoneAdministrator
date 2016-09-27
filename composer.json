@@ -1,7 +1,7 @@
 {
   "name": "forone/administrator",
   "description": "Admin system based on Laravel 5.2",
-  "homepage": "https://github.com/ForoneTech/ForoneAdministrator",
+  "homepage": "https://github.com/ForoneTech/LaravelAdmin",
   "keywords": ["framework", "laravel","forone","laravel 5.2"],
   "license": "MIT",
   "type": "project",
@@ -12,7 +12,7 @@
       "orangehill/iseed": "^2.0",
       "doctrine/dbal": "~2.3",
       "laravelcollective/html": "5.2.*",
-      "zizaco/entrust": "dev-laravel-5",
+      "zizaco/entrust": "5.2.x-dev",
       "forone/administrator": "5.2.x-dev"
   },
   "require-dev": {
