@@ -1,7 +1,7 @@
 {
   "name": "forone/administrator",
   "description": "Admin system based on Laravel 5.2",
-  "homepage": "https://github.com/ForoneTech/LaravelAdmin",
+  "homepage": "https://github.com/ForoneTech/ForoneAdministrator",
   "keywords": ["framework", "laravel","forone","laravel 5.2"],
   "license": "MIT",
   "type": "project",
