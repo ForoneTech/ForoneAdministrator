@@ -7,12 +7,12 @@
   "type": "project",
   "require": {
       "php": ">=5.5.9",
-      "laravel/framework": "5.2.x-dev",
+      "laravel/framework": "5.2.*",
       "qiniu/php-sdk": "v7.0.4",
       "orangehill/iseed": "^2.0",
       "doctrine/dbal": "~2.3",
       "laravelcollective/html": "5.2.*",
-      "zizaco/entrust": "dev-laravel-5",
+      "zizaco/entrust": "5.2.x-dev",
       "forone/administrator": "5.2.x-dev"
   },
   "require-dev": {
