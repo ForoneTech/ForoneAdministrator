@@ -243,7 +243,7 @@ class ForoneHtmlServiceProvider extends ServiceProvider
     {
         Form::macro('panel_end', function ($label = '') {
             if (!$label) {
-                return '';
+                return '</div></div>';
             }
             if (is_array($label)) {
                 $buttons = '';
