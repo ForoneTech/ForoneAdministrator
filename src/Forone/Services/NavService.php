@@ -1,10 +1,4 @@
 <?php
-/**
- * User : YuGang Yang
- * Date : 7/29/15
- * Time : 11:02
- * Email: smartydroid@gmail.com
- */
 
 namespace Forone\Services;
 
@@ -17,14 +11,16 @@ class NavService
     public function isActive($value)
     {
         $uri = array_key_exists('uri', $value) ? $value['uri'] : '';
+        $fullUrl = URL::current();
         if (!$uri) {
             $children = $value['children'];
             foreach ($children as $child) {
-                if (strripos(URL::current(), $child['uri'])) {
+                $position = strripos($fullUrl, $child['uri']);
+                if ($position && substr($fullUrl, $position-1, 1) == '/') {
                     return 'active';
                 }
             }
-        } else if (strripos(URL::current(), $uri)) {
+        } else if (strripos($fullUrl, $uri)) {
             return 'active';
         }
         return '';

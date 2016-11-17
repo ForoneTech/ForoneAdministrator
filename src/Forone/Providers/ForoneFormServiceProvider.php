@@ -22,6 +22,7 @@ class ForoneFormServiceProvider extends ServiceProvider
         $this->parseSpecialFields();
         $this->hiddenInput();
         $this->formText();
+        $this->formRead();
         $this->formPassword();
         $this->formArea();
         $this->formRadio();
@@ -122,6 +123,25 @@ class ForoneFormServiceProvider extends ServiceProvider
         };
         Form::macro('group_text', $handler);
         Form::macro('form_text', $handler);
+    }
+
+    private function formRead()
+    {
+        $handler = function ($name, $label,  $percent = 0.5, $color='',$value='') {
+            if (!$value) {
+                $value = ForoneFormServiceProvider::parseValue($this->model, $name);
+            }
+            $data = '';
+            $input_col = 9;
+            return '<div class="form-group col-sm-' . ($percent * 12) . '" '  . '>
+                        ' . Form::form_label($label, $data) . '
+                        <div class="col-sm-' . $input_col . '">
+                            <input  name="' . $name . '" type="text" readonly="readonly" value="' . $value . '" class="form-control" style="color:' . $color . '">
+                          </div>
+                    </div>';
+        };
+        Form::macro('group_read', $handler);
+        Form::macro('form_read', $handler);
     }
 
     private function formPassword()
@@ -300,7 +320,9 @@ class ForoneFormServiceProvider extends ServiceProvider
                 $label = is_array($item) ? $item['label'] : $item;
                 $selected = '';
                 if ($this->model) {
-                    $selected = $this->model[$name] == $value ? 'selected="selected"' : '';;
+                    if (isset($this->model[$name])) {
+                        $selected = $this->model[$name] == $value ? 'selected="selected"' : '';
+                    }
                 } else if (is_array($item)) {
                     $selected = sizeof($item) == 3 ? 'selected=' . $item[2] : '';
                 }
