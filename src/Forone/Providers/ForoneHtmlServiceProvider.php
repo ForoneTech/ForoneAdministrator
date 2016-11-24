@@ -170,7 +170,7 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                                 if (is_array($item)) {
                                     $value = array_key_exists($field, $item) ? $item[$field] : '';
                                 }else{
-                                    $value = $item->getAttribute($field) ? $item[$field] : '';
+                                    $value = array_key_exists($field, $item->getAttributes()) ? $item[$field] : '';
                                 }
                                 $value = $functions[$field . $index]($value);
                             } else {
@@ -181,7 +181,7 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                                     if (is_array($item)) {
                                         $value = array_key_exists($field, $item) ? $item[$field] : '';
                                     }else{
-                                        $value = $item->getAttribute($field) ? $item[$field] : '';
+                                        $value = array_key_exists($field, $item->getAttributes()) ? $item[$field] : '';
                                     }
                                 }
                             }
