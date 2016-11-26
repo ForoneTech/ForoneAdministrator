@@ -1,6 +1,6 @@
 实在招不到人，在此打个广告，招Laravel工程师，请联系 mani@nxdai.com 或 1283233833
 
-ForoneAdministrator 是一款基于Laravel5.1封装的后台管理系统，集成了[Entrust](https://github.com/Zizaco/entrust)权限管理，并针对业务的增删改查进行了视图和业务层的封装，有助于进行后台管理系统的快速研发。
+ForoneAdministrator 是一款基于Laravel5.2封装的后台管理系统，集成了[Entrust](https://github.com/Zizaco/entrust)权限管理，并针对业务的增删改查进行了视图和业务层的封装，有助于进行后台管理系统的快速研发。
 
 - [安装初始化](#init)
 - [forone配置](#config)
@@ -41,7 +41,7 @@ ForoneAdministrator 是一款基于Laravel5.1封装的后台管理系统，集�
 
 系统要求:
 
-- Laravel 5.1+
+- Laravel 5.2+
 - PHP 5.5.9+
 
 由于不可抗力因素，最好在`compoer.json`里加入如下配置后再开始安装，设置国内的`composer`镜像同时也可设置直接从国内git服务器上下载。
@@ -59,24 +59,25 @@ ForoneAdministrator 是一款基于Laravel5.1封装的后台管理系统，集�
 > 由于启用了 `"minimum-stability" : "dev"`，Laravel的`dev`版本会导致paginate出错，请在`composer.json`里将laravel版本设置为确定的版本号，例如`5.1.4`
 
 使用composer进行安装
-5.1.x版本
+5.2.x版本
 ```
-composer require forone/administrator:5.1.x
+composer require yangcuiwnag/administrator:5.2.x-dev
 ```
 
 编辑 `config/app.php` 注册 `providers` 和 `aliases`
 
 ```php
 'providers' => [
-    Forone\Providers\ForoneServiceProvider::class
+    Collective\Html\HtmlServiceProvider::class,
+    Forone\Providers\ForoneServiceProvider::class,
 ]
 ```
 
 ```php
 'aliases' => [
-    'Form'      => Illuminate\Html\FormFacade::class,
-    'Html'      => Illuminate\Html\HtmlFacade::class,
-    'Entrust'   => Zizaco\Entrust\EntrustFacade::class
+    'Form' => Collective\Html\FormFacade::class,
+    'Html' => Collective\Html\HtmlFacade::class,
+    'Entrust'   => Zizaco\Entrust\EntrustFacade::class,
 ]
 ```
 
@@ -102,7 +103,7 @@ php artisan forone:init
 'model' => 'Forone\Admin'
 
 ```
-5.1.11之后laravel版本，在用户模型内请务必删除继承的AuthorizableContract类，否则会报错
+5.2.0之后laravel版本，在用户模型内请务必删除继承的AuthorizableContract类，否则会报错
 
 为`App\User`添加Entrust的Trait，以便使用一些封装的方法
 ```

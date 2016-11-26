@@ -14,7 +14,7 @@ Route::controllers([
 ]);
 
 //admin
-Route::group(['prefix' => 'admin', 'middleware' => ['admin.auth', 'admin.permission:admin']], function () {
+Route::group(['prefix' => 'admin', 'middleware' => ['admin.auth', 'permission:admin']], function () {
 
     Route::group(['namespace' => '\Forone\Controllers\Permissions'], function () {
         Route::resource('roles', 'RolesController');
