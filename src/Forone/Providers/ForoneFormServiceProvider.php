@@ -43,7 +43,7 @@ class ForoneFormServiceProvider extends ServiceProvider
     {
         $arr = explode('-', $name);
         if (sizeof($arr) == 2) {
-            return $model && (!is_array($model) || array_key_exists($arr[0], $model)) ? $model[$arr[0]][$arr[1]] : '';
+            return $model && (!is_array($model) && isset($model[$arr[0]][$arr[1]])) ? $model[$arr[0]][$arr[1]] : '';
         } else {
             return $model && (!is_array($model) || array_key_exists($name, $model)) ? $model[$name] : '';
         }
