@@ -170,7 +170,7 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                                 if (is_array($item)) {
                                     $value = array_key_exists($field, $item) ? $item[$field] : '';
                                 }else{
-                                    $value = $item->getAttribute($field) ? $item[$field] : '';
+                                    $value = $item->{$field} ? $item->{$field} : '';
                                 }
                                 $value = $functions[$field . $index]($value);
                             } else {
@@ -181,7 +181,7 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                                     if (is_array($item)) {
                                         $value = array_key_exists($field, $item) ? $item[$field] : '';
                                     }else{
-                                        $value = $item->getAttribute($field) ? $item[$field] : '';
+                                        $value = $item->{$field} ? $item->{$field} : '';
                                     }
                                 }
                             }
@@ -243,7 +243,7 @@ class ForoneHtmlServiceProvider extends ServiceProvider
     {
         Form::macro('panel_end', function ($label = '') {
             if (!$label) {
-                return '';
+                return '</div></div>';
             }
             if (is_array($label)) {
                 $buttons = '';
@@ -275,8 +275,9 @@ class ForoneHtmlServiceProvider extends ServiceProvider
     {
         Form::macro('modal_button', function ($label, $modal, $data, $class = 'waves-effect') {
             $jsonData = json_encode($data);
-            $html = '<a href="' . $modal . '" style="margin-left:5px;"><button onclick="fillModal(\'' . $data->id . '\')" class="btn ' . $class . '" >' . $label . '</button></a>';
-            $js = "<script>init.push(function(){datas['" . $data->id . "']='" . $jsonData . "';})</script>";
+            $id = is_array($data) ? $data['id'] : $data->{'id'};
+            $html = '<a href="' . $modal . '" style="margin-left:5px;"><button onclick="fillModal(\'' . $id . '\')" class="btn ' . $class . '" >' . $label . '</button></a>';
+            $js = "<script>init.push(function(){datas['" . $id . "']='" . $jsonData . "';})</script>";
 
             return $html . $js;
         });
