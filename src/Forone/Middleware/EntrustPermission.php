@@ -9,7 +9,7 @@
 namespace Forone\Middleware;
 
 use Closure;
-use Forone\Role;
+
 class EntrustPermission {
 
     /**
