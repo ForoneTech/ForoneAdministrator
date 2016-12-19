@@ -9,7 +9,7 @@
 namespace Forone\Middleware;
 
 use Closure;
-
+use Forone\Role;
 class EntrustPermission {
 
     /**
@@ -21,7 +21,7 @@ class EntrustPermission {
      * @return mixed
      */
     public function handle($request, Closure $next, $permissions = null)
-    {
+    {   
         if ($permissions != null && !\Auth::user()->can(explode('|', $permissions))) {
             return response('Forbidden', 403);
         }

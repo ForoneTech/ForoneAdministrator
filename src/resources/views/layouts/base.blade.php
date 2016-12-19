@@ -24,10 +24,8 @@
     <link rel="stylesheet" href="{{ asset('vendor/forone/components/humane/themes/original.css') }}" type="text/css" />
     <link rel="stylesheet" href="{{ asset('vendor/forone/components/remodal/dist/remodal.css') }}">
     <link rel="stylesheet" href="{{ asset('vendor/forone/components/remodal/dist/remodal-default-theme.css') }}">
-    <link href="{{asset('vendor/forone/components/selectize/selectize.default.css')}}" rel="stylesheet">
+
     <script src="{{ asset('vendor/forone/libs/jquery/jquery/dist/jquery.js') }}"></script>
-    <script src="{{ asset('vendor/forone/components/selectize/selectize.min.js') }}"></script>
-    @yield('head')
     <style>
         input {
             font-size: 16px;

@@ -27,7 +27,6 @@ class QiniuUploadProvider extends ServiceProvider
     {
         $this->singleFileUpload();
         $this->multiFilesUpload();
-        $this->fileViewer();
         $this->singleVideoUpload();
     }
 
@@ -35,12 +34,7 @@ class QiniuUploadProvider extends ServiceProvider
     {
         $handler = function ($name, $label, $percent = 0.5,$platform="qiniu") {
             $value = ForoneFormServiceProvider::parseValue($this->model, $name);
-            if(!preg_match("/(jpe?g|png)/", $value)){
-                $imgUrl = '/vendor/forone/images/upload.png';
-            }else{
-                $imgUrl = config('forone.qiniu.host') . $value;
-            }
-            $url = $value ? $imgUrl : '/vendor/forone/images/upload_add.png';
+            $url = $value ? config('forone.qiniu.host') . $value : '/vendor/forone/images/upload_add.png';
             $js = View::make('forone::upload.upload')->with(['name'=>$name])->render();
             if(!QiniuUploadProvider::$single_inited){
                 $js = View::make('forone::upload.upload_js')->render() . $js;
@@ -59,7 +53,7 @@ class QiniuUploadProvider extends ServiceProvider
 
     private function multiFilesUpload()
     {
-        Form::macro('multi_file_upload', function ($name, $label, $with_description=true, $percent=0.5, $platform="qiniu") {
+        Form::macro('multi_file_upload', function ($name, $label, $with_description=true, $percent=0.5,$platform="qiniu") {
             $value = ForoneFormServiceProvider::parseValue($this->model, $name);
             $url = '/vendor/forone/images/upload_add.png';
             $uploaded_items = '';
@@ -69,11 +63,11 @@ class QiniuUploadProvider extends ServiceProvider
                     $details = explode('~', $item);
                     $idvalue = rand().'';
                     $div = '<div id="'.$idvalue.'div" style="float:left;width:68px;margin-right: 20px">';
-                    if(!preg_match("/(jpe?g|png)/", $details[0])){
-                        $img = '<img value="'.$details[0].'" onclick="removeMultiUploadItem(\'' . $idvalue . 'div\',\''.$name.'\')" style="width: 68px; height: 68px;cursor:pointer"
+                    if(preg_match("/.pdf/", $details[0])){
+                        $img = '<img onclick="removeMultiUploadItem(\'' . $idvalue . 'div\',\''.$name.'\')" style="width: 68px; height: 68px;cursor:pointer"
                         src="/vendor/forone/images/upload.png">';
                     }else{
-                        $img = '<img value="'.$details[0].'" onclick="removeMultiUploadItem(\'' . $idvalue . 'div\',\''.$name.'\')" style="width: 68px; height: 68px;cursor:pointer"
+                        $img = '<img onclick="removeMultiUploadItem(\'' . $idvalue . 'div\',\''.$name.'\')" style="width: 68px; height: 68px;cursor:pointer"
                         src="'.config('forone.qiniu.host').$details[0].'?imageView2/1/w/68/h/68">';
                     }
 
@@ -82,7 +76,7 @@ class QiniuUploadProvider extends ServiceProvider
                     if (sizeof($details) == 2) {
                         $v = "value='$details[1]'";
                     }
-                    $uploaded_items .= '<input '.$v.' onkeyup="fillMultiUploadInput(\''.$name.'\')" style="width: 68px;float: left" placeholder="文件描述"></div>';
+                    $uploaded_items .= '<input '.$v.' type="hidden" onkeyup="fillMultiUploadInput(\''.$name.'\')" style="width: 68px;float: left" placeholder="图片描述"></div>';
                 }
             }
 
@@ -99,45 +93,6 @@ class QiniuUploadProvider extends ServiceProvider
                             <img style="width:58px;height:58px;cursor:pointer;float:left;margin-right:20px;" id="'.$name.'_img" src="'.$url.'">
                             <label id="'.$name.'_label"></label>
                             <div id="'.$name.'_div">'.$uploaded_items.'</div>
-                        </div>
-                    </div>';
-        });
-    }
-
-    private function fileViewer()
-    {
-        Form::macro('file_viewer', function ($name, $label='文件浏览', $percent = 0.5) {
-            $value = $this->model ? ForoneFormServiceProvider::parseValue($this->model, $name) : $name;
-            $result = '';
-            if ($value) {
-                $items = explode('|', $value);
-                foreach ($items as $item) {
-                    $details = explode('~', $item);
-                    $idvalue = rand().'';
-                    $div = '<div id="'.$idvalue.'div" style="float:left;width:68px;margin-right: 20px">';
-                    $file = '<a href="'.config('forone.qiniu.host').$details[0].'" target="_blank">';
-                    if(!preg_match("/(jpe?g|png)/", $details[0])){
-                        $file .= '<img style="width: 68px; height: 68px;cursor:pointer" src="/vendor/forone/images/upload.png">';
-                    }else{
-                        $file .= '<img style="width: 68px; height: 68px;cursor:pointer" src="'.config('forone.qiniu.host').$details[0].'?imageView2/1/w/68/h/68">';
-                    }
-                    $file .= '</a>';
-
-                    $result .= $div . $file;
-                    $v = '';
-                    if (sizeof($details) == 2) {
-                        $v = "value='$details[1]'";
-                    }
-                    $result .= '<input '.$v.' style="width: 68px;float: left" placeholder="图片描述"></div>';
-                }
-            }
-
-            return '<div class="form-group col-sm-' . ($percent * 12) . '">
-                        ' . Form::form_label($label) . '
-                        <div class="col-sm-9">
-                            <input id="'.$name.'" type="hidden" name="' . $name . '" type="text" value="'.$value.'">
-                            <label id="'.$name.'_label"></label>
-                            <div id="'.$name.'_div">'.$result.'</div>
                         </div>
                     </div>';
         });

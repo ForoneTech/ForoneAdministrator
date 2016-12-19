@@ -6,7 +6,7 @@
             uptoken_url: '{{ route("admin.qiniu.video-token") }}',
             unique_names: true,
             domain: '{{config('forone.qiniu.host')}}',
-            max_file_size: '{{config('forone.qiniu.max_file_size')}}' ? '{{config('forone.qiniu.max_file_size')}}' : '150mb',
+            max_file_size: '100mb',
             flash_swf_url: '/vendor/forone/components/qiniu/plupload/Moxie.swf',
             max_retries: 3,
             chunk_size: '4mb',
@@ -36,21 +36,21 @@
                     });
                 },
                 'UploadProgress': function(up, file) {
-                    $('#progress').val(file.percent);
-
+                    console.log(up);
                 },
                 'FileUploaded': function(up, file, info) {
                     var domain = up.getOption('domain');
                     console.log(info);
+                    console.log('haha');
                     var res = $.parseJSON(info);
                     var sourceLink = domain + res.key;
-                    var source =  '<source src=" '+sourceLink+' " type="video/mp4">'
                     @if(!isset($multi))
                     $("source").attr("src",sourceLink);
-                    $("video").attr("src",sourceLink).html(source);
+                    $("video").attr("src",sourceLink);
                     $("#{{$name}}").attr("value",res.persistentId);
                     $(".video-js").css("display",'block');
                     $("video").css("display",'block');
+
                     @else
                         $("#"+file.id).attr("src",sourceLink);
                     $("#"+file.id+"loading").remove();
@@ -60,7 +60,6 @@
                 'Error': function(up, err, errTip) {
                 },
                 'UploadComplete': function() {
-
                 }
             }
         });
