@@ -17,6 +17,7 @@ ForoneAdministrator 是一款基于Laravel5.1封装的后台管理系统，集�
     - [多行文本输入框 - From::form_area](#form_area)
     - [单文件上传 - Form::single_file_upload](#single_upload)
     - [多文件上传 - Form::multi_file_upload](#multi_upload)
+    - [文件浏览 - Form::file_viewer](#file_viewer)
     - [富文本编辑器 - Form::ueditor](#ueditor)
 - [提高研发效率的几个自定义命令](#commands)
 
@@ -43,15 +44,16 @@ ForoneAdministrator 是一款基于Laravel5.1封装的后台管理系统，集�
 - Laravel 5.1+
 - PHP 5.5.9+
 
-由于不可抗力因素，最好在`compoer.json`里加入如下配置后再开始安装，设置国内的`composer`镜像同时也可设置直接从国内git服务器上下载。
+由于不可抗力因素，最好在`compoer.json`里加入如下配置后再开始安装，设置国内的`composer`镜像可加快下载速度。
 由于使用的entrust还处于dev状态，所以需要将composer.json里的`minimum-stability` 设置为 `dev`
 
 ```json
-"repositories": [
-  {"type": "git", "url": "http://git.nxdai.com/mani/ForoneAdministrator.git"},
-  {"type": "composer", "url": "http://packagist.phpcomposer.com"},
-  {"packagist": false}
-],
+"repositories": {
+    "packagist": {
+        "type": "composer",
+        "url": "https://packagist.phpcomposer.com"
+    }
+},
 "minimum-stability" : "dev"
 ```
 
@@ -131,7 +133,7 @@ return [
     'menus'                       => [
         '系统设置' => [
             'icon'       => 'mdi-toggle-radio-button-on', //菜单icon
-            'permission' => 'admin',                      //菜单显示所需权限
+            'permission' => 'admin',                      //菜单显示所需权限,多权限用数组的形式添加:['admin','test']
             'children'   => [                             //菜单的子菜单数组
                 '角色管理'  => [
                     'uri' => 'roles',                     //菜单对应的uri
@@ -266,7 +268,7 @@ $results['filters'] = [
     'other' => [
         ['label' => '其它过滤', 'value'=>''],
         ['label' => '过滤1', 'value' => 0]
-    }
+    ]
 ];
 ```
 
@@ -422,6 +424,20 @@ Form::form_select('type_id', '标的类型', [
 3. 是否显示图片描述输入框
 4. 项宽度，默认`0.5`
 5. 上传平台，目前默认且仅支持`qiniu`
+
+<a id="user-content-file_viewer" href="#file_viewer"></a>
+#### 文件浏览器
+
+用法：
+```php
+{!! Form::file_viewer('field_name', 'label') !!}
+```
+
+参数：
+
+1. 字段名
+2. 项名称
+3. 项宽度，默认`0.5`
 
 
 <a id="user-content-ueditor" href="#ueditor"></a>
