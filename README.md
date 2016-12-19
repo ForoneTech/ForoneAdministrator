@@ -48,12 +48,11 @@ ForoneAdministrator 是一款基于Laravel5.1封装的后台管理系统，集�
 由于使用的entrust还处于dev状态，所以需要将composer.json里的`minimum-stability` 设置为 `dev`
 
 ```json
-"repositories": {
-    "packagist": {
-        "type": "composer",
-        "url": "https://packagist.phpcomposer.com"
-    }
-},
+"repositories": [
+  {"type": "git", "url": "http://git.nxdai.com/mani/ForoneAdministrator.git"},
+  {"type": "composer", "url": "http://packagist.phpcomposer.com"},
+  {"packagist": false}
+],
 "minimum-stability" : "dev"
 ```
 
