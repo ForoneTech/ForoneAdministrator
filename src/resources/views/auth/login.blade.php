@@ -48,7 +48,7 @@
         });
     });
 </script>
-@if (isset($errors) && count($errors) > 0)
+@if (count($errors) > 0)
     <script>
         @foreach ($errors->all() as $error)
         humane.log('{{ $error }}');

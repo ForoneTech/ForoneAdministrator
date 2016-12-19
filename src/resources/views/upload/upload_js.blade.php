@@ -4,18 +4,15 @@
 <script>
     function fillMultiUploadInput(filed_name){
         var imgs = $("#"+filed_name+"_div").find('img');
-        var inputs = $("#"+filed_name+"_div").find('input');
         var urls = [];
         var items = [];
         imgs.each(function () {
-            var s =$(this).attr('value');
+            var s =$(this)[0].src;
+            s = s.replace('?imageView2/1/w/68/h/68', '');
+            s = s.replace('{{config('forone.qiniu.host')}}', '');
             urls.push(s);
         });
         $.each(urls,function(index,item){
-            var label = inputs[index].value;
-            if(label) {
-                item += '~' + label;
-            }
             items.push(item);
         })
         var value = items.join('|')

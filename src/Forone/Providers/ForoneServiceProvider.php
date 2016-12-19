@@ -66,7 +66,7 @@ class ForoneServiceProvider extends ServiceProvider
     private function registerProvider()
     {
         $this->app->register(\Illuminate\Translation\TranslationServiceProvider::class);
-        $this->app->register(\Collective\Html\HtmlServiceProvider::class);
+        $this->app->register(\Illuminate\Html\HtmlServiceProvider::class);
         $this->app->register(\Orangehill\Iseed\IseedServiceProvider::class);
 
         $this->app->register(EntrustServiceProvider::class);
@@ -118,9 +118,7 @@ class ForoneServiceProvider extends ServiceProvider
 
     private function registerMiddleware()
     {
-        $this->app['router']->middleware('role', \Forone\Middleware\EntrustRole::class);
-        $this->app['router']->middleware('ability', \Forone\Middleware\EntrustAbility::class);
-        $this->app['router']->middleware('permission', \Forone\Middleware\EntrustPermission::class);
+        $this->app['router']->middleware('admin.permission', \Forone\Middleware\EntrustPermission::class);
         $this->app['router']->middleware('admin.auth', \Forone\Middleware\Authenticate::class);
         $this->app['router']->middleware('admin.guest', \Forone\Middleware\RedirectIfAuthenticated::class);
     }

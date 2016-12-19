@@ -1,4 +1,10 @@
 <?php
+/**
+ * User : YuGang Yang
+ * Date : 7/29/15
+ * Time : 11:02
+ * Email: smartydroid@gmail.com
+ */
 
 namespace Forone\Services;
 
@@ -11,16 +17,14 @@ class NavService
     public function isActive($value)
     {
         $uri = array_key_exists('uri', $value) ? $value['uri'] : '';
-        $fullUrl = URL::current();
         if (!$uri) {
             $children = $value['children'];
             foreach ($children as $child) {
-                $position = strripos($fullUrl, $child['uri']);
-                if ($position && substr($fullUrl, $position-1, 1) == '/') {
+                if (strripos(URL::current(), $child['uri'])) {
                     return 'active';
                 }
             }
-        } else if (strripos($fullUrl, $uri)) {
+        } else if (strripos(URL::current(), $uri)) {
             return 'active';
         }
         return '';
@@ -28,10 +32,7 @@ class NavService
 
     public function checkPermission($value)
     {
-        if (array_key_exists('permission', $value)) {
-            return Auth::user()->can(explode('|',$value['permission']));
-        }
-        return true;
+        return array_key_exists('permission', $value) ? Auth::user()->can($value['permission']) : true;
     }
 
 }

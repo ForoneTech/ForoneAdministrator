@@ -22,7 +22,6 @@ class ForoneFormServiceProvider extends ServiceProvider
         $this->parseSpecialFields();
         $this->hiddenInput();
         $this->formText();
-        $this->formRead();
         $this->formPassword();
         $this->formArea();
         $this->formRadio();
@@ -32,11 +31,9 @@ class ForoneFormServiceProvider extends ServiceProvider
         $this->formLabel();
         $this->formSelect();
         $this->formMultiSelect();
-        $this->formTagsInput();
         $this->formDate();
         $this->formTime();
         $this->ueditor();
-        $this->formDropDown();
     }
 
     public static function parseValue($model, $name)
@@ -54,14 +51,14 @@ class ForoneFormServiceProvider extends ServiceProvider
      */
     private function ueditor()
     {
-        $handler = function ($name, $label, $percent = 0.5, $modal = false) {
+        $handler = function ($name, $label,$percent = 0.5, $modal = false) {
             $value = ForoneFormServiceProvider::parseValue($this->model, $name);
             $js = View::make('forone::ueditor.ueditor');
-            return $js . '<div class="form-group col-sm-' . ($percent * 12) . '">
+            return $js.'<div class="form-group col-sm-' . ($percent * 12) . '">
                         ' . Form::form_label($label) . '
                         <div class="col-sm-9">
                              <script id="container" name=' . $name . ' type="text/plain">
-                                    ' . $value . '
+                                    '.$value.'
                             </script>
                             <script type="text/javascript">
                                 var ue = UE.getEditor("container");
@@ -123,25 +120,6 @@ class ForoneFormServiceProvider extends ServiceProvider
         };
         Form::macro('group_text', $handler);
         Form::macro('form_text', $handler);
-    }
-
-    private function formRead()
-    {
-        $handler = function ($name, $label,  $percent = 0.5, $color='',$value='') {
-            if (!$value) {
-                $value = ForoneFormServiceProvider::parseValue($this->model, $name);
-            }
-            $data = '';
-            $input_col = 9;
-            return '<div class="form-group col-sm-' . ($percent * 12) . '" '  . '>
-                        ' . Form::form_label($label, $data) . '
-                        <div class="col-sm-' . $input_col . '">
-                            <input  name="' . $name . '" type="text" readonly="readonly" value="' . $value . '" class="form-control" style="color:' . $color . '">
-                          </div>
-                    </div>';
-        };
-        Form::macro('group_read', $handler);
-        Form::macro('form_read', $handler);
     }
 
     private function formPassword()
@@ -249,47 +227,39 @@ class ForoneFormServiceProvider extends ServiceProvider
 
     private function formButton()
     {
-        Form::macro('form_button', function ($config, $data = []) {
+        Form::macro('form_button', function ($config, $data) {
             if (!array_key_exists('alert', $config)) {
                 $config['alert'] = '确认吗？';
             }
             if (!array_key_exists('uri', $config)) {
                 $config['uri'] = 'update';
             }
-            if (!array_key_exists('id', $config)) {
-                $config['id'] = $data['id'];
-            }
-            if (!array_key_exists('method', $config)) {
-                $config['method'] = $config['uri'] == 'update'?"PATCH":'POST';
-            }
-            if (strpos($config['uri'], '.')) {
-                $uri = $config['method'] == 'POST' ? route($config['uri']) : route($config['uri'], ['id' => $config['id']]);
-            } else {
+            if (strpos($config['uri'] ,'.')) {
+                $uri = route($config['uri'],['id'=>$config['id']]);
+            }else{
                 $uri = $this->url->current() . '/' . $config['uri'];
             }
             if (!array_key_exists('class', $config)) {
                 $config['class'] = 'btn-default';
             }
-            $target = '';
-            if (array_key_exists('target', $config)) {
-                $target = 'target="'.$config['target'].'"';
+            if (!array_key_exists('method', $config)) {
+                $config['method'] = 'POST';
             }
 
-            if ($config['method'] != 'GET') {
+            if ($config['method'] == 'POST') {
                 $dataInputs = '';
-                $patch = $config['method'] != 'POST' ? '<input type="hidden" name="_method" value="'.$config['method'].'">' : '';
                 foreach ($data as $key => $value) {
                     $dataInputs .= '<input type="hidden" name="' . $key . '" value="' . $value . '">';
                 }
                 $result = '<form style="float: left;margin-right: 5px;" action="' . $uri . '" method="POST">
                  <input type="hidden" name="id" value="' . $config['id'] . '">
-                 ' . $patch . '
+                 <input type="hidden" name="_method" value="PATCH">
                  ' . $dataInputs . '
                  ' . Form::token() . '
                  <button type="submit" class="btn ' . $config['class'] . '" onclick="return confirm(\'' . $config['alert'] . '\')" >' . $config['name'] . '</button>
                  </form>';
             } else {
-                $result = '<a style="margin-right:5px" '.$target.' href="' . $uri . '"><button type="submit" class="btn ' . $config['class'] . '">' . $config['name'] . '</button></a>';
+                $result = '<a href="' . $uri . '"><button type="submit" class="btn ' . $config['class'] . '">' . $config['name'] . '</button></a>';
             }
 
             return $result;
@@ -311,7 +281,7 @@ class ForoneFormServiceProvider extends ServiceProvider
 
     private function formSelect()
     {
-        Form::macro('form_select', function ($name, $label, $data, $percent = 0.5, $modal = false) {
+        Form::macro('form_select', function ($name, $label, $data, $percent = 0.5, $modal=false) {
             $result = '<div class="form-group col-sm-' . ($percent * 12) . '">
                         ' . Form::form_label($label, $modal) . '
                         <div class="col-sm-9"><select class="form-control" name="' . $name . '">';
@@ -320,9 +290,7 @@ class ForoneFormServiceProvider extends ServiceProvider
                 $label = is_array($item) ? $item['label'] : $item;
                 $selected = '';
                 if ($this->model) {
-                    if (isset($this->model[$name])) {
-                        $selected = $this->model[$name] == $value ? 'selected="selected"' : '';
-                    }
+                    $selected = $this->model[$name] == $value ? 'selected="selected"' : '';;
                 } else if (is_array($item)) {
                     $selected = sizeof($item) == 3 ? 'selected=' . $item[2] : '';
                 }
@@ -333,86 +301,28 @@ class ForoneFormServiceProvider extends ServiceProvider
         });
     }
 
-    private function formTagsInput()
-    {
-        Form::macro('form_tags_input', function ($name, $label, $default='', $placeholder='', $percent = 0.5) {
-            $value = ForoneFormServiceProvider::parseValue($this->model, $name);
-            if (!$value) {
-                $value = $default;
-            }
-            $result = '<div class="form-group col-lg-' . ($percent * 12) . '">
-                        ' . Form::form_label($label).'<div class="col-sm-9">
-                        <input type="text" id="'.$name.'" name="'.$name.'" class="input-tags" placeholder="'.$placeholder.'" value="'.$value.'"></div></div>';
-            $js = "<script>init.push(function(){jQuery('#" . $name . "').selectize({
-            plugins: ['remove_button'],
-            create:true,
-            onDelete: function(values) {
-                return confirm(values.length > 1 ? '确认删除' + values.length + '个选项?' : '确认删除 \"' + values[0] + '\"?');
-            },
-            onItemAdd: function(value){
-                if(typeof itemAddHandler != 'undefined'){
-                    itemAddHandler('".$name."',value);
-                }
-            },
-            onItemRemove: function(value){
-                if(typeof itemRemoveHandler != 'undefined'){
-                    itemRemoveHandler('".$name."',value);
-                }
-            },
-            onChange: function(value){
-                if(typeof itemChangeHandler != 'undefined'){
-                    itemChangeHandler('".$name."',value);
-                }
-            }
-            });})</script>";
-            return $result . $js;
-        });
-    }
-
     private function formMultiSelect()
     {
-        Form::macro('form_multi_select', function ($name, $label, $data, $placeholder='', $percent = 0.5) {
-            $value = ForoneFormServiceProvider::parseValue($this->model, $name);
-            $value = $value ? explode(',', $value) : '' ;
-            $options = '';
-            foreach ($data as $item) {
-                if (array_key_exists('children', $item)) {
-                    $options .= '<optgroup label="'.$item['label'].'">';
-                    foreach ($item['children'] as $option) {
-                        $selected = $option['value'] && $value && in_array($option['value'].'',$value) ? 'selected="selected"' : '';
-                        $options .= '<option value="'.$option['value'].'" '.$selected.'>'.$option['label'].'</option>';
-                    }
-                    $options .= '</optgroup>';
-                }else{
-                    $selected = $item['value'] && $value && in_array($item['value'].'',$value) ? 'selected="selected"' : '';
-                    $options .= '<option value="'.$item['value'].'" '.$selected.'>'.$item['label'].'</option>';
-                }
-            }
+        Form::macro('form_multi_select', function ($name, $label, $data, $percent = 0.5) {
             $result = '<div class="form-group col-lg-' . ($percent * 12) . '">
-                        ' . Form::form_label($label).'<div class="col-sm-9"><select id="'.$name.'" name="'.$name.'[]" multiple placeholder="'.$placeholder.'">
-                        '.$options.'</select></div></div>';
-            $js = "<script>init.push(function(){jQuery('#" . $name . "').selectize({
-            plugins: ['remove_button'],
-            onDelete: function(values) {
-                return confirm(values.length > 1 ? '确认删除' + values.length + '个选项?' : '确认删除 \"' + values[0] + '\"?');
-            },
-            onItemAdd: function(value){
-                if(typeof itemAddHandler != 'undefined'){
-                    itemAddHandler('".$name."',value);
-                }
-            },
-            onItemRemove: function(value){
-                if(typeof itemRemoveHandler != 'undefined'){
-                    itemRemoveHandler('".$name."',value);
-                }
-            },
-            onChange: function(value){
-                if(typeof itemChangeHandler != 'undefined'){
-                    itemChangeHandler('".$name."',value);
+                        ' . Form::form_label($label) . '
+                        <div class="col-lg-9"><select multiple class="form-control chzn-select" name="' . $name . '[]">';
+            foreach ($data as $item) {
+                $value = is_array($item) ? $item['value'] : $item;
+                $label = is_array($item) ? $item['label'] : $item;
+                $selected = '';
+                if ($this->model) {
+                    if (isset($this->model[$name])) {
+                        $type_ids = explode(',', $this->model[$name]);
+                    } else {
+                        $type_ids = [];
+                    }
+                    $result .= '<option ' . (in_array($value, $type_ids) ? 'selected' : '') . ' value="' . $value . '">' . $label . '</option>';
+                } else if (is_array($item)) {
+                    $result .= '<option ' . $selected . ' value="' . $value . '">' . $label . '</option>';
                 }
             }
-            });})</script>";
-            return $result . $js;
+            return $result . '</select></div></div>';
         });
     }
 
@@ -445,29 +355,6 @@ class ForoneFormServiceProvider extends ServiceProvider
                 '<input id="' . $name . 'date" name="' . $name . '" type="text" value="' . $value . '" class="form-control" placeholder="' . $placeholder . '">';
             $js = "<script>init.push(function(){jQuery('#" . $name . "date').datetimepicker({format:'Y-m-d H:i'});})</script>";
             return $result . '</div></div>' . $js;
-        });
-    }
-
-    private function formDropDown()
-    {
-        Form::macro('form_dropdown', function ($label, $menus = []) {
-            $dropdownMenus = '';
-            foreach ($menus as $menu) {
-                if (array_key_exists('href', $menu) && $menu['href']) {
-                    $dropdownMenus .= '<li><a href="' . $menu['href'] . '">' . $menu['label'] . '</a></li>';
-                } else {
-                    $dropdownMenus .= '<li class="divider"></li>';
-                }
-            }
-            $result = '<div style="margin-right: 5px" class="btn-group dropdown">
-          <button type="button" class="btn btn-default waves-effect" data-toggle="dropdown" aria-expanded="true">
-                ' . $label . ' <span class="caret"></span>
-          </button>
-          <ul class="dropdown-menu animated fadeIn">'
-                . $dropdownMenus . '
-          </ul>
-        </div>';
-            return $result;
         });
     }
 }

@@ -28,19 +28,14 @@
                                                     <i class="fa fa-caret-down"></i>
                                                 </span>
                                                 @endif
-                                                @if(array_key_exists('tag', $value))
-                                                    <i class="pull-right up"><b class="label bg-info">{{!strpos($value['tag'], '::') ? $value['tag'] : call_user_func($value['tag'])}}</b></i>
-                                                @endif
                                                 <span class="font-normal">{{ $title }}</span>
                                             </a>
                                             @if(array_key_exists('children', $value) && count($value['children']))
                                                 <ul class="nav nav-sub">
                                                     @foreach($value['children'] as $childTitle => $chidrenValue)
-                                                        @if($ns->checkPermission($chidrenValue))
                                                         <li class="{{ $ns->isActive($chidrenValue) }}">
                                                             <a md-ink-ripple href='{{ '/admin/'.$chidrenValue['uri'] }}'>{{ $childTitle }}</a>
                                                         </li>
-                                                        @endif
                                                     @endforeach
                                                 </ul>
                                             @endif
