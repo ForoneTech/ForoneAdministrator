@@ -421,7 +421,7 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                             paramArray.forEach(function(param){
                                 if(param){
                                     var arr = param.split('=');
-                                    paramObject[arr[0]] = arr[1];
+                                    paramObject[arr[0]] = decodeURIComponent(arr[1]);
                                 }
                             });
                             var baseUrl = window.location.origin+window.location.pathname;
