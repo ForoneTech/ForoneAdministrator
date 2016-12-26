@@ -286,7 +286,7 @@ class ForoneFormServiceProvider extends ServiceProvider
                  ' . $patch . '
                  ' . $dataInputs . '
                  ' . Form::token() . '
-                 <button type="submit" class="btn ' . $config['class'] . '" onclick="return confirm(\'' . $config['alert'] . '\')" >' . $config['name'] . '</button>
+                 <button type="submit" class="btn btn-default ' . $config['class'] . '" onclick="return confirm(\'' . $config['alert'] . '\')" >' . $config['name'] . '</button>
                  </form>';
             } else {
                 $result = '<a style="margin-right:5px" '.$target.' href="' . $uri . '"><button type="submit" class="btn ' . $config['class'] . '">' . $config['name'] . '</button></a>';
