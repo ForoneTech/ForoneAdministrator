@@ -61,7 +61,8 @@ ForoneAdministrator 是一款基于Laravel5.2封装的后台管理系统，集�
 使用composer进行安装
 5.2.x版本
 ```
-composer require yangcuiwnag/administrator:5.2.x-dev
+composer require forone/administrator:5.2.x-dev
+
 ```
 
 编辑 `config/app.php` 注册 `providers` 和 `aliases`
@@ -133,7 +134,7 @@ return [
     'menus'                       => [
         '系统设置' => [
             'icon'       => 'mdi-toggle-radio-button-on', //菜单icon
-            'permission' => 'admin',                      //菜单显示所需权限
+            'permission' => 'admin',                      //菜单显示所需权限,多权限以数组的方式添加 ['admin','test']
             'children'   => [                             //菜单的子菜单数组
                 '角色管理'  => [
                     'uri' => 'roles',                     //菜单对应的uri
@@ -268,7 +269,7 @@ $results['filters'] = [
     'other' => [
         ['label' => '其它过滤', 'value'=>''],
         ['label' => '过滤1', 'value' => 0]
-    }
+    ]
 ];
 ```
 

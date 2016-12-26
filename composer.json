@@ -12,8 +12,8 @@
       "orangehill/iseed": "^2.0",
       "doctrine/dbal": "~2.3",
       "laravelcollective/html": "5.2.*",
-      "zizaco/entrust": "5.2.x-dev",
-      "forone/administrator": "5.2.x-dev"
+      "zizaco/entrust": "5.2.x-dev"
+
   },
   "require-dev": {
     "fzaninotto/faker": "~1.4",
