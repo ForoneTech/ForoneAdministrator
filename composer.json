@@ -13,6 +13,7 @@
       "doctrine/dbal": "~2.3",
       "laravelcollective/html": "5.2.*",
       "zizaco/entrust": "5.2.x-dev"
+
   },
   "require-dev": {
     "fzaninotto/faker": "~1.4",
@@ -23,6 +24,9 @@
     "symfony/dom-crawler": "2.8.*|3.0.*"
   },
   "autoload": {
+    "classmap": [
+      "database"
+    ],
     "psr-4": {
       "App\\": "app/",
       "Forone\\": "src/Forone/"
