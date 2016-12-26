@@ -133,7 +133,7 @@ return [
     'menus'                       => [
         '系统设置' => [
             'icon'       => 'mdi-toggle-radio-button-on', //菜单icon
-            'permission' => 'admin',                      //菜单显示所需权限
+            'permission' => 'admin',                      //菜单显示所需权限,多权限以数组的方式添加 ['admin','test']
             'children'   => [                             //菜单的子菜单数组
                 '角色管理'  => [
                     'uri' => 'roles',                     //菜单对应的uri
@@ -268,7 +268,7 @@ $results['filters'] = [
     'other' => [
         ['label' => '其它过滤', 'value'=>''],
         ['label' => '过滤1', 'value' => 0]
-    }
+    ]
 ];
 ```
 
