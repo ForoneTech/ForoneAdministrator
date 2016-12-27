@@ -41,7 +41,7 @@ ForoneAdministrator 是一款基于Laravel5.2封装的后台管理系统，集�
 
 系统要求:
 
-- Laravel 5.2+
+- Laravel 5.1+
 - PHP 5.5.9+
 
 由于不可抗力因素，最好在`compoer.json`里加入如下配置后再开始安装，设置国内的`composer`镜像同时也可设置直接从国内git服务器上下载。
@@ -61,7 +61,8 @@ ForoneAdministrator 是一款基于Laravel5.2封装的后台管理系统，集�
 使用composer进行安装
 5.2.x版本
 ```
-composer require yangcuiwnag/administrator:5.2.x-dev
+composer require forone/administrator:5.1.x-dev
+
 ```
 
 编辑 `config/app.php` 注册 `providers` 和 `aliases`
