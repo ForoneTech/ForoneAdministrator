@@ -30,3 +30,5 @@ Route::group(['prefix' => 'admin', 'middleware' => ['web','auth', 'permission:ad
     });
 
 });
+
+//upload

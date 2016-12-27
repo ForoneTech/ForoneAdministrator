@@ -180,7 +180,9 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                                     }
                                 }
                             }
-                            $html .= Form::form_dropdown('更多操作', $dropDown);
+                            if (!empty($dropDown)) {
+                                $html .= Form::form_dropdown('更多', $dropDown);
+                            }
                         } else {
                             if (array_key_exists($field . $index, $functions)) {
                                 if (is_array($item)) {
@@ -337,6 +339,11 @@ class ForoneHtmlServiceProvider extends ServiceProvider
             $html .= '<div class="panel-body b-b b-light">';
             if (array_key_exists('new', $data)) {
                 $html .= '<a href="' . $this->url->current() . '/create" class="btn btn-primary">&#43; 新增</a>';
+            }
+            if (!empty($data['buttons'])) {
+                foreach ($data['buttons'] as $button) {
+                    $html .= Form::form_button($button);
+                }
             }
             if (array_key_exists('filters', $data)) {
 
