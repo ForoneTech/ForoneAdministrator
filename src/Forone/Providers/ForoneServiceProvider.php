@@ -9,6 +9,7 @@
 namespace Forone\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Zizaco\Entrust\EntrustServiceProvider;
 
 class ForoneServiceProvider extends ServiceProvider
 {
