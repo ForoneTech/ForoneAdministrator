@@ -118,6 +118,7 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                         if ($field == 'buttons') {
                             $buttons = $functions[$field . $index]($item);
                             $dropDown = [];
+                            $showMore = count($buttons) > 3;
                             foreach ($buttons as $button) {
                                 $size = sizeof($button);
                                 $normalButton = false;
@@ -140,12 +141,20 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                                             ], ['enabled' => true]);
                                             break;
                                         case '查看':
-                                            $html .= '<a style="margin-right:3px" href="' . $this->url->current() . '/' . $item['id'] . '">
+                                            if ($showMore) {
+                                                $dropDown[] = ['label'=>'查看', 'href'=>$this->url->current() . '/' . $item['id']];
+                                            }else{
+                                                $html .= '<a style="margin-right:3px" href="' . $this->url->current() . '/' . $item['id'] . '">
                                                     <button class="btn btn-default">查看</button></a>';
+                                            }
                                             break;
                                         case '编辑':
-                                            $html .= '<a style="margin-right:5px" href="' . $this->url->current() . '/' . $item['id'] . '/edit">
+                                            if ($showMore) {
+                                                $dropDown[] = ['label'=>'编辑', 'href'=>$this->url->current() . '/' . $item['id'] . '/edit'];
+                                            }else{
+                                                $html .= '<a style="margin-right:5px" href="' . $this->url->current() . '/' . $item['id'] . '/edit">
                                                     <button  class="btn btn-default">编辑</button></a>';
+                                            }
                                             break;
                                     }
                                 }
@@ -159,20 +168,24 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                                         if (array_key_exists('method', $config) && $config['method'] == 'GET') {
                                             $uri = array_key_exists('uri', $config) ? $config['uri'] : '';
                                             $config['uri'] = $uri;
-                                            if (strpos($config['uri'], '.')) {
-                                                if ($config['method'] == 'POST') {
-                                                    $uri = route($config['uri']);
-                                                }else{
-                                                    if ($data) {
-                                                        $uri = route($config['uri'], $data);
+                                            if ($showMore) {
+                                                if (strpos($config['uri'], '.')) {
+                                                    if ($config['method'] == 'POST') {
+                                                        $uri = route($config['uri']);
                                                     }else{
-                                                        $uri = route($config['uri'], ['id' => $config['id']]);
+                                                        if ($data) {
+                                                            $uri = route($config['uri'], $data);
+                                                        }else{
+                                                            $uri = route($config['uri'], ['id' => $config['id']]);
+                                                        }
                                                     }
+                                                } else {
+                                                    $uri = $this->url->current() . '/' . $config['uri'];
                                                 }
-                                            } else {
-                                                $uri = $this->url->current() . '/' . $config['uri'];
+                                                $dropDown[] = ['label'=>$config['name'], 'href'=>$uri];
+                                            }else{
+                                                $html .= Form::form_button($config, $data);
                                             }
-                                            $dropDown[] = ['label'=>$config['name'], 'href'=>$uri];
                                         } else {
                                             $config['id'] = $item->id;
                                             $html .= Form::form_button($config, $data);
