@@ -159,7 +159,7 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                                             $uri = array_key_exists('uri', $config) ? $config['uri'] : '';
                                             $config['uri'] = $uri;
                                         } else {
-                                            $config['id'] = $item->id;
+                                            $config['id'] = $item["id"];
                                         }
                                         $html .= Form::form_button($config, $data);
                                     }
