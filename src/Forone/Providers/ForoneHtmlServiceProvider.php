@@ -117,6 +117,8 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                         $html .= $widths[$index] ? '<td style="width: ' . $widths[$index] . 'px">' : '<td>';
                         if ($field == 'buttons') {
                             $buttons = $functions[$field . $index]($item);
+                            $dropDown = [];
+                            $showMore = count($buttons) > 3;
                             foreach ($buttons as $button) {
                                 $size = sizeof($button);
                                 $normalButton = false;
@@ -139,12 +141,20 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                                             ], ['enabled' => true]);
                                             break;
                                         case '查看':
-                                            $html .= '<a href="' . $this->url->current() . '/' . $item['id'] . '">
-                                                    <button class="btn">查看</button></a>';
+                                            if ($showMore) {
+                                                $dropDown[] = ['label'=>'查看', 'href'=>$this->url->current() . '/' . $item['id']];
+                                            }else{
+                                                $html .= '<a style="margin-right:3px" href="' . $this->url->current() . '/' . $item['id'] . '">
+                                                    <button class="btn btn-default">查看</button></a>';
+                                            }
                                             break;
                                         case '编辑':
-                                            $html .= '<a href="' . $this->url->current() . '/' . $item['id'] . '/edit">
-                                                    <button class="btn">编辑</button></a>';
+                                            if ($showMore) {
+                                                $dropDown[] = ['label'=>'编辑', 'href'=>$this->url->current() . '/' . $item['id'] . '/edit'];
+                                            }else{
+                                                $html .= '<a style="margin-right:5px" href="' . $this->url->current() . '/' . $item['id'] . '/edit">
+                                                    <button  class="btn btn-default">编辑</button></a>';
+                                            }
                                             break;
                                     }
                                 }
@@ -158,12 +168,35 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                                         if (array_key_exists('method', $config) && $config['method'] == 'GET') {
                                             $uri = array_key_exists('uri', $config) ? $config['uri'] : '';
                                             $config['uri'] = $uri;
+                                            if ($showMore) {
+                                                if (strpos($config['uri'], '.')) {
+                                                    if ($config['method'] == 'POST') {
+                                                        $uri = route($config['uri']);
+                                                    }else{
+                                                        if ($data) {
+                                                            $uri = route($config['uri'], $data);
+                                                        }else{
+                                                            $uri = route($config['uri'], ['id' => $config['id']]);
+                                                        }
+                                                    }
+                                                } else {
+                                                    $uri = $this->url->current() . '/' . $config['uri'];
+                                                }
+                                                $dropDown[] = ['label'=>$config['name'], 'href'=>$uri];
+                                            }else{
+                                                $html .= Form::form_button($config, $data);
+                                            }
                                         } else {
+
                                             $config['id'] = $item["id"];
+                                            $html .= Form::form_button($config, $data);
+
                                         }
-                                        $html .= Form::form_button($config, $data);
                                     }
                                 }
+                            }
+                            if (!empty($dropDown)) {
+                                $html .= Form::form_dropdown('更多', $dropDown);
                             }
                         } else {
                             if (array_key_exists($field . $index, $functions)) {
@@ -276,7 +309,7 @@ class ForoneHtmlServiceProvider extends ServiceProvider
         Form::macro('modal_button', function ($label, $modal, $data, $class = 'waves-effect') {
             $jsonData = json_encode($data);
             $id = is_array($data) ? $data['id'] : $data->{'id'};
-            $html = '<a href="' . $modal . '" style="margin-left:5px;"><button onclick="fillModal(\'' . $id . '\')" class="btn ' . $class . '" >' . $label . '</button></a>';
+            $html = '<a href="' . $modal . '" style="margin-right:5px;"><button onclick="fillModal(\'' . $id . '\')" class="btn btn-default ' . $class . '" >' . $label . '</button></a>';
             $js = "<script>init.push(function(){datas['" . $id . "']='" . $jsonData . "';})</script>";
 
             return $html . $js;
@@ -321,6 +354,11 @@ class ForoneHtmlServiceProvider extends ServiceProvider
             $html .= '<div class="panel-body b-b b-light">';
             if (array_key_exists('new', $data)) {
                 $html .= '<a href="' . $this->url->current() . '/create" class="btn btn-primary">&#43; 新增</a>';
+            }
+            if (!empty($data['buttons'])) {
+                foreach ($data['buttons'] as $button) {
+                    $html .= Form::form_button($button);
+                }
             }
             if (array_key_exists('filters', $data)) {
 
@@ -421,7 +459,7 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                             paramArray.forEach(function(param){
                                 if(param){
                                     var arr = param.split('=');
-                                    paramObject[arr[0]] = arr[1];
+                                    paramObject[arr[0]] = decodeURIComponent(arr[1]);
                                 }
                             });
                             var baseUrl = window.location.origin+window.location.pathname;

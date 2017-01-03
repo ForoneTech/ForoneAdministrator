@@ -250,6 +250,10 @@ class ForoneFormServiceProvider extends ServiceProvider
     private function formButton()
     {
         Form::macro('form_button', function ($config, $data = []) {
+            if (!is_array($config)) {
+                $data = $config->data;
+                $config = $config->config;
+            }
             if (!array_key_exists('alert', $config)) {
                 $config['alert'] = '确认吗？';
             }
@@ -262,7 +266,9 @@ class ForoneFormServiceProvider extends ServiceProvider
             if (!array_key_exists('method', $config)) {
                 $config['method'] = $config['uri'] == 'update'?"PATCH":'POST';
             }
-            if (strpos($config['uri'], '.')) {
+            if(strpos($config['uri'], "http://") !== false){
+                $uri = $config['uri'];
+            }else if (strpos($config['uri'], '.')) {
                 $uri = $config['method'] == 'POST' ? route($config['uri']) : route($config['uri'], ['id' => $config['id']]);
             } else {
                 $uri = $this->url->current() . '/' . $config['uri'];
@@ -286,7 +292,7 @@ class ForoneFormServiceProvider extends ServiceProvider
                  ' . $patch . '
                  ' . $dataInputs . '
                  ' . Form::token() . '
-                 <button type="submit" class="btn ' . $config['class'] . '" onclick="return confirm(\'' . $config['alert'] . '\')" >' . $config['name'] . '</button>
+                 <button type="submit" class="btn btn-default ' . $config['class'] . '" onclick="return confirm(\'' . $config['alert'] . '\')" >' . $config['name'] . '</button>
                  </form>';
             } else {
                 $result = '<a style="margin-right:5px" '.$target.' href="' . $uri . '"><button type="submit" class="btn ' . $config['class'] . '">' . $config['name'] . '</button></a>';

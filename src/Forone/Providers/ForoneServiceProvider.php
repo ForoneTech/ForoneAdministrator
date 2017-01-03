@@ -9,6 +9,7 @@
 namespace Forone\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Zizaco\Entrust\EntrustServiceProvider;
 
 class ForoneServiceProvider extends ServiceProvider
 {
@@ -66,7 +67,7 @@ class ForoneServiceProvider extends ServiceProvider
     private function registerProvider()
     {
         $this->app->register(\Illuminate\Translation\TranslationServiceProvider::class);
-        $this->app->register(\Illuminate\Html\HtmlServiceProvider::class);
+        $this->app->register(\Collective\Html\HtmlServiceProvider::class);
         $this->app->register(\Orangehill\Iseed\IseedServiceProvider::class);
 
         $this->app->register(EntrustServiceProvider::class);
