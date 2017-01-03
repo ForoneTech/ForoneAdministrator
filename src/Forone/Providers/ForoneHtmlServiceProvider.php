@@ -187,8 +187,10 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                                                 $html .= Form::form_button($config, $data);
                                             }
                                         } else {
-                                            $config['id'] = $item->id;
+
+                                            $config['id'] = $item["id"];
                                             $html .= Form::form_button($config, $data);
+
                                         }
                                     }
                                 }
