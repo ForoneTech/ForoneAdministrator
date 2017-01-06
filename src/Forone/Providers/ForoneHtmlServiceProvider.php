@@ -142,16 +142,22 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                                             break;
                                         case '查看':
                                             if ($showMore) {
-                                                $dropDown[] = ['label'=>'查看', 'href'=>$this->url->current() . '/' . $item['id']];
-                                            }else{
+                                                $dropDown[] = [
+                                                    'label' => '查看',
+                                                    'href'  => $this->url->current() . '/' . $item['id']
+                                                ];
+                                            } else {
                                                 $html .= '<a style="margin-right:3px" href="' . $this->url->current() . '/' . $item['id'] . '">
                                                     <button class="btn btn-default">查看</button></a>';
                                             }
                                             break;
                                         case '编辑':
                                             if ($showMore) {
-                                                $dropDown[] = ['label'=>'编辑', 'href'=>$this->url->current() . '/' . $item['id'] . '/edit'];
-                                            }else{
+                                                $dropDown[] = [
+                                                    'label' => '编辑',
+                                                    'href'  => $this->url->current() . '/' . $item['id'] . '/edit'
+                                                ];
+                                            } else {
                                                 $html .= '<a style="margin-right:5px" href="' . $this->url->current() . '/' . $item['id'] . '/edit">
                                                     <button  class="btn btn-default">编辑</button></a>';
                                             }
@@ -172,25 +178,23 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                                                 if (strpos($config['uri'], '.')) {
                                                     if ($config['method'] == 'POST') {
                                                         $uri = route($config['uri']);
-                                                    }else{
+                                                    } else {
                                                         if ($data) {
                                                             $uri = route($config['uri'], $data);
-                                                        }else{
+                                                        } else {
                                                             $uri = route($config['uri'], ['id' => $config['id']]);
                                                         }
                                                     }
                                                 } else {
                                                     $uri = $this->url->current() . '/' . $config['uri'];
                                                 }
-                                                $dropDown[] = ['label'=>$config['name'], 'href'=>$uri];
-                                            }else{
+                                                $dropDown[] = ['label' => $config['name'], 'href' => $uri];
+                                            } else {
                                                 $html .= Form::form_button($config, $data);
                                             }
                                         } else {
-
-                                            $config['id'] = $item["id"];
+                                            $config['id'] = $item->id;
                                             $html .= Form::form_button($config, $data);
-
                                         }
                                     }
                                 }
@@ -202,7 +206,7 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                             if (array_key_exists($field . $index, $functions)) {
                                 if (is_array($item)) {
                                     $value = array_key_exists($field, $item) ? $item[$field] : '';
-                                }else{
+                                } else {
                                     $value = $item->{$field} ? $item->{$field} : '';
                                 }
                                 $value = $functions[$field . $index]($value);
@@ -213,7 +217,7 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                                 } else {
                                     if (is_array($item)) {
                                         $value = array_key_exists($field, $item) ? $item[$field] : '';
-                                    }else{
+                                    } else {
                                         $value = $item->{$field} ? $item->{$field} : '';
                                     }
                                 }
@@ -285,10 +289,10 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                         $buttons .= '
                             <button type="submit" class="btn btn-info">' . $button . '</button>
                         ';
-                    }else if (!is_array($button[0])) {
+                    } elseif (get_class($button) == 'Forone\Models\Button') {
+                        $buttons .= Form::form_button($button);
+                    } elseif (!is_array($button[0])) {
                         $buttons .= Form::form_dropdown($button[0], $button[1]);
-                    } else {
-                        $buttons .= Form::form_button($button[0], sizeof($button) == 2 ? $button[1] : []);
                     }
                 }
                 $result = '</div><footer class="panel-footer" style="height: 70px">
