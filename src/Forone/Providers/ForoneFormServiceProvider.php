@@ -42,7 +42,11 @@ class ForoneFormServiceProvider extends ServiceProvider
     public static function parseValue($model, $name)
     {
         $arr = explode('-', $name);
-        if (sizeof($arr) == 2) {
+        $dotArray = explode('.', $name);
+        if (count($dotArray) == 2) {
+            $arr = $dotArray;
+        }
+        if (count($arr) == 2) {
             return $model && (!is_array($model) && isset($model[$arr[0]][$arr[1]])) ? $model[$arr[0]][$arr[1]] : '';
         } else {
             return $model && (!is_array($model) || array_key_exists($name, $model)) ? $model[$name] : '';
@@ -295,7 +299,7 @@ class ForoneFormServiceProvider extends ServiceProvider
                  <button type="submit" class="btn btn-default ' . $config['class'] . '" onclick="return confirm(\'' . $config['alert'] . '\')" >' . $config['name'] . '</button>
                  </form>';
             } else {
-                $result = '<a style="margin-right:5px" '.$target.' href="' . $uri . '"><button type="submit" class="btn ' . $config['class'] . '">' . $config['name'] . '</button></a>';
+                $result = '<a style="margin-right:5px" '.$target.' href="' . $uri . '" class="btn '. $config['class'] . '">' . $config['name'] . '</a>';
             }
 
             return $result;
