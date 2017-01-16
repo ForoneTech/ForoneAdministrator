@@ -314,8 +314,7 @@ class ForoneHtmlServiceProvider extends ServiceProvider
             $jsonData = json_encode($data);
             $id = is_array($data) ? $data['id'] : $data->{'id'};
             $html = '<a href="' . $modal . '" style="margin-right:5px;"><button onclick="fillModal(\'' . $id . '\')" class="btn btn-default ' . $class . '" >' . $label . '</button></a>';
-            $js = "<script>init.push(function(){datas['" . $id . "']=" . json_encode($jsonData) . ";})</script>"
-
+            $js = "<script>init.push(function(){datas['" . $id . "']=" . json_encode($jsonData) . ";})</script>";
             return $html . $js;
         });
     }
