@@ -289,7 +289,7 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                         $buttons .= '
                             <button type="submit" class="btn btn-info">' . $button . '</button>
                         ';
-                    } elseif (get_class($button) == 'Forone\Models\Button') {
+                    } elseif (!is_array($button) && get_class($button) == 'Forone\Models\Button') {
                         $buttons .= Form::form_button($button);
                     } elseif (!is_array($button[0])) {
                         $buttons .= Form::form_dropdown($button[0], $button[1]);
