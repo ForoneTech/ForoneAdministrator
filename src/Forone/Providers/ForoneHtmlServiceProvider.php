@@ -293,6 +293,8 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                         $buttons .= Form::form_button($button);
                     } elseif (!is_array($button[0])) {
                         $buttons .= Form::form_dropdown($button[0], $button[1]);
+                    } else {
+                        $buttons .= Form::form_button(array_get($button,0),array_get($button,1));
                     }
                 }
                 $result = '</div><footer class="panel-footer" style="height: 70px">
