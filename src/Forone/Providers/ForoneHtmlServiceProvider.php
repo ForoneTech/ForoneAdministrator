@@ -401,7 +401,7 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                             }else{
                                 delete paramObject[$(this).attr('name')];
                             }
-                            window.location.href = $.param(paramObject) ? baseUrl+'?'+$.param(paramObject) : baseUrl;
+                            window.location.href = $.param(paramObject) ? baseUrl+'?'+ decodeURIComponent($.param(paramObject)) : baseUrl;
                         });
                     })</script>";
                 $html .= $result . $js;
@@ -545,7 +545,9 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                             paramArray.forEach(function(param){
                                 if(param){
                                     var arr = param.split('=');
-                                    paramObject[arr[0]] = arr[1];
+                                    if(arr[0] !== 'page'){
+                                        paramObject[arr[0]] = arr[1];
+                                    }
                                 }
                             });
                             var baseUrl = window.location.origin+window.location.pathname;
