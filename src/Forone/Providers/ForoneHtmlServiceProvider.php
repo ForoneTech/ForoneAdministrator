@@ -129,14 +129,14 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                                         case '禁用':
                                             $html .= Form::form_button([
                                                 'name'  => $value,
-                                                'id'    => $item->id,
+                                                'id'    => $item['id'],
                                                 'class' => 'bg-warning'
                                             ], ['enabled' => false]);
                                             break;
                                         case '启用':
                                             $html .= Form::form_button([
                                                 'name'  => $value,
-                                                'id'    => $item->id,
+                                                'id'    => $item['id'],
                                                 'class' => 'btn-success'
                                             ], ['enabled' => true]);
                                             break;
@@ -193,7 +193,7 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                                                 $html .= Form::form_button($config, $data);
                                             }
                                         } else {
-                                            $config['id'] = $item->id;
+                                            $config['id'] = $item['id'];
                                             $html .= Form::form_button($config, $data);
                                         }
                                     }

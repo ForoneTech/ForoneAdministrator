@@ -14,6 +14,7 @@ ForoneAdministrator 是一款基于Laravel5.2封装的后台管理系统，集�
     - [时间控件 - Form::form_time](#form_time)
     - [日期控件 - Form::form_date](#form_date)
     - [单行文本输入框 - From::form_text](#form_text)
+    - [文本标签输入框 - Form::form_tags_input](#form_tags_input)
     - [多行文本输入框 - From::form_area](#form_area)
     - [单文件上传 - Form::single_file_upload](#single_upload)
     - [多文件上传 - Form::multi_file_upload](#multi_upload)
@@ -386,6 +387,21 @@ Form::form_select('type_id', '标的类型', [
 ```php
 {!! Form::form_text('column','字段名称','提示文字') !!}
 ```
+
+<a id="user-content-form_tags_input" href="#form_tags_input"></a>
+#### 标签文本输入
+
+用法：
+```php
+{!! Form::form_tags_input('column','字段名称','var1,var2,var3') !!}
+```
+参数：
+
+1. 字段名
+2. label名称
+3. 标签(可选,为空时使用字段名对应的值;标签之间用","分割)
+4. 提示文案(可选)
+5. 项宽度，默认`0.5`(可选)
 
 <a id="user-content-form_area" href="#form_area"></a>
 #### 多行文本输入
