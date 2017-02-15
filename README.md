@@ -2,6 +2,12 @@
 
 ForoneAdministrator 是一款基于Laravel5.2封装的后台管理系统，集成了[Entrust](https://github.com/Zizaco/entrust)权限管理，并针对业务的增删改查进行了视图和业务层的封装，有助于进行后台管理系统的快速研发。
 
+框架`Demo`地址:[Demo](http://demo.nxdai.com/)
+
+`Demo`账号:`admin@admin.com` 密码:`admin`
+
+`Demo`源码:[源码](https://github.com/hhxiaohei/demo.git)
+ 
 - [安装初始化](#init)
 - [forone配置](#config)
 - [权限控制](#permission)
@@ -249,6 +255,7 @@ function __construct()
     'new'=>true,
     'search'=>true,
     'title'=>'数据列表标题',
+    'time'=>true,
     'filters'=>$results['filters']
     ]) !!}
 ```
@@ -256,9 +263,10 @@ function __construct()
 数据项参数：
 
 1. `new` 表示是否显示`新增`按钮，点击后跳转到创建页面
-2. `search` 表示是否显示`检索`输入框，输入检索内容后，默认以`keywords`为参数传递到后端接口，相当于`?keywords=xxx`
+2. `search` 表示是否显示`检索`输入框，输入检索内容后，默认以`keywords`为参数传递到后端接口，相当于`?keywords=xxx`,如需自定义`placeholder`,可以将true替换为`placeholder`文字
 3. `title` 标题
-4. `filters` 数据源为数组，如下：
+4. `time ` 时间筛选
+5. `filters` 数据源为数组，如下：
 
 ```php
 $results['filters'] = [
