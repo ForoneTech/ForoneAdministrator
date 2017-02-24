@@ -120,12 +120,8 @@ class QiniuUploadProvider extends ServiceProvider
                     $details = explode('~', $item);
                     $idvalue = rand().'';
                     $div = '<div id="'.$idvalue.'div" style="float:left;width:68px;margin-right: 20px">';
-                    $file = '<a href="'.config('forone.qiniu.host').$details[0].'" onclick="return false">';
-                    if(!preg_match("/(jpe?g|png)/", $details[0])){
-                        $file .= '<img style="width: 68px; height: 68px;cursor:pointer" src="/vendor/forone/images/upload.png" data-src="'.config('forone.qiniu.host').$details[0].'?imageView2/1/">';
-                    }else{
-                        $file .= '<img style="width: 68px; height: 68px;cursor:pointer" src="'.config('forone.qiniu.host').$details[0].'?imageView2/1/w/68/h/68" data-src="'.config('forone.qiniu.host').$details[0].'?imageView2/1/">';
-                    }
+                    $file = '<a href="'.config('forone.qiniu.host').$details[0].'" target="_blank">';
+                    $file .= '<img style="width: 68px; height: 68px;cursor:pointer" src="'.config('forone.qiniu.host').$details[0].'?imageView2/1/w/68/h/68" onerror="javascript:this.src=\'/vendor/forone/images/upload.png\'" data-src="'.config('forone.qiniu.host').$details[0].'?imageView2/1/">';
                     $file .= '</a>';
 
                     $result .= $div . $file;
