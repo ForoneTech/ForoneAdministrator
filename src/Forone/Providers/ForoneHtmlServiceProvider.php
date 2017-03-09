@@ -313,7 +313,7 @@ class ForoneHtmlServiceProvider extends ServiceProvider
     public function modalButton()
     {
         Form::macro('modal_button', function ($label, $modal, $data, $class = 'waves-effect') {
-            $jsonData = json_encode($data);
+            $jsonData = isset($data['attributes']) ? json_encode($data['attributes']) : json_encode($data);
             $id = is_array($data) ? $data['id'] : $data->{'id'};
             $html = '<a href="' . $modal . '" style="margin-right:5px;"><button onclick="fillModal(\'' . $id . '\')" class="btn btn-default ' . $class . '" >' . $label . '</button></a>';
             $js = "<script>init.push(function(){datas['" . $id . "']=" . json_encode($jsonData) . ";})</script>";
