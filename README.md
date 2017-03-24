@@ -7,7 +7,7 @@ ForoneAdministrator 是一款基于Laravel5.2封装的后台管理系统，集�
 `Demo`账号:`admin@admin.com` 密码:`admin`
 
 `Demo`源码:[源码](https://github.com/hhxiaohei/demo.git)
- 
+
 - [安装初始化](#init)
 - [forone配置](#config)
 - [权限控制](#permission)
