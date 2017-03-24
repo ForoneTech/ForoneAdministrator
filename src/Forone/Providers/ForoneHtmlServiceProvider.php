@@ -175,16 +175,10 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                                             $uri = array_key_exists('uri', $config) ? $config['uri'] : '';
                                             $config['uri'] = $uri;
                                             if ($showMore) {
-                                                if (strpos($config['uri'], '.')) {
-                                                    if ($config['method'] == 'POST') {
-                                                        $uri = route($config['uri']);
-                                                    } else {
-                                                        if ($data) {
-                                                            $uri = route($config['uri'], $data);
-                                                        } else {
-                                                            $uri = route($config['uri'], ['id' => $config['id']]);
-                                                        }
-                                                    }
+                                                if(strpos($config['uri'], "http://") !== false){
+                                                    $uri = $config['uri'];
+                                                }else if (strpos($config['uri'], '.')) {
+                                                    $uri = $config['method'] == 'POST' ? route($config['uri']) : route($config['uri'], empty($data)?['id' => $config['id']]:$data);
                                                 } else {
                                                     $uri = $this->url->current() . '/' . $config['uri'];
                                                 }
