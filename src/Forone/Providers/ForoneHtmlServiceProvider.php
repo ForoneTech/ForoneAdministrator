@@ -193,7 +193,9 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                                 $value = $functions[$field . $index]($value);
                             } else {
                                 $arr = explode('.', $field);
-                                if (sizeof($arr) == 2) {
+                                if(sizeof($arr) == 3) {
+                                    $value = $item[$arr[0]][$arr[1]][$arr[2]];
+                                }elseif (sizeof($arr) == 2) {
                                     $value = $item[$arr[0]][$arr[1]];
                                 } else {
                                     if (is_array($item)) {
