@@ -381,7 +381,7 @@ class ForoneFormServiceProvider extends ServiceProvider
 
     private function formMultiSelect()
     {
-        Form::macro('form_multi_select', function ($name, $label, $data, $placeholder='', $percent = 0.5) {
+        Form::macro('form_multi_select', function ($name, $label, $data, $placeholder='', $percent = 0.5,$create='false') {
             $value = ForoneFormServiceProvider::parseValue($this->model, $name);
             $value = $value ? explode(',', $value) : '' ;
             $options = '';
@@ -403,7 +403,7 @@ class ForoneFormServiceProvider extends ServiceProvider
                         '.$options.'</select></div></div>';
             $js = "<script>init.push(function(){jQuery('#" . $name . "').selectize({
             plugins: ['remove_button'],
-            create:true,
+            create:".$create.",
             onDelete: function(values) {
                 return confirm(values.length > 1 ? '确认删除' + values.length + '个选项?' : '确认删除 \"' + values[0] + '\"?');
             },
