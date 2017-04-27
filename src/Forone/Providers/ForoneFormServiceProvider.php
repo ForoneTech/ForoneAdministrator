@@ -403,6 +403,7 @@ class ForoneFormServiceProvider extends ServiceProvider
                         '.$options.'</select></div></div>';
             $js = "<script>init.push(function(){jQuery('#" . $name . "').selectize({
             plugins: ['remove_button'],
+            create:true,
             onDelete: function(values) {
                 return confirm(values.length > 1 ? '确认删除' + values.length + '个选项?' : '确认删除 \"' + values[0] + '\"?');
             },
