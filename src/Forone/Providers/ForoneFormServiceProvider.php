@@ -330,8 +330,9 @@ class ForoneFormServiceProvider extends ServiceProvider
                 $label = is_array($item) ? $item['label'] : $item;
                 $selected = '';
                 if ($this->model) {
-                    if (isset($this->model[$name])) {
-                        $selected = $this->model[$name] == $value ? 'selected="selected"' : '';
+                    $v = ForoneFormServiceProvider::parseValue($this->model, $name);
+                    if ($v) {
+                        $selected = $v == $value ? 'selected="selected"' : '';
                     }
                 } else if (is_array($item)) {
                     $selected = sizeof($item) == 3 ? 'selected=' . $item[2] : '';
