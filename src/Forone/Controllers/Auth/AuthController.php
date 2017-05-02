@@ -36,6 +36,8 @@ class AuthController extends BaseController {
      */
     protected $redirectPath = 'admin/roles';
 
+    protected $loginView = "forone::auth.login";
+
     /**
      * @var string
      */
@@ -52,7 +54,7 @@ class AuthController extends BaseController {
     public function __construct()
     {
         parent::__construct();
-        $this->middleware('admin.guest', ['except' => 'getLogout']);
+        $this->middleware('guest', ['except' => 'getLogout']);
         $this->redirectPath = config('forone.RedirectAfterLoginPath') ? config('forone.RedirectAfterLoginPath') : $this->redirectPath;
     }
 

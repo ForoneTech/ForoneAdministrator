@@ -208,7 +208,7 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                                 $arr = explode('.', $field);
                                 if(sizeof($arr) == 3) {
                                     $value = $item[$arr[0]][$arr[1]][$arr[2]];
-                                }elseif(sizeof($arr) == 2) {
+                                }elseif (sizeof($arr) == 2) {
                                     $value = $item[$arr[0]][$arr[1]];
                                 } else {
                                     if (is_array($item)) {
@@ -397,7 +397,7 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                             }else{
                                 delete paramObject[$(this).attr('name')];
                             }
-                            window.location.href = $.param(paramObject) ? baseUrl+'?'+ decodeURIComponent($.param(paramObject)) : baseUrl;
+                            window.location.href = $.param(paramObject) ? baseUrl+'?'+decodeURIComponent($.param(paramObject)) : baseUrl;
                         });
                     })</script>";
                 $html .= $result . $js;

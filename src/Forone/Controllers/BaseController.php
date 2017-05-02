@@ -8,6 +8,7 @@
 
 namespace Forone\Controllers;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\URL;
@@ -21,18 +22,20 @@ class BaseController extends Controller
     protected $pageTitle;
     protected $rules = [];
     protected $uri = '';
+    protected $page_name = "";
 
-    function __construct($uri='', $name='')
+    function __construct($uri='', $page_name='')
     {
         $this->currentUser = Auth::user();
-        $this->uri = $uri;
+        $this->uri = $uri?$uri:$this->uri;
+        $this->page_name = $page_name?$page_name:$this->page_name;
         View::share('currentUser', $this->currentUser);
 
         //share the config option to all the views
         View::share('siteConfig', config('forone.site_config'));
         View::share('pageTitle', $this->loadPageTitle());
-        view()->share('page_name', $name);
-        view()->share('uri', $uri);
+        view()->share('page_name', $this->page_name);
+        view()->share('uri', $this->uri);
     }
 
     private function loadPageTitle()
