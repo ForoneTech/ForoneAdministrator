@@ -384,7 +384,7 @@ class ForoneFormServiceProvider extends ServiceProvider
     {
         Form::macro('form_multi_select', function ($name, $label, $data, $placeholder='', $percent = 0.5,$create='false') {
             $value = ForoneFormServiceProvider::parseValue($this->model, $name);
-            $value = $value ? explode(',', $value) : '' ;
+            $value = $value ? (is_array($value)?$value: explode(',', $value)): '' ;
             $options = '';
             foreach ($data as $item) {
                 if (array_key_exists('children', $item)) {
