@@ -26,6 +26,7 @@ ForoneAdministrator 是一款基于Laravel5.2封装的后台管理系统，集�
     - [多文件上传 - Form::multi_file_upload](#multi_upload)
     - [文件浏览 - Form::file_viewer](#file_viewer)
     - [富文本编辑器 - Form::ueditor](#ueditor)
+    - [Tag 标签 - Form::tags](#tags)
 - [提高研发效率的几个自定义命令](#commands)
 
 ### 效果图
@@ -478,6 +479,14 @@ Form::form_select('type_id', '标的类型', [
 1. 字段名
 2. 项名称
 3. 项宽度，默认`0.5`
+
+<a id="user-content-tags" href="#tags"></a>
+#### Tag标签
+
+用法:
+```php
+{!! Form::form_tags_input('tags', '标签', '备注信息') !!}
+```
 
 
 
