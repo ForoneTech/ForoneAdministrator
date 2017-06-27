@@ -463,6 +463,13 @@ Form::form_select('type_id', '标的类型', [
 2. 项名称
 3. 项宽度，默认`0.5`
 
+#### Tag标签
+
+用法:
+```php
+{!! Form::form_tags_input('tags', '标签', '备注信息') !!}
+```
+
 
 
 <a id="user-content-commands" href="#commands"></a>
