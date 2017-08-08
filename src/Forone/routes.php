@@ -7,8 +7,9 @@
  */
 
 Route::get('/', function () {
-    return redirect('/admin/auth/login');
+    return redirect()->route('admin.admins.index');
 });
+
 Route::group(['middleware'=>['web']],function (){
     Route::controllers([
         'admin/auth' => config('forone.auth.administrator_auth_controller', 'Forone\Controllers\Auth\AuthController'),
