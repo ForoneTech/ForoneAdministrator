@@ -7,7 +7,7 @@
  */
 
 Route::get('/', function () {
-    return redirect('/admin/auth/login');
+    return redirect()->route('admin.admins.index');
 });
 Route::group(['middleware'=>['web']],function (){
     Route::controllers([
