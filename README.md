@@ -53,8 +53,13 @@ ForoneAdministrator 是一款基于Laravel5.2封装的后台管理系统，集�
 
 由于不可抗力因素，最好在`compoer.json`里加入如下配置后再开始安装，设置国内的`composer`镜像同时也可设置直接从国内git服务器上下载。
 由于使用的entrust还处于dev状态，所以需要将composer.json里的`minimum-stability` 设置为 `dev`
+由于url是http,非https,还需要在`config`中 设置 `secure-http` 为 false;
 
 ```json
+"config": {
+         "preferred-install": "dist",
+         "secure-http": false
+     },
 "repositories": [
   {"type": "git", "url": "http://git.nxdai.com/mani/ForoneAdministrator.git"},
   {"type": "composer", "url": "http://packagist.phpcomposer.com"},
@@ -111,7 +116,9 @@ php artisan forone:init
 'model' => 'Forone\Admin'
 
 ```
-5.2.0之后laravel版本，在用户模型内请务必删除继承的AuthorizableContract类，否则会报错
+修改 `config/entrust.php`
+'role' => 'Forone\Role',
+'permission' => 'Forone\Permission',
 
 为`App\User`添加Entrust的Trait，以便使用一些封装的方法
 ```
