@@ -106,8 +106,10 @@ class ForoneFormServiceProvider extends ServiceProvider
 
     private function formText()
     {
-        $handler = function ($name, $label, $placeholder = '', $percent = 0.5, $modal = false) {
-            $value = ForoneFormServiceProvider::parseValue($this->model, $name);
+        $handler = function ($name, $label, $placeholder = '', $percent = 0.5, $modal = false, $value = '') {
+            if (!$value) {
+                $value = ForoneFormServiceProvider::parseValue($this->model, $name);
+            }
             $data = '';
             $input_col = 9;
             if (is_array($placeholder)) {
