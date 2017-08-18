@@ -44,7 +44,7 @@ class CreateCrud extends Command
         $base_path = base_path();
         $app_path = app_path();
         $tableName = $this->argument('table_name');
-        $uri = Str::snake(str_singular($tableName),'-');
+        $uri = Str::snake(camel_case(str_singular($tableName)),'-');
 
         $fileName = studly_case(str_singular($tableName));
         $columns = \DB::select(DB::raw("select COLUMN_NAME,COLUMN_TYPE,COLUMN_COMMENT from information_schema.columns where table_schema = '". env('DB_DATABASE') . "'  and table_name = '".$tableName."'"));
@@ -53,7 +53,14 @@ class CreateCrud extends Command
         }
         $column_str = '';
         $form_str = '';
-        collect($columns)->each(function($item) use (&$column_str,&$form_str) {
+        $num = 0;
+        collect($columns)->each(function($item) use (&$column_str,&$form_str,&$num) {
+            if($item->COLUMN_NAME == 'created_at') {
+                $num++;
+            }
+            if($item->COLUMN_NAME == 'updated_at') {
+                $num++;
+            }
             if(!$item->COLUMN_COMMENT) {
                 switch ($item->COLUMN_NAME) {
                     case 'id':
@@ -97,8 +104,13 @@ class CreateCrud extends Command
         }
         file_put_contents($distController . $fileName . "Controller.php", $controllerFile);
 
+        //Model 替换
         $modelFile = file_get_contents($source_direcotry . '/BaseModel.php');
         $modelFile = str_replace('BaseModel', $fileName, $modelFile);
+        $modelFile = str_replace('BaseTable', $tableName, $modelFile);
+        if ($num != 2) {
+            $modelFile = str_replace('public $timestamps = true;', 'public $timestamps = false;', $modelFile);
+        }
         $distModel= $base_path . '/app/Models/';
 
         if ( !@mkdir($distModel) && !is_dir($distModel)) {

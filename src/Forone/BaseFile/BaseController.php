@@ -64,7 +64,7 @@ class BaseTextController extends BaseController
         ];
         $all = $request->except(['page']);
         //自行添加规则
-        $paginate = BaseText::orderBy('created_at', 'desc');
+        $paginate = BaseText::orderBy('id', 'desc');
         foreach ($all as $key => $value) {
             if ($key == 'keywords') {
                 $paginate->where('id', $value);

@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class BaseModel extends Model
 {
-    //protected $table = '';
+    protected $table = 'BaseTable';
     protected $guarded = [];
+    public $timestamps = true;
 
 }
