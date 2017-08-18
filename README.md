@@ -501,6 +501,7 @@ Form::form_select('type_id', '标的类型', [
 #### 提高研发效率的几个自定义命令
 
 - `php artisan forone:init` 系统初始化命令，只可运行一次。
+- `php artisan quick:create-crud 数据表名` 根据数据表名,一键生成crud文件,包含相应的Controller,Model,View。
 - `php artisan db:backup` 通过`iseed`库自动备份当前数据库的数据到Seeder文件里，解决研发时测试数据同步或临时数据结构变更测试数据面临清空等问题。并可根据migrations的文件顺序进行合理的排序，避免由于依赖关系引起的后续数据填充问题。
 - `php artisan db:clear` 清空数据库，心情不爽的时候用一下，感觉棒棒哒。
 - `php artisan db:upgrade` 升级数据库，可能加了新的字段等，会自动填充Seeder文件里的数据，升级之前最好先备份下数据。
