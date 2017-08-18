@@ -1,0 +1,1 @@
+{!! Form::form_text('number','范例2','范例2') !!}
