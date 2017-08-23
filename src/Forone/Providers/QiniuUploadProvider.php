@@ -46,13 +46,18 @@ class QiniuUploadProvider extends ServiceProvider
                 $js = View::make('forone::upload.upload_js')->render() . $js;
                 QiniuUploadProvider::$single_inited = true;
             }
+            $reqjs = "<script>$(function () {
+                      $.fn.Photos({
+                            target: '.file_viewer'
+                        });
+                      })</script>";
             return $js.'<div class="form-group col-sm-' . ($percent * 12) . '">
                         ' . Form::form_label($label) . '
                         <div class="col-sm-9">
                             <input id="' . $name . '" type="hidden" name="' . $name . '" type="text" value="' . $value . '">
                             <img style="width:58px;height:58px;cursor:pointer;" id="' . $name . '_img" src="' . $url . '">
                         </div>
-                    </div>';
+                    </div>'.$reqjs;
         };
         Form::macro('single_file_upload', $handler);
     }
