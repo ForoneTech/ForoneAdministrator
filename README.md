@@ -471,7 +471,37 @@ Form::form_select('type_id', '标的类型', [
 2. 项名称
 3. 项宽度，默认`0.5`
 
+<a id="user-content-oss_file_upload" href="#oss_file_upload"></a>
+#### 阿里云oss文件上传
 
+用法：
+```php
+{!! Form::oss_file_upload('field_name', 'label',0.5,true,'?x-oss-process=image/resize,m_lfit,h_80,w_80',true) !!}
+```
+
+参数：
+
+1. 字段名
+2. 项名称
+3. 项宽度，默认`0.5`
+4. 上传之后的文件是否重命名(重命名随机)
+5. <a href="https://help.aliyun.com/document_detail/44686.html">阿里云oss的图片服务规则</a>
+6. 是否可以上传多个附件(一次选一个)
+
+<a id="user-content-oss_file_viewer" href="#oss_file_viewer"></a>
+#### 阿里云oss文件浏览
+
+用法：
+```php
+{!! Form::oss_file_viewer('field_name', 'label',0.5,'?x-oss-process=image/resize,m_lfit,h_80,w_80') !!}
+```
+
+参数：
+
+1. 字段名
+2. 项名称
+3. 项宽度，默认`0.5`
+4. <a href="https://help.aliyun.com/document_detail/44686.html">阿里云oss的图片服务规则</a>
 
 <a id="user-content-commands" href="#commands"></a>
 #### 提高研发效率的几个自定义命令
