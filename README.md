@@ -20,6 +20,8 @@ ForoneAdministrator 是一款基于Laravel5.2封装的后台管理系统，集�
     - [多文件上传 - Form::multi_file_upload](#multi_upload)
     - [文件浏览 - Form::file_viewer](#file_viewer)
     - [富文本编辑器 - Form::ueditor](#ueditor)
+    - [阿里云OSS文件上传 - Form::oss_file_upload](#oss_file_upload)
+    - [阿里云OSS文件浏览 - Form::oss_file_viewer](#oss_file_viewer)
 - [提高研发效率的几个自定义命令](#commands)
 
 ### 效果图
