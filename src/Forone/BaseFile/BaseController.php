@@ -47,6 +47,11 @@ class BaseTextController extends BaseController
                             ['查看'],
                             ['编辑'],
                         ];
+                        if ($data->enabled == 1) {
+                            array_push($buttons, ['禁用']);
+                        } elseif($data->enabled == 0) {
+                            array_push($buttons, ['启用']);
+                        }
                         //需要额外按钮可以解开注释
 //                        array_push($buttons, [
 //                            [
