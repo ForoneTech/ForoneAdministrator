@@ -76,8 +76,12 @@ class CreateCrud extends Command
 
             }
             //这里格式设置好了, 勿格式化
-            $column_str .= "['{$item->COLUMN_COMMENT}', '$item->COLUMN_NAME' ], \n                ";
-            if ($item->COLUMN_NAME == 'id' || $item->COLUMN_NAME == 'created_at' || $item->COLUMN_NAME == 'updated_at' ) {
+            if($item->COLUMN_NAME == 'enabled') {
+
+            } else {
+                $column_str .= "['{$item->COLUMN_COMMENT}', '$item->COLUMN_NAME' ], \n                ";
+            }
+            if ($item->COLUMN_NAME == 'id' || $item->COLUMN_NAME == 'created_at' || $item->COLUMN_NAME == 'updated_at' || $item->COLUMN_NAME == 'enabled' ) {
             } else {
                 if (strpos($item->COLUMN_TYPE,'time') !== false) {
                     $form_str .= "{!! Form::form_time('".$item->COLUMN_NAME."', '".$item->COLUMN_COMMENT."','".$item->COLUMN_COMMENT."') !!} \n";
