@@ -79,7 +79,7 @@ class CreateCrud extends Command
             if($item->COLUMN_NAME == 'enabled') {
 
             } else {
-                $column_str .= "['{$item->COLUMN_COMMENT}', '$item->COLUMN_NAME' ], \n                ";
+                $column_str .= "['{$item->COLUMN_COMMENT}', '$item->COLUMN_NAME'], \n                ";
             }
             if ($item->COLUMN_NAME == 'id' || $item->COLUMN_NAME == 'created_at' || $item->COLUMN_NAME == 'updated_at' || $item->COLUMN_NAME == 'enabled' ) {
             } else {
