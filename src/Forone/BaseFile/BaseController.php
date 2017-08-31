@@ -46,6 +46,13 @@ class BaseTextController extends BaseController
                         $buttons = [
                             ['查看'],
                             ['编辑'],
+                            [
+                                'name'   =>'删除',
+                                'uri'    => 'admin.base-text.destroy',
+                                'method' => 'DELETE',
+                                'id'     => $data->id,
+                                'class'  => 'btn-dark',
+                            ]
                         ];
                         if ($data->enabled == 1) {
                             array_push($buttons, ['禁用']);
@@ -53,15 +60,15 @@ class BaseTextController extends BaseController
                             array_push($buttons, ['启用']);
                         }
                         //需要额外按钮可以解开注释
-//                        array_push($buttons, [
-//                            [
-//                                'name'   => $data->check == 1 ? '驳回审核' : '审核',
-//                                'uri'    => 'admin.service-check.check',
-//                                'method' => 'GET',
-//                                'id'     => $data->id,
-//                                'class'  => 'btn-dark',
-//                            ]
-//                        ]);
+                        //                        array_push($buttons, [
+                        //                            [
+                        //                                'name'   => $data->check == 1 ? '驳回审核' : '审核',
+                        //                                'uri'    => 'admin.service-check.check',
+                        //                                'method' => 'GET',
+                        //                                'id'     => $data->id,
+                        //                                'class'  => 'btn-dark',
+                        //                            ]
+                        //                        ]);
                         return $buttons;
                     },
                 ],
@@ -167,5 +174,11 @@ class BaseTextController extends BaseController
         BaseText::find($id)->update($input);
 
         return redirect()->to($return_url);
+    }
+
+    public function destroy($id)
+    {
+        BaseText::destroy($id);
+        return back();
     }
 }
