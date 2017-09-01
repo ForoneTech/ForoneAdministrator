@@ -143,7 +143,7 @@ class CreateCrud extends Command
         $routeFile = file_get_contents($route_file_path);
 
         if(strpos($routeFile,"Route::resource('{$uri}'") === false) {
-            $routeFile .= "\nRoute::group(['prefix' => 'admin', 'middleware' => ['web','auth', 'permission:admin'],'namespace'=>'{$fileName}'], function () {
+            $routeFile .= "\nRoute::group(['prefix' => 'admin', 'middleware' => ['auth', 'permission:admin'],'namespace'=>'{$fileName}'], function () {
     Route::resource('".$uri."', '".$fileName."Controller');
 });";
             file_put_contents($route_file_path,$routeFile);
