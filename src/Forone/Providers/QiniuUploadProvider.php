@@ -29,6 +29,7 @@ class QiniuUploadProvider extends ServiceProvider
         $this->multiFilesUpload();
         $this->fileViewer();
         $this->singleVideoUpload();
+        $this->localSingleFileUpload();
     }
 
     private function singleFileUpload()
@@ -171,5 +172,22 @@ class QiniuUploadProvider extends ServiceProvider
             '</div>';
         };
         Form::macro('single_video_upload', $handler);
+    }
+
+    //本地文件上传,使用之前在Form::model写入'files'=>true
+    private function localSingleFileUpload()
+    {
+        $handler = function ($name, $label, $percent = 0.5,$platform="qiniu") {
+            $value = ForoneFormServiceProvider::parseValue($this->model, $name);
+            return '<div class="form-group col-sm-' . ($percent * 12) . '">
+                        ' . Form::form_label($label) . '
+                        <div class="col-sm-9">
+                        '.
+                        Form::file($name)
+                        .'<input id="' . $name . '" type="hidden" name="' . $name . '" type="text" value="' . $value . '">
+                        </div>
+                    </div>';
+        };
+        Form::macro('local_single_file_upload', $handler);
     }
 }

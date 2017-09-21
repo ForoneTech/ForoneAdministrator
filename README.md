@@ -24,6 +24,7 @@ ForoneAdministrator 是一款基于Laravel5.2封装的后台管理系统，集�
     - [多行文本输入框 - From::form_area](#form_area)
     - [单文件上传 - Form::single_file_upload](#single_upload)
     - [多文件上传 - Form::multi_file_upload](#multi_upload)
+    - [本地单文件上传 - Form::local_single_file_upload](#local_single_file_upload)
     - [文件浏览 - Form::file_viewer](#file_viewer)
     - [富文本编辑器 - Form::ueditor](#ueditor)
     - [Tag 标签 - Form::tags](#tags)
@@ -441,6 +442,38 @@ Form::form_select('type_id', '标的类型', [
 2. 项名称
 3. 项宽度，默认`0.5`
 4. 上传平台，目前默认且仅支持`qiniu`
+
+<a id="local_single_file_upload" href="#local_single_file_upload"></a>
+#### 本地单文件上传
+用法：
+使用前需要`在Form::model写入'files'=>true`
+
+例如
+```php
+{!! Form::model($data,['method'=>'PUT','route'=>['admin'],'class'=>'form-horizontal','files'=>true]) !!}
+```
+
+参数：
+
+1. 字段名
+2. 项名称
+3. 项宽度，默认`0.5`
+
+然后
+```php
+{!! Form::local_single_file_upload('field_name', 'label' ,0.5) !!}
+```
+
+获取上传后文件路径:
+参数：
+
+1. $request接受到的文件
+2. 保存路径
+
+```php
+$file = new UploadsManager($request->file('aaa') , public_path('images'));
+dd($file->upload());
+```
 
 <a id="user-content-multi_upload" href="#multi_upload"></a>
 #### 多文件上传
