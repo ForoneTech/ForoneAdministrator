@@ -14,6 +14,7 @@ Route::group(['middleware'=>['web']],function (){
     Route::controllers([
         'admin/auth' => config('forone.auth.administrator_auth_controller', 'Forone\Controllers\Auth\AuthController'),
     ]);
+    Route::get('/admin/oss/config', ['as' => 'admin.oss.config', 'uses' => 'Forone\Controllers\Upload\OssController@config']);
     Route::get('/admin/qiniu/upload-token', ['as'=>'admin.qiniu.upload-token', 'uses'=>'Forone\Controllers\Upload\QiniuController@token']);
 
 });

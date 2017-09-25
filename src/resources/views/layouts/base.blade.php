@@ -27,7 +27,6 @@
     <link href="{{asset('vendor/forone/components/selectize/selectize.default.css')}}" rel="stylesheet">
     <script src="{{ asset('vendor/forone/libs/jquery/jquery/dist/jquery.js') }}"></script>
     <script src="{{ asset('vendor/forone/components/selectize/selectize.min.js') }}"></script>
-
     {{--Add fileViewer--}}
     <link rel="stylesheet" href="{{ asset('vendor/forone/styles/Test-Photo.css') }}" type="text/css" />
     <script src="{{ asset('vendor/forone/scripts/jquery.mousewheel.min.js') }}"></script>
