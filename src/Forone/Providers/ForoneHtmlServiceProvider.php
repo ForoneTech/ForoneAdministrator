@@ -175,16 +175,10 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                                             $uri = array_key_exists('uri', $config) ? $config['uri'] : '';
                                             $config['uri'] = $uri;
                                             if ($showMore) {
-                                                if (strpos($config['uri'], '.')) {
-                                                    if ($config['method'] == 'POST') {
-                                                        $uri = route($config['uri']);
-                                                    } else {
-                                                        if ($data) {
-                                                            $uri = route($config['uri'], $data);
-                                                        } else {
-                                                            $uri = route($config['uri'], ['id' => $config['id']]);
-                                                        }
-                                                    }
+                                                if(strpos($config['uri'], "http://") !== false){
+                                                    $uri = $config['uri'];
+                                                }else if (strpos($config['uri'], '.')) {
+                                                    $uri = $config['method'] == 'POST' ? route($config['uri']) : route($config['uri'], empty($data)?['id' => $config['id']]:$data);
                                                 } else {
                                                     $uri = $this->url->current() . '/' . $config['uri'];
                                                 }
@@ -212,7 +206,9 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                                 $value = $functions[$field . $index]($value);
                             } else {
                                 $arr = explode('.', $field);
-                                if (sizeof($arr) == 2) {
+                                if(sizeof($arr) == 3) {
+                                    $value = $item[$arr[0]][$arr[1]][$arr[2]];
+                                }elseif (sizeof($arr) == 2) {
                                     $value = $item[$arr[0]][$arr[1]];
                                 } else {
                                     if (is_array($item)) {

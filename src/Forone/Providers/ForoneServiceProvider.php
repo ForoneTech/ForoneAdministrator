@@ -60,7 +60,8 @@ class ForoneServiceProvider extends ServiceProvider
             \Forone\Console\InitCommand::class,
             \Forone\Console\Upgrade::class,
             \Forone\Console\Backup::class,
-            \Forone\Console\CopyForone::class
+            \Forone\Console\CopyForone::class,
+            \Forone\Console\CreateCrud::class
         ]);
     }
 
