@@ -76,8 +76,12 @@ class CreateCrud extends Command
 
             }
             //这里格式设置好了, 勿格式化
-            $column_str .= "['{$item->COLUMN_COMMENT}', '$item->COLUMN_NAME' ], \n                ";
-            if ($item->COLUMN_NAME == 'id' || $item->COLUMN_NAME == 'created_at' || $item->COLUMN_NAME == 'updated_at' ) {
+            if($item->COLUMN_NAME == 'enabled') {
+
+            } else {
+                $column_str .= "['{$item->COLUMN_COMMENT}', '$item->COLUMN_NAME'], \n                ";
+            }
+            if ($item->COLUMN_NAME == 'id' || $item->COLUMN_NAME == 'created_at' || $item->COLUMN_NAME == 'updated_at' || $item->COLUMN_NAME == 'enabled' ) {
             } else {
                 if (strpos($item->COLUMN_TYPE,'time') !== false) {
                     $form_str .= "{!! Form::form_time('".$item->COLUMN_NAME."', '".$item->COLUMN_COMMENT."','".$item->COLUMN_COMMENT."') !!} \n";
@@ -139,7 +143,7 @@ class CreateCrud extends Command
         $routeFile = file_get_contents($route_file_path);
 
         if(strpos($routeFile,"Route::resource('{$uri}'") === false) {
-            $routeFile .= "\nRoute::group(['prefix' => 'admin', 'middleware' => ['web','auth', 'permission:admin'],'namespace'=>'{$fileName}'], function () {
+            $routeFile .= "\nRoute::group(['prefix' => 'admin', 'middleware' => ['auth', 'permission:admin'],'namespace'=>'{$fileName}'], function () {
     Route::resource('".$uri."', '".$fileName."Controller');
 });";
             file_put_contents($route_file_path,$routeFile);
