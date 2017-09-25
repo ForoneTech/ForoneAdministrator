@@ -332,8 +332,9 @@ class ForoneFormServiceProvider extends ServiceProvider
                 $label = is_array($item) ? $item['label'] : $item;
                 $selected = '';
                 if ($this->model) {
-                    if (isset($this->model[$name])) {
-                        $selected = $this->model[$name] == $value ? 'selected="selected"' : '';
+                    $v = ForoneFormServiceProvider::parseValue($this->model, $name);
+                    if ($v) {
+                        $selected = $v == $value ? 'selected="selected"' : '';
                     }
                 } else if (is_array($item)) {
                     $selected = sizeof($item) == 3 ? 'selected=' . $item[2] : '';
@@ -385,7 +386,7 @@ class ForoneFormServiceProvider extends ServiceProvider
     {
         Form::macro('form_multi_select', function ($name, $label, $data, $placeholder='', $percent = 0.5,$create='false') {
             $value = ForoneFormServiceProvider::parseValue($this->model, $name);
-            $value = $value ? explode(',', $value) : '' ;
+            $value = $value ? (is_array($value)?$value: explode(',', $value)): '' ;
             $options = '';
             foreach ($data as $item) {
                 if (array_key_exists('children', $item)) {

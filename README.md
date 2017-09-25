@@ -2,6 +2,12 @@
 
 ForoneAdministrator 是一款基于Laravel5.2封装的后台管理系统，集成了[Entrust](https://github.com/Zizaco/entrust)权限管理，并针对业务的增删改查进行了视图和业务层的封装，有助于进行后台管理系统的快速研发。
 
+框架`Demo`地址:[Demo](http://demo.nxdai.com/)
+
+`Demo`账号:`admin@admin.com` 密码:`admin`
+
+`Demo`源码:[源码](https://github.com/hhxiaohei/demo.git)
+
 - [安装初始化](#init)
 - [forone配置](#config)
 - [权限控制](#permission)
@@ -18,10 +24,12 @@ ForoneAdministrator 是一款基于Laravel5.2封装的后台管理系统，集�
     - [多行文本输入框 - From::form_area](#form_area)
     - [单文件上传 - Form::single_file_upload](#single_upload)
     - [多文件上传 - Form::multi_file_upload](#multi_upload)
+    - [本地单文件上传 - Form::local_single_file_upload](#local_single_file_upload)
     - [文件浏览 - Form::file_viewer](#file_viewer)
     - [富文本编辑器 - Form::ueditor](#ueditor)
     - [阿里云OSS文件上传 - Form::oss_file_upload](#oss_file_upload)
     - [阿里云OSS文件浏览 - Form::oss_file_viewer](#oss_file_viewer)
+    - [Tag 标签 - Form::tags](#tags)
 - [提高研发效率的几个自定义命令](#commands)
 
 ### 效果图
@@ -49,8 +57,13 @@ ForoneAdministrator 是一款基于Laravel5.2封装的后台管理系统，集�
 
 由于不可抗力因素，最好在`compoer.json`里加入如下配置后再开始安装，设置国内的`composer`镜像同时也可设置直接从国内git服务器上下载。
 由于使用的entrust还处于dev状态，所以需要将composer.json里的`minimum-stability` 设置为 `dev`
+由于url是http,非https,还需要在`config`中 设置 `secure-http` 为 false;
 
 ```json
+"config": {
+         "preferred-install": "dist",
+         "secure-http": false
+     },
 "repositories": [
   {"type": "git", "url": "http://git.nxdai.com/mani/ForoneAdministrator.git"},
   {"type": "composer", "url": "http://packagist.phpcomposer.com"},
@@ -107,7 +120,9 @@ php artisan forone:init
 'model' => 'Forone\Admin'
 
 ```
-5.2.0之后laravel版本，在用户模型内请务必删除继承的AuthorizableContract类，否则会报错
+修改 `config/entrust.php`
+'role' => 'Forone\Role',
+'permission' => 'Forone\Permission',
 
 为`App\User`添加Entrust的Trait，以便使用一些封装的方法
 ```
@@ -252,6 +267,7 @@ function __construct()
     'new'=>true,
     'search'=>true,
     'title'=>'数据列表标题',
+    'time'=>true,
     'filters'=>$results['filters']
     ]) !!}
 ```
@@ -259,9 +275,10 @@ function __construct()
 数据项参数：
 
 1. `new` 表示是否显示`新增`按钮，点击后跳转到创建页面
-2. `search` 表示是否显示`检索`输入框，输入检索内容后，默认以`keywords`为参数传递到后端接口，相当于`?keywords=xxx`
+2. `search` 表示是否显示`检索`输入框，输入检索内容后，默认以`keywords`为参数传递到后端接口，相当于`?keywords=xxx`,如需自定义`placeholder`,可以将true替换为`placeholder`文字
 3. `title` 标题
-4. `filters` 数据源为数组，如下：
+4. `time ` 时间筛选
+5. `filters` 数据源为数组，如下：
 
 ```php
 $results['filters'] = [
@@ -428,6 +445,37 @@ Form::form_select('type_id', '标的类型', [
 3. 项宽度，默认`0.5`
 4. 上传平台，目前默认且仅支持`qiniu`
 
+<a id="local_single_file_upload" href="#local_single_file_upload"></a>
+#### 本地单文件上传
+用法：
+使用前需要`在Form::model写入'files'=>true`
+
+例如
+```php
+{!! Form::model($data,['method'=>'PUT','route'=>['admin'],'class'=>'form-horizontal','files'=>true]) !!}
+```
+
+参数：
+
+1. 字段名
+2. 项名称
+3. 项宽度，默认`0.5`
+
+然后
+```php
+{!! Form::local_single_file_upload('field_name', 'label' ,0.5) !!}
+```
+
+获取上传后文件路径:
+参数：
+
+1. $request接受到的文件
+2. 保存路径
+
+```php
+$file = new UploadsManager($request->file('aaa') , public_path('images'));
+dd($file->upload());
+
 <a id="user-content-multi_upload" href="#multi_upload"></a>
 #### 多文件上传
 
@@ -473,6 +521,14 @@ Form::form_select('type_id', '标的类型', [
 2. 项名称
 3. 项宽度，默认`0.5`
 
+<a id="user-content-tags" href="#tags"></a>
+#### Tag标签
+
+用法:
+```php
+{!! Form::form_tags_input('tags', '标签', '备注信息') !!}
+```
+
 <a id="user-content-oss_file_upload" href="#oss_file_upload"></a>
 #### 阿里云oss文件上传
 
@@ -509,6 +565,7 @@ Form::form_select('type_id', '标的类型', [
 #### 提高研发效率的几个自定义命令
 
 - `php artisan forone:init` 系统初始化命令，只可运行一次。
+- `php artisan quick:create-crud 数据表名` 根据数据表名,一键生成crud文件,包含相应的Controller,Model,View。
 - `php artisan db:backup` 通过`iseed`库自动备份当前数据库的数据到Seeder文件里，解决研发时测试数据同步或临时数据结构变更测试数据面临清空等问题。并可根据migrations的文件顺序进行合理的排序，避免由于依赖关系引起的后续数据填充问题。
 - `php artisan db:clear` 清空数据库，心情不爽的时候用一下，感觉棒棒哒。
 - `php artisan db:upgrade` 升级数据库，可能加了新的字段等，会自动填充Seeder文件里的数据，升级之前最好先备份下数据。
