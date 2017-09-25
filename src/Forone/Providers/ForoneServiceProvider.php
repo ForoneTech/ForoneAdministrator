@@ -76,6 +76,7 @@ class ForoneServiceProvider extends ServiceProvider
         $this->app->register(ForoneHtmlServiceProvider::class);
         $this->app->register(ForoneValidatorProvider::class);
         $this->app->register(QiniuUploadProvider::class);
+        $this->app->register(OssUploadProvider::class);
     }
 
     private function registerAlias()

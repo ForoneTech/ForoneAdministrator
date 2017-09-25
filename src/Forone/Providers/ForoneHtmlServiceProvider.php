@@ -397,7 +397,7 @@ class ForoneHtmlServiceProvider extends ServiceProvider
                             }else{
                                 delete paramObject[$(this).attr('name')];
                             }
-                            window.location.href = $.param(paramObject) ? baseUrl+'?'+decodeURIComponent($.param(paramObject)) : baseUrl;
+                            window.location.href = $.param(paramObject) ? baseUrl+'?'+ decodeURIComponent($.param(paramObject)) : baseUrl;
                         });
                     })</script>";
                 $html .= $result . $js;

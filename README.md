@@ -27,6 +27,8 @@ ForoneAdministrator 是一款基于Laravel5.2封装的后台管理系统，集�
     - [本地单文件上传 - Form::local_single_file_upload](#local_single_file_upload)
     - [文件浏览 - Form::file_viewer](#file_viewer)
     - [富文本编辑器 - Form::ueditor](#ueditor)
+    - [阿里云OSS文件上传 - Form::oss_file_upload](#oss_file_upload)
+    - [阿里云OSS文件浏览 - Form::oss_file_viewer](#oss_file_viewer)
     - [Tag 标签 - Form::tags](#tags)
 - [提高研发效率的几个自定义命令](#commands)
 
@@ -529,6 +531,37 @@ dd($file->upload());
 ```
 
 
+<a id="user-content-oss_file_upload" href="#oss_file_upload"></a>
+#### 阿里云oss文件上传
+
+用法：
+```php
+{!! Form::oss_file_upload('field_name', 'label',0.5,true,'?x-oss-process=image/resize,m_lfit,h_80,w_80',true) !!}
+```
+
+参数：
+
+1. 字段名
+2. 项名称
+3. 项宽度，默认`0.5`
+4. 上传之后的文件是否重命名(重命名随机)
+5. <a href="https://help.aliyun.com/document_detail/44686.html">阿里云oss的图片服务规则</a>
+6. 是否可以上传多个附件(一次选一个)
+
+<a id="user-content-oss_file_viewer" href="#oss_file_viewer"></a>
+#### 阿里云oss文件浏览
+
+用法：
+```php
+{!! Form::oss_file_viewer('field_name', 'label',0.5,'?x-oss-process=image/resize,m_lfit,h_80,w_80') !!}
+```
+
+参数：
+
+1. 字段名
+2. 项名称
+3. 项宽度，默认`0.5`
+4. <a href="https://help.aliyun.com/document_detail/44686.html">阿里云oss的图片服务规则</a>
 
 <a id="user-content-commands" href="#commands"></a>
 #### 提高研发效率的几个自定义命令
