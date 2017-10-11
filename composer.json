@@ -8,11 +8,11 @@
   "require": {
       "php": ">=5.5.9",
       "laravel/framework": "5.1.*",
-      "qiniu/php-sdk": "v7.0.4",
+      "qiniu/php-sdk": "~7.2.0",
       "orangehill/iseed": "^2.0",
       "doctrine/dbal": "~2.3",
       "laravelcollective/html": "5.1.*",
-      "zizaco/entrust": "5.2.x-dev"
+      "zizaco/entrust": "dev-laravel-5"
 
   },
   "require-dev": {
@@ -20,8 +20,8 @@
     "mockery/mockery": "0.9.*",
     "phpunit/phpunit": "~4.0",
     "phpspec/phpspec": "~2.1",
-    "symfony/css-selector": "2.8.*|3.0.*",
-    "symfony/dom-crawler": "2.8.*|3.0.*"
+    "symfony/css-selector": "2.7.*|3.0.*",
+    "symfony/dom-crawler": "2.7.*|3.0.*"
   },
   "autoload": {
     "classmap": [
@@ -33,7 +33,6 @@
   },
   "autoload-dev": {
     "classmap": [
-      "tests/TestCase.php"
     ]
   },
   "scripts": {
@@ -44,12 +43,10 @@
       "php artisan key:generate"
     ],
     "post-install-cmd": [
-      "Illuminate\\Foundation\\ComposerScripts::postInstall",
-      "php artisan optimize"
+      "Illuminate\\Foundation\\ComposerScripts::postInstall"
     ],
     "post-update-cmd": [
-      "Illuminate\\Foundation\\ComposerScripts::postUpdate",
-      "php artisan optimize"
+      "Illuminate\\Foundation\\ComposerScripts::postUpdate"
     ]
   },
   "config": {
