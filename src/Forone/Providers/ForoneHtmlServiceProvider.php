@@ -56,25 +56,30 @@ class ForoneHtmlServiceProvider extends ServiceProvider
             // build table head
             $html .= '<thead><tr>';
             foreach ($columns as $index => $column) {
-                array_push($heads, $column[0]); // title
-                array_push($fields, $column[1]); // fields
-                $size = sizeof($column);
-                switch ($size) {
-                    case 2:
-                        array_push($widths, 0); // width
-                        break;
-                    case 3:
-                        if (is_int($column[2])) {
+                if(config('forone.column.limit') == 0 || $index < config('forone.column.limit') || $column[1] == 'buttons'){
+                    if($column[1] == 'buttons' && config('forone.column.limit') > 0){
+                        $index = config('forone.column.limit');
+                    }
+                    array_push($heads, $column[0]); // title
+                    array_push($fields, $column[1]); // fields
+                    $size = sizeof($column);
+                    switch ($size) {
+                        case 2:
+                            array_push($widths, 0); // width
+                            break;
+                        case 3:
+                            if (is_int($column[2])) {
+                                array_push($widths, $column[2]);
+                            } else {
+                                array_push($widths, 0);
+                                $functions[$column[1] . $index] = $column[2];
+                            }
+                            break;
+                        case 4:
                             array_push($widths, $column[2]);
-                        } else {
-                            array_push($widths, 0);
-                            $functions[$column[1] . $index] = $column[2];
-                        }
-                        break;
-                    case 4:
-                        array_push($widths, $column[2]);
-                        $functions[$column[1] . $index] = $column[3];
-                        break;
+                            $functions[$column[1] . $index] = $column[3];
+                            break;
+                    }
                 }
             }
 
