@@ -57,5 +57,6 @@ return [
         'mime_types' => env('OSS_MIME _TYPES','jpeg,jpg,gif,png,bmp,docx'),//上传的类型
         //图片默认服务规则,也可单独对每一个图片进行设置(在fileUpload第五个参数中设置);图片服务api:https://help.aliyun.com/document_detail/44686.html
         'process' => env('OSS_PROCESS','?x-oss-process=image/resize,m_lfit,h_80,w_80'),
-    ]
+    ],
+    'column' => ['limit' => 0]
 ];
