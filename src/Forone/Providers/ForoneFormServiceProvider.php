@@ -333,7 +333,7 @@ class ForoneFormServiceProvider extends ServiceProvider
                 $selected = '';
                 if ($this->model) {
                     $v = ForoneFormServiceProvider::parseValue($this->model, $name);
-                    if ($v) {
+                    if ($v !== '') {
                         $selected = $v == $value ? 'selected="selected"' : '';
                     }
                 } else if (is_array($item)) {
