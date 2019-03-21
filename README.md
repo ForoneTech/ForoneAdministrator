@@ -1,5 +1,11 @@
 实在招不到人，在此打个广告，招Laravel工程师，请联系 mani@nxdai.com 或 1283233833
 
+框架`Demo`地址:[Demo](http://demo.nxdai.com/)
+
+`Demo`账号:`admin@admin.com` 密码:`admin`
+
+`Demo`源码:[源码](https://github.com/hhxiaohei/demo.git)
+
 ForoneAdministrator 是一款基于Laravel5.2封装的后台管理系统，集成了[Entrust](https://github.com/Zizaco/entrust)权限管理，并针对业务的增删改查进行了视图和业务层的封装，有助于进行后台管理系统的快速研发。
 
 框架`Demo`地址:[Demo](http://demo.nxdai.com/)

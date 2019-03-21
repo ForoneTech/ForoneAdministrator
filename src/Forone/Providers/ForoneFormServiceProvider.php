@@ -41,6 +41,11 @@ class ForoneFormServiceProvider extends ServiceProvider
 
     public static function parseValue($model, $name)
     {
+        // 兼容 ValidationException
+        if (isset($model[$name])) {
+            return $model[$name];
+        }
+
         $arr = explode('-', $name);
         $dotArray = explode('.', $name);
         if (count($dotArray) == 2) {
